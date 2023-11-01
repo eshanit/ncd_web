@@ -365,7 +365,7 @@ const chartSegmentDistrict = async (data: any) => {
                 },
                 yaxis: {
                   title: {
-                    text: "Number of Mentees",
+                    text: "Count Scores",
                   },
                   decimalsInFloat:0,
                   min: 0,
@@ -461,7 +461,7 @@ const chartSegmentDistrict = async (data: any) => {
               },
               yaxis: {
                 title: {
-                  text: "Number of Mentees",
+                  text: "Count Scores",
                 },
                 decimalsInFloat:0,
                 min: 0,
@@ -479,7 +479,8 @@ const chartSegmentDistrict = async (data: any) => {
                 },
               } 
         },
-        optionsiieBehaviour:{chart: {
+        optionsiieBehaviour:{
+            chart: {
             height: 350,
             type: "line",
             stacked: false,
@@ -556,7 +557,7 @@ const chartSegmentDistrict = async (data: any) => {
           },
           yaxis: {
             title: {
-              text: "Number of Mentees",
+              text: "Count Scores",
             },
             decimalsInFloat:0,
             min: 0,
@@ -651,7 +652,7 @@ const chartSegmentDistrict = async (data: any) => {
               },
               yaxis: {
                 title: {
-                  text: "Number of Mentees",
+                  text: "Count Scores",
                 },
                 decimalsInFloat:0,
                 min: 0,
@@ -746,7 +747,7 @@ const chartSegmentDistrict = async (data: any) => {
           },
           yaxis: {
             title: {
-              text: "Number of Mentees",
+              text: "Count Scores",
             },
             decimalsInFloat:0,
             min: 0,
@@ -841,7 +842,7 @@ const chartSegmentDistrict = async (data: any) => {
               },
               yaxis: {
                 title: {
-                  text: "Number of Mentees",
+                  text: "Count Scores",
                 },
                 decimalsInFloat:0,
                 min: 0,

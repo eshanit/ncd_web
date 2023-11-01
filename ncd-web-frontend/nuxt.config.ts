@@ -55,6 +55,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-icon',
     'nuxt-lodash',
+    '@formkit/auto-animate/nuxt'
 
   ],
   // Google sign in

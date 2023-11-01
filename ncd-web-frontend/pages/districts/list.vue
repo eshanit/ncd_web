@@ -147,6 +147,7 @@ const boxPlotPerformanceChart = distPerformanceChartData.state;
         </NuxtLink>
         <p>|</p>
         <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Districts</strong></p>
+       
       </div>
     </nav>
   </header>
@@ -156,7 +157,8 @@ const boxPlotPerformanceChart = distPerformanceChartData.state;
 
       <UCard class="my-5">
         <template #header>
-          <div class="text-green-500"><strong>Districts</strong></div>
+          <div class="text-orange-500 text-sm my-2"><strong>Districts</strong></div>
+          <p class="text-sm">Below is a list of all the districts where evaluations where done. Click on the green button to view analysis for each district.</p>
         </template>
 
         <!-- <p class="text-green-500" v-if="distPerformance">{{ boxPlotPerformance }}</p> -->
@@ -185,21 +187,24 @@ const boxPlotPerformanceChart = distPerformanceChartData.state;
 
       <UCard>
         <template #header>
-         <div class="text-orange-500"><strong>Chart Analysis</strong></div> 
+         <div class="text-orange-500 text-sm  my-2"><strong>Distric-Mentee-Evaluation Analysis</strong></div>
+         <p class="text-sm">This is a composite chart which shows 1. Number of <span class="text-cyan-500 italic">Mentees</span> per district, 2. Number of <span class="text-green-500 italic">Evaluations</span> per district and 3. The  <span class="text-orange-500 italic">ratio of Mentee to Evaluation(s)</span> per district.</p>
         </template>
         <div v-if="chartData">
    
-            <apexchart width="1200" height="350" type="line" :options="chartData.options" :series="chartData.series"></apexchart>
+            <apexchart width="1200" height="450" type="line" :options="chartData.options" :series="chartData.series"></apexchart>
           </div>
       </UCard>
 
       <UCard>
         <template #header>
-         <div class="text-orange-500"><strong>Box Plot Analysis </strong></div> 
+         <div class="text-orange-500 text-sm my-2"><strong>Box Plot Analysis </strong></div> 
+         <p class="text-sm">An evaluation session consists of 29 questions whose maximum score is 3 so all in all a mentee can get a maximum of 87 points, for this chart, we converted their scores using this base and ploted their scores as a percentage to get a representational picture of the mean, median and the upper and lower quantiles of each district.</p>
+    
         </template>
         <div v-if="boxPlotPerformanceChart">
    
-            <apexchart width="1200" height="350" type="boxPlot" :options="boxPlotPerformanceChart.options" :series="boxPlotPerformanceChart.series"></apexchart>
+            <apexchart width="1200" height="450" type="boxPlot" :options="boxPlotPerformanceChart.options" :series="boxPlotPerformanceChart.series"></apexchart>
           </div>
       </UCard>
 

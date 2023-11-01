@@ -4,6 +4,12 @@ import { useAsyncState } from '@vueuse/core';
 import { format } from 'date-fns'
 import { mean, mode, standardDeviation, sampleSkewness } from 'simple-statistics'
 
+
+const isOpenMean = ref(false)
+const isOpenModal = ref(false)
+const isOpenStdDeviation = ref(false)
+const isOpenSkewness = ref(false)
+
 const route = useRoute()
 
 const menteeId = route.params.id;
@@ -129,8 +135,8 @@ const getflatScores = scoreArrays.state
                         <div class="flex border-r-2 border-gray-400 justify-items-center">
                             <div class="justify-start w-1/2">
                                 <NuxtLink :to="{ name: 'mentees-analysis-id', params: { id: menteeId } }">
-                                    <UButton size="xl" color="red" variant="outline">
-                                        Indepth Analysis
+                                    <UButton size="xl" color="purple" variant="outline">
+                                        <strong>Indepth Analysis</strong>
                                     </UButton>
                                 </NuxtLink>
                             </div>
@@ -153,50 +159,305 @@ const getflatScores = scoreArrays.state
                     <div class=" text-orange-500"><strong>Scores Analysis</strong></div>
 
                     <div class="grid grid-cols-4">
-                        <div class="mt-5 mx-2">
-                            <div class="text-center">
-                                <div class="border-b-4 border-yellow-300 pb-2"> <strong>Mean Score</strong></div>
-                                <div>
-                                    <div v-if="getflatScores" class="text-3xl"> {{ mean(getflatScores).toFixed(2) }}</div>
-                                    <div v-else> calc ...</div>
+                        <div class="mt-5 mx-2 cursor-pointer" @click="isOpenMean = true">
+                            <UCard class=" hover:border-yellow-400 hover:border-2 ">
+                                <div class="text-center">
+                                    <div class="border-b-4 border-yellow-300 pb-2"> <strong>Mean Score</strong></div>
+                                    <div>
+                                        <div v-if="getflatScores" class="text-3xl"> {{ mean(getflatScores).toFixed(2) }}
+                                        </div>
+                                        <div v-else> calc ...</div>
+                                    </div>
                                 </div>
-                            </div>
+                            </UCard>
                         </div>
-                        <div class="mt-5 mx-2">
-                            <div class="text-center">
-                                <div class="border-b-4 border-green-500 pb-2"> <strong>Modal Score</strong></div>
-                                <div>
-                                    <div v-if="getflatScores" class="text-3xl"> {{ mode(getflatScores) }}</div>
-                                    <div v-else> calc ...</div>
+                        <div class="mt-5 mx-2 cursor-pointer" @click="isOpenModal = true">
+                            <UCard class=" hover:border-green-400 hover:border-2 ">
+                                <div class="text-center">
+                                    <div class="border-b-4 border-green-300 pb-2"> <strong>Mode Score</strong></div>
+                                    <div>
+                                        <div v-if="getflatScores" class="text-3xl"> {{ mode(getflatScores) }}
+                                        </div>
+                                        <div v-else> calc ...</div>
+                                    </div>
                                 </div>
-                            </div>
+                            </UCard>
                         </div>
-                        <div class="mt-5 mx-2">
-                            <div class="text-center">
-                                <div class="border-b-4 border-blue-500 pb-2"> <strong>Std Deviation</strong></div>
-                                <div>
-                                    <div v-if="getflatScores" class="text-3xl"> {{
-                                        standardDeviation(getflatScores).toFixed(2)
-                                    }}</div>
-                                    <div v-else> calc ...</div>
+                        <div class="mt-5 mx-2 cursor-pointer" @click="isOpenStdDeviation = true">
+                            <UCard class=" hover:border-blue-400 hover:border-2 ">
+                                <div class="text-center">
+                                    <div class="border-b-4 border-blue-300 pb-2"> <strong>Std Deviation of Scores</strong>
+                                    </div>
+                                    <div>
+                                        <div v-if="getflatScores" class="text-3xl"> {{
+                                            standardDeviation(getflatScores).toFixed(2) }}
+                                        </div>
+                                        <div v-else> calc ...</div>
+                                    </div>
                                 </div>
-                            </div>
+                            </UCard>
                         </div>
-                        <div class="mt-5 mx-2">
-                            <div class="text-center">
-                                <div class="border-b-4 border-red-500 pb-2"> <strong>Sample Skewness</strong></div>
-                                <div v-if="getflatScores">
-                                    <div v-if="getflatScores.length > 3" class="text-3xl"> {{
-                                                                            sampleSkewness(getflatScores).toFixed(2) }}</div>
-                                    <div v-else> n/a </div>
-                            </div>
+                        <div class="mt-5 mx-2 cursor-pointer" @click="isOpenSkewness = true">
+                            <UCard class=" hover:border-red-400 hover:border-2 ">
+                                <div class="text-center">
+                                    <div class="border-b-4 border-red-300 pb-2"> <strong>Skewness of Scores</strong></div>
+                                    <div>
+                                        <div v-if="getflatScores" class="text-3xl"> {{
+                                            sampleSkewness(getflatScores).toFixed(2) }}
+                                        </div>
+                                        <div v-else> calc ...</div>
+                                    </div>
+                                </div>
+                            </UCard>
                         </div>
                     </div>
                 </div>
-            </div>
-        </UContainer>
-    </div>
+            </UContainer>
+        </div>
 
-</div></template>
+    </div>
+    <!--mean-->
+    <USlideover v-model="isOpenMean">
+        <UCard class="flex flex-col flex-1 "
+            :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-500 dark:divide-gray-800' }"
+            v-if="getflatScores">
+            <template #header>
+                <!-- Content -->
+                <div class="flex">
+                    <div class=" text-green-500"><strong>Mean/Average Scores</strong></div>
+                </div>
+            </template>
+            <!-- Content -->
+            <div class="my-2">
+                <p>The mean score for <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> for all their scores aggregated over
+                    <span class="text-red-500 text-sm italic"><strong>{{ mentee.length }}</strong></span> evaluations is
+                    <span class="text-blue-500 text-sm italic"><strong>{{ mean(getflatScores).toFixed(2) }}</strong></span>
+                </p>
+            </div>
+            <div v-if="mean(getflatScores) < 1.5">
+                <p>This means overally <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> performed <span
+                        class=" text-red-500 italic"><strong>Poorly</strong></span>, and the performance is unacceptable</p>
+            </div>
+            <div v-if="mean(getflatScores) >= 1.5 || mean(getflatScores) <= 2.5">
+                <p>This means overally <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> performed <span
+                        class=" text-yellow-500 italic"><strong>Moderately</strong></span>, and the performance is
+                    acceptable but needs improvement</p>
+            </div>
+            <div v-if="mean(getflatScores) > 2.5">
+                <p>This means overally <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> is <span
+                        class=" text-green-500 italic"><strong>Competent</strong></span>, and the performance is good, a
+                    master of skill</p>
+            </div>
+
+            <template #footer>
+                <!-- Content -->
+                <div>
+                    <p><span class="text-red-500"><strong>NB:</strong></span> <span class="text-sm italic"> This is data
+                            collected over <span class="text-blue-500 text-sm italic"><strong>{{ mentee.length
+                            }}</strong></span> evaluation sessions.</span></p>
+                </div>
+            </template>
+        </UCard>
+    </USlideover>
+
+    <!--mode-->
+
+    <USlideover v-model="isOpenModal">
+        <UCard class="flex flex-col flex-1 "
+            :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-500 dark:divide-gray-800' }"
+            v-if="getflatScores">
+            <template #header>
+                <!-- Content -->
+                <div class="flex">
+                    <div class=" text-green-500"><strong>Mode Score</strong></div>
+                </div>
+            </template>
+            <!-- Content -->
+            <div class="my-2">
+                <p>The mode score for <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> for all their scores aggregated over
+                    <span class="text-red-500 text-sm italic"><strong>{{ mentee.length }}</strong></span> evaluations is
+                    <span class="text-blue-500 text-sm italic"><strong>{{ mode(getflatScores) }}</strong></span>
+                </p>
+            </div>
+            <div v-if="mode(getflatScores) == 0" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span> got a score of <span
+                        class="text-gray-500 italic"><strong>0 (Not Applicable - could not be evaluated)</strong></span> on
+                    most of the evaluation items.</p>
+            </div>
+            <div v-if="mode(getflatScores) == 1" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span> got a score of <span
+                        class=" text-red-500 italic"><strong>1 (Poor - unacceptable performance)</strong></span> on most of
+                    the evaluation items.</p>
+            </div>
+            <div v-if="mode(getflatScores) == 2" class="my-2">
+                <p>This means overally <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> got a score of <span
+                        class=" text-yellow-500 italic"><strong>2 (Moderate - acceptable but needs
+                            improvement)</strong></span> on most of the evaluation items.</p>
+            </div>
+            <div v-if="mode(getflatScores) == 3" class="my-2">
+                <p>This means overally <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> got a score of <span
+                        class=" text-green-500 italic"><strong>3 (Competent - good, master of skill)</strong></span> on most
+                    of the evaluation items.</p>
+            </div>
+
+
+
+
+            <template #footer>
+                <!-- Content -->
+                <div>
+                    <p><span class="text-red-500"><strong>NB:</strong></span> <span class="text-sm italic"> This is data
+                            collected over <span class="text-blue-500 text-sm italic"><strong>{{ mentee.length
+                            }}</strong></span> evaluation sessions.</span></p>
+                </div>
+            </template>
+        </UCard>
+    </USlideover>
+
+    <!--Std Deviation-->
+
+    <USlideover v-model="isOpenStdDeviation">
+        <UCard class="flex flex-col flex-1 "
+            :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-500 dark:divide-gray-800' }"
+            v-if="getflatScores">
+            <template #header>
+                <!-- Content -->
+                <div class="flex">
+                    <div class=" text-green-500"><strong>Standard Devation of Scores</strong></div>
+                </div>
+            </template>
+            <!-- Content -->
+            <div class="my-2">
+                <p>The Standard Deviation of scores for <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> for all their scores aggregated over
+                    <span class="text-red-500 text-sm italic"><strong>{{ mentee.length }}</strong></span> evaluations is
+                    <span class="text-blue-500 text-sm italic"><strong>{{ standardDeviation(getflatScores).toFixed(2)
+                    }}</strong></span>
+                </p>
+            </div>
+            <div v-if="standardDeviation(getflatScores) == 0" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span> got equal scores across all evaluations
+                </p>
+            </div>
+            <div v-else-if="standardDeviation(getflatScores) > 0 && standardDeviation(getflatScores) < 0.5" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s scores do not differ much from the
+                    average or mean </p>
+            </div>
+
+            <div v-else-if="standardDeviation(getflatScores) >= 0.5 && standardDeviation(getflatScores) < 1" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s scores differ by some considerable
+                    margin from the mean </p>
+            </div>
+            <div v-else-if="standardDeviation(getflatScores) >= 1 && standardDeviation(getflatScores) < 1.5" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s scores differs considerably from the
+                    mean </p>
+            </div>
+            <div v-else class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s scores differs very much from the
+                    mean </p>
+            </div>
+
+
+
+
+
+            <template #footer>
+                <!-- Content -->
+                <div>
+                    <p><span class="text-red-500"><strong>NB:</strong></span> <span class="text-sm italic"> This is data
+                            collected over <span class="text-blue-500 text-sm italic"><strong>{{ mentee.length
+                            }}</strong></span> evaluation sessions.</span></p>
+                </div>
+            </template>
+        </UCard>
+    </USlideover>
+
+    <!--sampleSkewness-->
+    <USlideover v-model="isOpenSkewness">
+        <UCard class="flex flex-col flex-1 "
+            :ui="{ body: { base: 'flex-1' }, ring: '', divide: 'divide-y divide-gray-500 dark:divide-gray-800' }"
+            v-if="getflatScores">
+            <template #header>
+                <!-- Content -->
+                <div class="flex">
+                    <div class=" text-green-500"><strong>Skewness of Scores</strong></div>
+                </div>
+            </template>
+            <!-- Content -->
+            <div class="my-2">
+                <p>The sample skewness of the scores for <span class="text-red-500 text-sm italic"><strong>{{
+                    mentee[0].info.menteeInfo[0].firstname }} {{
+        mentee[0].info.menteeInfo[0].lastname }}</strong></span> for all their scores aggregated over
+                    <span class="text-red-500 text-sm italic"><strong>{{ mentee.length }}</strong></span> evaluations is
+                    <span class="text-blue-500 text-sm italic"><strong>{{ sampleSkewness(getflatScores).toFixed(2)
+                    }}</strong></span>
+                </p>
+            </div>
+            <div v-if="sampleSkewness(getflatScores) == 0" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s score data is likely asymmetrical.
+                </p>
+            </div>
+            <div v-else-if="sampleSkewness(getflatScores) < 0" class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s are negatively skewed, it has a tail
+                    on the negative side of the graph, meaning the graph is skewed to the left, so when modeling the data or
+                    making
+                    statistical inferences its best to take this into account.
+                </p>
+            </div>
+
+            <div v-else="sampleSkewness(getflatScores) > 0  " class="my-2">
+                <p>This means <span class="text-red-500 text-sm italic"><strong>{{ mentee[0].info.menteeInfo[0].firstname }}
+                            {{
+                                mentee[0].info.menteeInfo[0].lastname }}</strong></span>'s are positively skewed, it has a tail
+                    on the positive side of the graph, meaning the graph is skewed to the right, so when modeling the data or
+                    making
+                    statistical inferences its best to take this into account.
+                </p>
+            </div>
+
+
+        <template #footer>
+            <!-- Content -->
+            <div>
+                <p><span class="text-red-500"><strong>NB:</strong></span> <span class="text-sm italic"> This is data
+                        collected over <span class="text-blue-500 text-sm italic"><strong>{{ mentee.length
+                                }}</strong></span> evaluation sessions.</span></p>
+            </div>
+        </template>
+    </UCard>
+</USlideover></template>
 <script setup>
 </script>

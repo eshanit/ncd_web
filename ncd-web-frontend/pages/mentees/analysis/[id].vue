@@ -131,7 +131,7 @@ const chartOptions = (data: any) => {
 const series = (data: any) => {
     let vm: any[] = [];
 
-    const newData = data.reverse()
+    const newData = data
 
     for (var i = 0; i < newData.length; i++) {
         vm.push(newData[i].meanScore)
@@ -551,17 +551,20 @@ const getflatPercScores = scorePercArrays.state
         </nav>
     </header>
 
-    <div v-if="tableData">
+    <div v-if="mentee">
         <UContainer>
-            <div class="my-6 pl-6" v-if="mentee">
+            <div class="my-12 pl-6 py-3" v-if="mentee">
                 <strong><span class="text-green-500 text-2xl p-1">{{ mentee[0].info.menteeInfo[0].firstname
                 }}</span></strong>|<span class="text-orange-500 p-1">{{
     (mentee[0].info.menteeInfo[0].lastname).toLowerCase() }}</span>
             </div>
 
-            <UCard class="mx-auto my-5">
+            <UCard class="mx-auto">
                 <template #header>
-                    <div><strong>List of Evaluations</strong></div>
+                    <div class="text-orange-500 text-sm my-2"><strong>List of Evaluations</strong></div>
+                    <div class="text-sm">Below is a list of all the evaluations for <span class="italic bold"> {{ mentee[0].info.menteeInfo[0].firstname
+                }} {{ mentee[0].info.menteeInfo[0].lastname
+                }}</span>. To see a report on an evaluation, click the evaluation report button. </div>
                 </template>
                 <div>
                     <UTable :columns=columns :rows="getRows(tableData)">
@@ -575,7 +578,7 @@ const getflatPercScores = scorePercArrays.state
                             <NuxtLink :to="{ name: 'mentees-scores-scoreid', params: { scoreid: row.id } }">
                                 <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
                                     square variant="outline">
-                                    score report | <span class=" text-red-500">view</span></UButton>
+                                    Eval report | <span class=" text-red-500">view</span></UButton>
                             </NuxtLink>
 
                         </template>
@@ -586,7 +589,12 @@ const getflatPercScores = scorePercArrays.state
             <!-- chart 1-->
 
             <UCard class="pt-5 mx-auto my-5">
-                <template #header><strong>Bar Chart for Mean Scores</strong></template>
+                <template #header>
+                    <div class="text-sm text-orange-500 my-2"><strong>Bar Chart for Mean Scores</strong></div>
+                    <div class="text-sm">Each evaluation that <span class="italic bold"> {{ mentee[0].info.menteeInfo[0].firstname
+                }} {{ mentee[0].info.menteeInfo[0].lastname
+                }}</span> completed has its mean score calculated over the 29 evaluation items. Below is a bar chart which gives a visual representation of the mean scores over time. </div>
+                </template>
                 <div class="w-full border-solid hover:border-dotted border-black" v-if="tableData">
                     <apexchart class="pr-3" width="1200" height="400" type="bar" :options="chartOptions(tableData)"
                         :series="series(tableData)">
@@ -597,7 +605,12 @@ const getflatPercScores = scorePercArrays.state
             <!-- chart 2 -->
 
             <UCard class="pt-5 mx-auto my-5">
-                <template #header><strong>Compare actual scores:</strong></template>
+                <template #header>
+                    <div class="text-sm text-orange-500 my-2"><strong>Line Chart Comparison of Scores</strong></div>
+                    <div class="text-sm">Each evaluation that <span class="italic bold"> {{ mentee[0].info.menteeInfo[0].firstname
+                }} {{ mentee[0].info.menteeInfo[0].lastname
+                }}</span> completed has 29 evaluation items. Below is a line chart which gives a visual representation of hpw the mentee faired on each question. The graph is interactive, you can select and deselect the dates which you want to analyse. </div>
+                </template>
                 <div class="w-full border-solid hover:border-dotted border-black" v-if="chartData">
                     <apexchart width="1200" height="500" type="line" :options="chartData.options"
                         :series="chartData.series">
@@ -610,12 +623,12 @@ const getflatPercScores = scorePercArrays.state
             <UCard class="pt-5 mx-auto my-5">
                 <template #header>
                     <div class="grid grid-cols-2 ">
-                        <div class="left-0">
+                        <div class="left-0 text-sm text-orange-500 ">
                             <strong>Score Break Down:</strong>
                         </div>
                         <div class="">
                             <div class="" v-show="!perc">
-                                <UButton @click="perc = !perc" color="orange" variant="outline"> View in %</UButton>
+                                <UButton @click="perc = !perc" color="purple" variant="outline"> View in %</UButton>
                             </div>
                             <div class="" v-show="perc">
                                 <UButton @click="perc = !perc" color="green" variant="outline"> View in Scores</UButton>
@@ -623,8 +636,7 @@ const getflatPercScores = scorePercArrays.state
                         </div>
 
                     </div>
-
-
+                    <div class="text-sm">The graph below shows score counts for each evaluation session. To toggle between percentages and counts click the button above.</div>
                 </template>
                 <div v-show="!perc">
                     <div class="w-full border-solid hover:border-dotted border-black" v-if="getflatScores">

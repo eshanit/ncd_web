@@ -124,11 +124,12 @@ const items = (row: { id: any; }) => [
         <UContainer>
             <UCard class="my-5">
                 <template #header>
-                    <div class="flex">
-                        <div class="text-orange-500 pr-1"><strong>Mentees</strong></div> | <div class="text-green-500 pl-1">
+                    <div class="flex my-2">
+                        <div class="text-orange-500 text-sm pr-1"><strong>Mentees</strong></div> | <div class="text-green-500 text-sm pl-1">
                             {{
                                 districtId }}</div>
                     </div>
+                    <div class="text-sm"><p>Below is a list of all the mentees in this district.</p></div>
                 </template>
                 <UTable :columns=columns :rows="getRows(evals)">
                     <template #empty-state>
@@ -154,26 +155,28 @@ const items = (row: { id: any; }) => [
 
             <UCard>
                 <template #header>
-                    <div class="flex">
-                        <div class="text-orange-500 pr-1"><strong>DM Segment Analysis</strong></div>|<div
-                            class="text-green-500 pl-1">{{ districtId }}</div>
+                    <div class="flex my-2">
+                        <div class="text-orange-500 pr-1 text-sm"><strong>DM Segment Analysis</strong></div>|<div
+                            class="text-green-500 pl-1 ext-sm">{{ districtId }}</div>
                     </div>
+                    <div class="text-sm"><p>The DM Evaluation Form has two segements 1. <span class="text-red-500"><strong>Introduction and Initial Evaluation</strong></span> and 2. <span class="text-cyan-500"><strong>Management of DM</strong></span> each of which are further devided into 3 subsections. 
+                        The charts below gives a visual represantation of the distribution of scores in each of those sub-sections and their proportions.</p></div>
                 </template>
                 <!--IIE CHARTS-->
                 <div v-if="chartSegmentData">
                     <div class="  border-b border-gray-300 pb-2 pt-2 ">
                         <p> Section A: <strong> Introduction and Initial Evaluation</strong></p>
                     </div>
-                    <div class="grid grid-cols-3">
+                    <div class="grid grid-cols-3" >
                         <div>
                             <div class="flex border-r border-green-600 text-center p-2">
                                 <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Knowledge</div>
-                                <div class="flex-1" v-show="!isOpenIIEKnowledge">
+                                <div class="flex-1" v-show="!isOpenIIEKnowledge" v-auto-animate>
                                     <UButton label="Open" @click="isOpenIIEKnowledge = true" variant="outline"><strong>View
                                             Proportions</strong>
                                     </UButton>
                                 </div>
-                                <div class="flex-1" v-show="isOpenIIEKnowledge">
+                                <div class="flex-1" v-show="isOpenIIEKnowledge" v-auto-animate>
                                     <UButton label="Open" @click="isOpenIIEKnowledge = false" variant="outline"
                                         color="purple"><strong>View Counts</strong>
                                     </UButton>
@@ -202,90 +205,201 @@ const items = (row: { id: any; }) => [
                             </div>
                         </div>
                         <div>
-                            <div class=" border-r border-green-600 text-center p-2">
-                                <div class="text-gray-500 text-xl pb-1">Acquired-Skill</div>
-                                <!-- <div> Average Score: <UButton label="Open" @click="isOpenIIEKnowledge = true"><strong>{{
-                            mentee.scoreStats.averageIIEKnowledgeScore }}</strong></UButton>
-                        </div> -->
+                            <div class="flex border-r border-green-600 text-center p-2">
+                                <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Acquired-Skill</div>
+                                <div class="flex-1" v-show="!isOpenIIEAcquiredSkill">
+                                    <UButton label="Open" @click="isOpenIIEAcquiredSkill = true" variant="outline">
+                                        <strong>View
+                                            Proportions</strong>
+                                    </UButton>
+                                </div>
+                                <div class="flex-1" v-show="isOpenIIEAcquiredSkill">
+                                    <UButton label="Open" @click="isOpenIIEAcquiredSkill = false" variant="outline"
+                                        color="purple"><strong>View Counts</strong>
+                                    </UButton>
+                                </div>
                             </div>
-                            <div class="border-r border-green-500  pb-2 " v-if="chartSegmentData">
+                            <div class="border-r border-green-500  pb-2" v-show="!isOpenIIEAcquiredSkill">
                                 <apexchart width="350" type="line"
                                     :options="chartSegmentData.lineColumn.optionsiieAcquiredSkill"
                                     :series="chartSegmentData.lineColumn.seriesiieAcquiredSkill"></apexchart>
                             </div>
+                            <div class="border-r border-green-500  pb-2 " v-show="isOpenIIEAcquiredSkill">
+                                <apexchart type="donut" :options="{
+                                    labels: chartSegmentData.pie.keys.iieacquiredskill,
+                                    responsive: [{
+                                        breakpoint: 350,
+                                        options: {
+                                            chart: {
+                                                width: 250
+                                            },
+                                            legend: {
+                                                position: 'top'
+                                            }
+                                        }
+                                    }]
+                                }" :series="chartSegmentData.pie.values.iieacquiredskill"></apexchart>
+                            </div>
                         </div>
                         <div>
-                            <div class=" text-center p-2">
-                                <div class="text-gray-500 text-xl pb-1">Behaviour</div>
-                                <!-- <div> Average Score: <UButton label="Open" @click="isOpenIIEKnowledge = true"><strong>{{
-                            mentee.scoreStats.averageIIEKnowledgeScore }}</strong></UButton>
-                        </div> -->
+                            <div class="flex border-r border-green-600 text-center p-2">
+                                <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Behaviour</div>
+                                <div class="flex-1" v-show="!isOpenIIEBehaviour">
+                                    <UButton label="Open" @click="isOpenIIEBehaviour = true" variant="outline"><strong>View
+                                            Proportions</strong>
+                                    </UButton>
+                                </div>
+                                <div class="flex-1" v-show="isOpenIIEBehaviour">
+                                    <UButton label="Open" @click="isOpenIIEBehaviour = false" variant="outline"
+                                        color="purple"><strong>View Counts</strong>
+                                    </UButton>
+                                </div>
                             </div>
-                            <div class=" pb-2 " v-if="chartSegmentData">
+                            <div class="border-r border-green-500  pb-2" v-show="!isOpenIIEBehaviour">
                                 <apexchart width="350" type="line"
                                     :options="chartSegmentData.lineColumn.optionsiieBehaviour"
                                     :series="chartSegmentData.lineColumn.seriesiieBehaviour"></apexchart>
                             </div>
+                            <div class="border-r border-green-500  pb-2 " v-show="isOpenIIEBehaviour">
+                                <apexchart type="donut" :options="{
+                                    labels: chartSegmentData.pie.keys.iiebehaviour,
+                                    responsive: [{
+                                        breakpoint: 350,
+                                        options: {
+                                            chart: {
+                                                width: 250
+                                            },
+                                            legend: {
+                                                position: 'top'
+                                            }
+                                        }
+                                    }]
+                                }" :series="chartSegmentData.pie.values.iiebehaviour"></apexchart>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
                 <!--MANAGEMENT CHARTS-->
-                <div>
+                <div class="" v-if="chartSegmentData">
                     <div class="  border-b border-gray-300 pb-2 pt-2 ">
                         <p> Section B: <strong> Management of DM</strong></p>
                     </div>
-                    <div class="grid grid-cols-3">
+                    <div class="grid grid-cols-3" v-auto-animate>
+
                         <div>
-                            <div class=" border-r border-green-600 text-center p-2">
-                                <div class="text-gray-500 text-xl pb-1"> Knowledge</div>
-                                <!-- <div> Average Score: <UButton label="Open" @click="isOpenIIEKnowledge = true"><strong>{{
-                            mentee.scoreStats.averageIIEKnowledgeScore }}</strong></UButton>
-                        </div> -->
+                            <div class="flex border-r border-green-600 text-center p-2">
+                                <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Knowledge</div>
+                                <div class="flex-1" v-show="!isOpenMngtKnowledge">
+                                    <UButton label="Open" @click="isOpenMngtKnowledge = true" variant="outline"><strong>View
+                                            Proportions</strong>
+                                    </UButton>
+                                </div>
+                                <div class="flex-1" v-show="isOpenMngtKnowledge">
+                                    <UButton label="Open" @click="isOpenMngtKnowledge = false" variant="outline"
+                                        color="purple"><strong>View Counts</strong>
+                                    </UButton>
+                                </div>
                             </div>
-                            <div class="border-r border-green-500  pb-2 " v-if="chartSegmentData">
+                            <div class="border-r border-green-500  pb-2" v-show="!isOpenMngtKnowledge">
                                 <apexchart width="350" type="line"
                                     :options="chartSegmentData.lineColumn.optionsmngtKnowledge"
                                     :series="chartSegmentData.lineColumn.seriesmngtKnowledge"></apexchart>
                             </div>
+                            <div class="border-r border-green-500  pb-2 " v-show="isOpenMngtKnowledge">
+                                <apexchart type="donut" :options="{
+                                    labels: chartSegmentData.pie.keys.mngtknowledge,
+                                    responsive: [{
+                                        breakpoint: 350,
+                                        options: {
+                                            chart: {
+                                                width: 250
+                                            },
+                                            legend: {
+                                                position: 'top'
+                                            }
+                                        }
+                                    }]
+                                }" :series="chartSegmentData.pie.values.mngtknowledge"></apexchart>
+                            </div>
                         </div>
                         <div>
-                            <div class=" border-r border-green-600 text-center p-2">
-                                <div class="text-gray-500 text-xl pb-1">Acquired-Skill</div>
-                                <!-- <div> Average Score: <UButton label="Open" @click="isOpenIIEKnowledge = true"><strong>{{
-                            mentee.scoreStats.averageIIEKnowledgeScore }}</strong></UButton>
-                        </div> -->
+                            <div class="flex border-r border-green-600 text-center p-2">
+                                <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Acquired-Skill</div>
+                                <div class="flex-1" v-show="!isOpenMngtAcquiredSkill">
+                                    <UButton label="Open" @click="isOpenMngtAcquiredSkill = true" variant="outline">
+                                        <strong>View
+                                            Proportions</strong>
+                                    </UButton>
+                                </div>
+                                <div class="flex-1" v-show="isOpenMngtAcquiredSkill">
+                                    <UButton label="Open" @click="isOpenMngtAcquiredSkill = false" variant="outline"
+                                        color="purple"><strong>View Counts</strong>
+                                    </UButton>
+                                </div>
                             </div>
-                            <div class="border-r border-green-500  pb-2 " v-if="chartSegmentData">
+                            <div class="border-r border-green-500  pb-2" v-show="!isOpenMngtAcquiredSkill">
                                 <apexchart width="350" type="line"
                                     :options="chartSegmentData.lineColumn.optionsmngtAcquiredSkill"
                                     :series="chartSegmentData.lineColumn.seriesmngtAcquiredSkill"></apexchart>
                             </div>
+                            <div class="border-r border-green-500  pb-2 " v-show="isOpenMngtAcquiredSkill">
+                                <apexchart type="donut" :options="{
+                                    labels: chartSegmentData.pie.keys.mngtacquiredskill,
+                                    responsive: [{
+                                        breakpoint: 350,
+                                        options: {
+                                            chart: {
+                                                width: 250
+                                            },
+                                            legend: {
+                                                position: 'top'
+                                            }
+                                        }
+                                    }]
+                                }" :series="chartSegmentData.pie.values.mngtacquiredskill"></apexchart>
+                            </div>
                         </div>
                         <div>
-                            <div class=" text-center p-2">
-                                <div class="text-gray-500 text-xl pb-1">Behaviour</div>
-                                <!-- <div> Average Score: <UButton label="Open" @click="isOpenIIEKnowledge = true"><strong>{{
-                            mentee.scoreStats.averageIIEKnowledgeScore }}</strong></UButton>
-                        </div> -->
+                            <div class="flex border-r border-green-600 text-center p-2">
+                                <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Behaviour</div>
+                                <div class="flex-1" v-show="!isOpenMngtBehaviour">
+                                    <UButton label="Open" @click="isOpenMngtBehaviour = true" variant="outline"><strong>View
+                                            Proportions</strong>
+                                    </UButton>
+                                </div>
+                                <div class="flex-1" v-show="isOpenMngtBehaviour">
+                                    <UButton label="Open" @click="isOpenMngtBehaviour = false" variant="outline"
+                                        color="purple"><strong>View Counts</strong>
+                                    </UButton>
+                                </div>
                             </div>
-                            <div class=" pb-2 " v-if="chartSegmentData">
+                            <div class="border-r border-green-500  pb-2" v-show="!isOpenMngtBehaviour">
                                 <apexchart width="350" type="line"
                                     :options="chartSegmentData.lineColumn.optionsmngtBehaviour"
                                     :series="chartSegmentData.lineColumn.seriesmngtBehaviour"></apexchart>
                             </div>
+                            <div class="border-r border-green-500  pb-2 " v-show="isOpenMngtBehaviour">
+                                <apexchart type="donut" :options="{
+                                    labels: chartSegmentData.pie.keys.mngtbehaviour,
+                                    responsive: [{
+                                        breakpoint: 350,
+                                        options: {
+                                            chart: {
+                                                width: 250
+                                            },
+                                            legend: {
+                                                position: 'top'
+                                            }
+                                        }
+                                    }]
+                                }" :series="chartSegmentData.pie.values.mngtbehaviour"></apexchart>
+                            </div>
                         </div>
-
                     </div>
                 </div>
 
             </UCard>
         </UContainer>
-        <div v-if="chartSegmentData">{{ chartSegmentData }}</div>
-
-
-
-
     </div>
 </template>
