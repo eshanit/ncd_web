@@ -111,7 +111,7 @@ const handleGoogleLoginError = () => {
 async function loginSuccessful() {
   loginSuccess.value = true;
   setTimeout(() => {
-    navigateTo("/dashboard");
+    navigateTo("/iam/dashboard");
   }, 300);
 }
 

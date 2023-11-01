@@ -1,3 +1,5 @@
+
+import { groupBy, uniqBy } from "lodash";
 /**
  * {
  * district,
@@ -14,46 +16,59 @@
  * }
  */
 
-const useDistructTableData = async (district: any, mentee: any) => {
-  //district
-  const districtData = district.then((response: any) => {
-    const state = response.state.value;
-    let vmDistricts: any[] = [];
-    let vmFacilities: any[] = [];
+const useDistructTableData = async (data: any) => {
+  ///
+  return data.then((response: any) => {
+    const state: any = response.state.value;
 
-    for (var i = 0; i < state.length; i++) {
-      vmDistricts.push(state[i].district);
-      vmFacilities.push(state[i].facilities);
+    const districts: any[] = Object.keys(state);
+    const districtEvals: any[] = Object.values(state);
+
+    let vmDistrictEvalCounts: any[] = [];
+
+    for (var i = 0; i < districtEvals.length; i++) {
+      vmDistrictEvalCounts.push(districtEvals[i].length);
     }
 
-    return {
-      districts: vmDistricts,
-      facilities: vmFacilities,
-    };
-  });
+    /// Mentees
+    const distNames :any[] = [];
 
-  //mentees
+    districtEvals.forEach((element: any) => {
+        element.forEach((el: any) => {
+          distNames.push(
+            {
 
-  const menteeData = mentee.then((response: any) => {
-    const state = response.state.value;
-    let vmDistrictMenteeCounts: any[] = []
+              district: el.district,
+              facility: el.facility,
+              fullname: el.info.menteeInfo[0].firstname + ' ' + el.info.menteeInfo[0].lastname
+            });
+      });
+    });
 
-    const districts: any[] = Object.keys(state)
-    const districtMentees: any[] = Object.values(state)
+    const districtMenteeCounts = Object.values(groupBy(distNames, 'district')).map((element)=>{
+      return uniqBy(element,(obj)=> obj.fullname).length
+    });
 
-    for(var i = 0; i < districtMentees.length; i++){
-       vmDistrictMenteeCounts.push(districtMentees[i].length)
+    const districtFacilityCounts = Object.values(groupBy(distNames, 'district')).map((element)=>{
+      return uniqBy(element,(obj)=> obj.facility).length
+    });
+  
+
+    ///
+
+    const dataTable: any[] = [];
+
+    for (var i = 0; i < districts.length; i++) {
+      dataTable.push({
+        district: districts[i],
+        evaluations: vmDistrictEvalCounts[i],
+        mentees: districtMenteeCounts[i],
+        facilities: districtFacilityCounts[i]
+      });
     }
 
-    return {
-      districtsFromMentees: districts,
-      menteesInDistrict: districtMentees ,
-      districtMenteeCounts: vmDistrictMenteeCounts
-    } ;
-
+    return dataTable;
   });
-
-  return menteeData; 
 };
 
 export default useDistructTableData;

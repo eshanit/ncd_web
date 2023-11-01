@@ -64,6 +64,19 @@ export const useEvaluationsStore = defineStore("evaluations", {
       return evals.then((resp: any)=>{
         return groupBy(resp, 'district')
       })
+    },
+    async groupedByFacility() {
+      const evals = this.evaluations();
+      
+      return evals.then((resp: any)=>{
+        return groupBy(resp, 'facility')
+      })
+    },
+    async getEvalByDistrict(district: string | string[]){
+      const evals = this.evaluations()
+      return evals.then((resp: any)=>{
+        return resp.filter((evaluation: any) => evaluation.district === district);
+      })
     }
   },
 });
