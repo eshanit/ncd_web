@@ -71,13 +71,17 @@ const columns = [
         label: 'View'
     }
 ]
-
+const q = ref('')
 const page = ref(1)
 const pageCount = 5
 
 const getRows = (data: any) => {
 
-    return data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return data.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
 
@@ -562,11 +566,14 @@ const getflatPercScores = scorePercArrays.state
             <UCard class="mx-auto">
                 <template #header>
                     <div class="text-orange-500 text-sm my-2"><strong>List of Evaluations</strong></div>
-                    <div class="text-sm">Below is a list of all the evaluations for <span class="italic bold"> {{ mentee[0].info.menteeInfo[0].firstname
+                    <div class="text-sm">Below is a list of all the evaluations for <span class="italic text-green-500"> {{ mentee[0].info.menteeInfo[0].firstname
                 }} {{ mentee[0].info.menteeInfo[0].lastname
                 }}</span>. To see a report on an evaluation, click the evaluation report button. </div>
                 </template>
                 <div>
+                    <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                        <UInput v-model="q" placeholder="Filter people..." />
+                    </div>
                     <UTable :columns=columns :rows="getRows(tableData)">
                         <template #empty-state>
                             <div class="flex flex-col items-center justify-center py-6 gap-3">
@@ -575,7 +582,7 @@ const getflatPercScores = scorePercArrays.state
                             </div>
                         </template>
                         <template #actions-data="{ row }">
-                            <NuxtLink :to="{ name: 'mentees-scores-scoreid', params: { scoreid: row.id } }">
+                            <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.id } }">
                                 <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
                                     square variant="outline">
                                     Eval report | <span class=" text-red-500">view</span></UButton>

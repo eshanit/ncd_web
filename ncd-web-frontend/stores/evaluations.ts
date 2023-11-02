@@ -77,6 +77,15 @@ export const useEvaluationsStore = defineStore("evaluations", {
       return evals.then((resp: any)=>{
         return resp.filter((evaluation: any) => evaluation.district === district);
       })
+    },
+    async getIncompleteEvals(){
+      const config = useRuntimeConfig();
+
+      const { data, pending, error, refresh } = await useFetch(
+        `${config.public.nestServerUrl}/incomplete`
+      );
+
+      return data.value;
     }
   },
 });

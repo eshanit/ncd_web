@@ -67,7 +67,7 @@ const incompleteEvals: any = incompleteEvalsData.state
 
         <UCard class=" border-slate-700 border-2 text-center w-1/3 m-2 hover:bg-slate-200 hover:text-white"
           v-if="mentees">
-          <NuxtLink to="/mentees/report">
+          <NuxtLink :to="{ name: 'mentees-report' }">
             <h3 class=""><strong>Mentees</strong></h3>
             <div class=" w-full h-px max-w-6xl mx-auto my-1"
               style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
@@ -94,7 +94,7 @@ const incompleteEvals: any = incompleteEvalsData.state
         </UCard>
 
         <UCard class=" border-amber-500 border-2 text-center w-1/3 m-2  hover:bg-amber-200 hover:text-white" v-if="districts">
-          <NuxtLink to="/districts/list">
+          <NuxtLink :to="{ name: 'districts-list' }">
           <h3 class=""><strong>Districts</strong></h3>
           <div class=" w-full h-px max-w-6xl mx-auto my-1"
             style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
@@ -132,11 +132,13 @@ const incompleteEvals: any = incompleteEvalsData.state
           <div class=" w-full h-px max-w-6xl mx-auto my-5"
             style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
           </div>
-          <div v-if="evaluations" class="text-center">
+          <div v-if="incompleteEvals" class="text-center">
             <span class=" text-red-500 text-9xl">{{ incompleteEvals.length }}</span>
           </div>
         </div>
       </div>
+
+
     </div>
 
   </UContainer>
