@@ -2154,10 +2154,10 @@ const useDataForScoreTables = (data: any) => {
     const majorData = {
       dmQ1: {
         mentees: {
-          dmQ1NotApplicableMentees: dmQ1NotApplicableMentees,
-          dmQ1PoorMentees: dmQ1PoorMentees,
-          dmQ1AverageMentees: dmQ1AverageMentees,
-          dmQ1GoodMentees: dmQ1GoodMentees,
+          NotApplicableMentees: dmQ1NotApplicableMentees,
+          PoorMentees: dmQ1PoorMentees,
+          AverageMentees: dmQ1AverageMentees,
+          GoodMentees: dmQ1GoodMentees,
         },
         counts: countBy(dmQ1Data),
         statistics: {
@@ -2172,13 +2172,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ2: {
         mentees: {
-          dmQ2NotApplicableMentees: dmQ2NotApplicableMentees,
-          dmQ2PoorMentees: dmQ2PoorMentees,
-          dmQ2AverageMentees: dmQ2AverageMentees,
-          dmQ2GoodMentees: dmQ2GoodMentees,
+          NotApplicableMentees: dmQ2NotApplicableMentees,
+          PoorMentees: dmQ2PoorMentees,
+          AverageMentees: dmQ2AverageMentees,
+          GoodMentees: dmQ2GoodMentees,
         },
         counts: countBy(dmQ2Data),
         statistics: {
+          total: dmQ2Data.length,
           mean: mean(dmQ2Data),
           median: median(dmQ2Data),
           mode: mode(dmQ2Data),
@@ -2189,13 +2190,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ3: {
         mentees: {
-          dmQ3NotApplicableMentees: dmQ3NotApplicableMentees,
-          dmQ3PoorMentees: dmQ3PoorMentees,
-          dmQ3AverageMentees: dmQ3AverageMentees,
-          dmQ3GoodMentees: dmQ3GoodMentees,
+          NotApplicableMentees: dmQ3NotApplicableMentees,
+          PoorMentees: dmQ3PoorMentees,
+          AverageMentees: dmQ3AverageMentees,
+          GoodMentees: dmQ3GoodMentees,
         },
         counts: countBy(dmQ3Data),
         statistics: {
+          total: dmQ3Data.length,
           mean: mean(dmQ3Data),
           median: median(dmQ3Data),
           mode: mode(dmQ3Data),
@@ -2206,13 +2208,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ4: {
         mentees: {
-          dmQ4NotApplicableMentees: dmQ4NotApplicableMentees,
-          dmQ4PoorMentees: dmQ4PoorMentees,
-          dmQ4AverageMentees: dmQ4AverageMentees,
-          dmQ4GoodMentees: dmQ4GoodMentees,
+          NotApplicableMentees: dmQ4NotApplicableMentees,
+          PoorMentees: dmQ4PoorMentees,
+          AverageMentees: dmQ4AverageMentees,
+          GoodMentees: dmQ4GoodMentees,
         },
         counts: countBy(dmQ4Data),
         statistics: {
+          total: dmQ4Data.length,
           mean: mean(dmQ4Data),
           median: median(dmQ4Data),
           mode: mode(dmQ4Data),
@@ -2223,13 +2226,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ5: {
         mentees: {
-          dmQ5NotApplicableMentees: dmQ5NotApplicableMentees,
-          dmQ5PoorMentees: dmQ5PoorMentees,
-          dmQ5AverageMentees: dmQ5AverageMentees,
-          dmQ5GoodMentees: dmQ5GoodMentees,
+          NotApplicableMentees: dmQ5NotApplicableMentees,
+          PoorMentees: dmQ5PoorMentees,
+          AverageMentees: dmQ5AverageMentees,
+          GoodMentees: dmQ5GoodMentees,
         },
         counts: countBy(dmQ5Data),
         statistics: {
+          total: dmQ5Data.length,
           mean: mean(dmQ5Data),
           median: median(dmQ5Data),
           mode: mode(dmQ5Data),
@@ -2240,13 +2244,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ6: {
         mentees: {
-          dmQ6NotApplicableMentees: dmQ6NotApplicableMentees,
-          dmQ6PoorMentees: dmQ6PoorMentees,
-          dmQ6AverageMentees: dmQ6AverageMentees,
-          dmQ6GoodMentees: dmQ6GoodMentees,
+          NotApplicableMentees: dmQ6NotApplicableMentees,
+          PoorMentees: dmQ6PoorMentees,
+          AverageMentees: dmQ6AverageMentees,
+          GoodMentees: dmQ6GoodMentees,
         },
         counts: countBy(dmQ6Data),
         statistics: {
+          total: dmQ6Data.length,
           mean: mean(dmQ6Data),
           median: median(dmQ6Data),
           mode: mode(dmQ6Data),
@@ -2257,13 +2262,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ7: {
         mentees: {
-          dmQ7NotApplicableMentees: dmQ7NotApplicableMentees,
-          dmQ7PoorMentees: dmQ7PoorMentees,
-          dmQ7AverageMentees: dmQ7AverageMentees,
-          dmQ7GoodMentees: dmQ7GoodMentees,
+          NotApplicableMentees: dmQ7NotApplicableMentees,
+          PoorMentees: dmQ7PoorMentees,
+          AverageMentees: dmQ7AverageMentees,
+          GoodMentees: dmQ7GoodMentees,
         },
         counts: countBy(dmQ7Data),
         statistics: {
+          total: dmQ7Data.length,
           mean: mean(dmQ7Data),
           median: median(dmQ7Data),
           mode: mode(dmQ7Data),
@@ -2274,13 +2280,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ8: {
         mentees: {
-          dmQ8NotApplicableMentees: dmQ8NotApplicableMentees,
-          dmQ8PoorMentees: dmQ8PoorMentees,
-          dmQ8AverageMentees: dmQ8AverageMentees,
-          dmQ8GoodMentees: dmQ8GoodMentees,
+          NotApplicableMentees: dmQ8NotApplicableMentees,
+          PoorMentees: dmQ8PoorMentees,
+          AverageMentees: dmQ8AverageMentees,
+          GoodMentees: dmQ8GoodMentees,
         },
         counts: countBy(dmQ8Data),
         statistics: {
+          total: dmQ8Data.length,
           mean: mean(dmQ8Data),
           median: median(dmQ8Data),
           mode: mode(dmQ8Data),
@@ -2291,13 +2298,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ9: {
         mentees: {
-          dmQ9NotApplicableMentees: dmQ9NotApplicableMentees,
-          dmQ9PoorMentees: dmQ9PoorMentees,
-          dmQ9AverageMentees: dmQ9AverageMentees,
-          dmQ9GoodMentees: dmQ9GoodMentees,
+          NotApplicableMentees: dmQ9NotApplicableMentees,
+          PoorMentees: dmQ9PoorMentees,
+          AverageMentees: dmQ9AverageMentees,
+          GoodMentees: dmQ9GoodMentees,
         },
         counts: countBy(dmQ9Data),
         statistics: {
+          total: dmQ9Data.length,
           mean: mean(dmQ9Data),
           median: median(dmQ9Data),
           mode: mode(dmQ9Data),
@@ -2308,13 +2316,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ10: {
         mentees: {
-          dmQ10NotApplicableMentees: dmQ10NotApplicableMentees,
-          dmQ10PoorMentees: dmQ10PoorMentees,
-          dmQ10AverageMentees: dmQ10AverageMentees,
-          dmQ10GoodMentees: dmQ10GoodMentees,
+          NotApplicableMentees: dmQ10NotApplicableMentees,
+          PoorMentees: dmQ10PoorMentees,
+          AverageMentees: dmQ10AverageMentees,
+          GoodMentees: dmQ10GoodMentees,
         },
         counts: countBy(dmQ10Data),
         statistics: {
+          total: dmQ10Data.length,
           mean: mean(dmQ10Data),
           median: median(dmQ10Data),
           mode: mode(dmQ10Data),
@@ -2325,13 +2334,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ11: {
         mentees: {
-          dmQ11NotApplicableMentees: dmQ11NotApplicableMentees,
-          dmQ11PoorMentees: dmQ11PoorMentees,
-          dmQ11AverageMentees: dmQ11AverageMentees,
-          dmQ11GoodMentees: dmQ11GoodMentees,
+          NotApplicableMentees: dmQ11NotApplicableMentees,
+          PoorMentees: dmQ11PoorMentees,
+          AverageMentees: dmQ11AverageMentees,
+          GoodMentees: dmQ11GoodMentees,
         },
         counts: countBy(dmQ11Data),
         statistics: {
+          total: dmQ11Data.length,
           mean: mean(dmQ11Data),
           median: median(dmQ11Data),
           mode: mode(dmQ11Data),
@@ -2342,13 +2352,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ12: {
         mentees: {
-          dmQ12NotApplicableMentees: dmQ12NotApplicableMentees,
-          dmQ12PoorMentees: dmQ12PoorMentees,
-          dmQ12AverageMentees: dmQ12AverageMentees,
-          dmQ12GoodMentees: dmQ12GoodMentees,
+          NotApplicableMentees: dmQ12NotApplicableMentees,
+          PoorMentees: dmQ12PoorMentees,
+          AverageMentees: dmQ12AverageMentees,
+          GoodMentees: dmQ12GoodMentees,
         },
         counts: countBy(dmQ12Data),
         statistics: {
+          total: dmQ12Data.length,
           mean: mean(dmQ12Data),
           median: median(dmQ12Data),
           mode: mode(dmQ12Data),
@@ -2359,13 +2370,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ13: {
         mentees: {
-          dmQ13NotApplicableMentees: dmQ13NotApplicableMentees,
-          dmQ13PoorMentees: dmQ13PoorMentees,
-          dmQ13AverageMentees: dmQ13AverageMentees,
-          dmQ13GoodMentees: dmQ13GoodMentees,
+          NotApplicableMentees: dmQ13NotApplicableMentees,
+          PoorMentees: dmQ13PoorMentees,
+          AverageMentees: dmQ13AverageMentees,
+          GoodMentees: dmQ13GoodMentees,
         },
         counts: countBy(dmQ13Data),
         statistics: {
+          total: dmQ13Data.length,
           mean: mean(dmQ13Data),
           median: median(dmQ13Data),
           mode: mode(dmQ13Data),
@@ -2376,13 +2388,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ14: {
         mentees: {
-          dmQ14NotApplicableMentees: dmQ14NotApplicableMentees,
-          dmQ14PoorMentees: dmQ14PoorMentees,
-          dmQ14AverageMentees: dmQ14AverageMentees,
-          dmQ14GoodMentees: dmQ14GoodMentees,
+          NotApplicableMentees: dmQ14NotApplicableMentees,
+          PoorMentees: dmQ14PoorMentees,
+          AverageMentees: dmQ14AverageMentees,
+          GoodMentees: dmQ14GoodMentees,
         },
         counts: countBy(dmQ14Data),
         statistics: {
+          total: dmQ14Data.length,
           mean: mean(dmQ14Data),
           median: median(dmQ14Data),
           mode: mode(dmQ14Data),
@@ -2393,13 +2406,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ15: {
         mentees: {
-          dmQ15NotApplicableMentees: dmQ15NotApplicableMentees,
-          dmQ15PoorMentees: dmQ15PoorMentees,
-          dmQ15AverageMentees: dmQ15AverageMentees,
-          dmQ15GoodMentees: dmQ15GoodMentees,
+          NotApplicableMentees: dmQ15NotApplicableMentees,
+          PoorMentees: dmQ15PoorMentees,
+          AverageMentees: dmQ15AverageMentees,
+          GoodMentees: dmQ15GoodMentees,
         },
         counts: countBy(dmQ15Data),
         statistics: {
+          total: dmQ15Data.length,
           mean: mean(dmQ15Data),
           median: median(dmQ15Data),
           mode: mode(dmQ15Data),
@@ -2410,13 +2424,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ16: {
         mentees: {
-          dmQ16NotApplicableMentees: dmQ16NotApplicableMentees,
-          dmQ16PoorMentees: dmQ16PoorMentees,
-          dmQ16AverageMentees: dmQ16AverageMentees,
-          dmQ16GoodMentees: dmQ16GoodMentees,
+          NotApplicableMentees: dmQ16NotApplicableMentees,
+          PoorMentees: dmQ16PoorMentees,
+          AverageMentees: dmQ16AverageMentees,
+          GoodMentees: dmQ16GoodMentees,
         },
         counts: countBy(dmQ16Data),
         statistics: {
+          total: dmQ16Data.length,
           mean: mean(dmQ16Data),
           median: median(dmQ16Data),
           mode: mode(dmQ16Data),
@@ -2427,13 +2442,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ17: {
         mentees: {
-          dmQ17NotApplicableMentees: dmQ17NotApplicableMentees,
-          dmQ17PoorMentees: dmQ17PoorMentees,
-          dmQ17AverageMentees: dmQ17AverageMentees,
-          dmQ17GoodMentees: dmQ17GoodMentees,
+          NotApplicableMentees: dmQ17NotApplicableMentees,
+          PoorMentees: dmQ17PoorMentees,
+          AverageMentees: dmQ17AverageMentees,
+          GoodMentees: dmQ17GoodMentees,
         },
         counts: countBy(dmQ17Data),
         statistics: {
+          total: dmQ17Data.length,
           mean: mean(dmQ17Data),
           median: median(dmQ17Data),
           mode: mode(dmQ17Data),
@@ -2444,13 +2460,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ18: {
         mentees: {
-          dmQ18NotApplicableMentees: dmQ18NotApplicableMentees,
-          dmQ18PoorMentees: dmQ18PoorMentees,
-          dmQ18AverageMentees: dmQ18AverageMentees,
-          dmQ18GoodMentees: dmQ18GoodMentees,
+          NotApplicableMentees: dmQ18NotApplicableMentees,
+          PoorMentees: dmQ18PoorMentees,
+          AverageMentees: dmQ18AverageMentees,
+          GoodMentees: dmQ18GoodMentees,
         },
         counts: countBy(dmQ18Data),
         statistics: {
+          total: dmQ18Data.length,
           mean: mean(dmQ18Data),
           median: median(dmQ18Data),
           mode: mode(dmQ18Data),
@@ -2461,13 +2478,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ19: {
         mentees: {
-          dmQ19NotApplicableMentees: dmQ19NotApplicableMentees,
-          dmQ19PoorMentees: dmQ19PoorMentees,
-          dmQ19AverageMentees: dmQ19AverageMentees,
-          dmQ19GoodMentees: dmQ19GoodMentees,
+          NotApplicableMentees: dmQ19NotApplicableMentees,
+          PoorMentees: dmQ19PoorMentees,
+          AverageMentees: dmQ19AverageMentees,
+          GoodMentees: dmQ19GoodMentees,
         },
         counts: countBy(dmQ19Data),
         statistics: {
+          total: dmQ19Data.length,
           mean: mean(dmQ19Data),
           median: median(dmQ19Data),
           mode: mode(dmQ19Data),
@@ -2478,13 +2496,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ20: {
         mentees: {
-          dmQ20NotApplicableMentees: dmQ20NotApplicableMentees,
-          dmQ20PoorMentees: dmQ20PoorMentees,
-          dmQ20AverageMentees: dmQ20AverageMentees,
-          dmQ20GoodMentees: dmQ20GoodMentees,
+          NotApplicableMentees: dmQ20NotApplicableMentees,
+          PoorMentees: dmQ20PoorMentees,
+          AverageMentees: dmQ20AverageMentees,
+          GoodMentees: dmQ20GoodMentees,
         },
         counts: countBy(dmQ20Data),
         statistics: {
+          total: dmQ20Data.length,
           mean: mean(dmQ20Data),
           median: median(dmQ20Data),
           mode: mode(dmQ20Data),
@@ -2495,13 +2514,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ21: {
         mentees: {
-          dmQ21NotApplicableMentees: dmQ21NotApplicableMentees,
-          dmQ21PoorMentees: dmQ21PoorMentees,
-          dmQ21AverageMentees: dmQ21AverageMentees,
-          dmQ21GoodMentees: dmQ21GoodMentees,
+          NotApplicableMentees: dmQ21NotApplicableMentees,
+          PoorMentees: dmQ21PoorMentees,
+          AverageMentees: dmQ21AverageMentees,
+          GoodMentees: dmQ21GoodMentees,
         },
         counts: countBy(dmQ21Data),
         statistics: {
+          total: dmQ21Data.length,
           mean: mean(dmQ21Data),
           median: median(dmQ21Data),
           mode: mode(dmQ21Data),
@@ -2512,13 +2532,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ22: {
         mentees: {
-          dmQ22NotApplicableMentees: dmQ22NotApplicableMentees,
-          dmQ22PoorMentees: dmQ22PoorMentees,
-          dmQ22AverageMentees: dmQ22AverageMentees,
-          dmQ22GoodMentees: dmQ22GoodMentees,
+          NotApplicableMentees: dmQ22NotApplicableMentees,
+          PoorMentees: dmQ22PoorMentees,
+          AverageMentees: dmQ22AverageMentees,
+          GoodMentees: dmQ22GoodMentees,
         },
         counts: countBy(dmQ22Data),
         statistics: {
+          total: dmQ22Data.length,
           mean: mean(dmQ22Data),
           median: median(dmQ22Data),
           mode: mode(dmQ22Data),
@@ -2529,13 +2550,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ23: {
         mentees: {
-          dmQ23NotApplicableMentees: dmQ23NotApplicableMentees,
-          dmQ23PoorMentees: dmQ23PoorMentees,
-          dmQ23AverageMentees: dmQ23AverageMentees,
-          dmQ23GoodMentees: dmQ23GoodMentees,
+          NotApplicableMentees: dmQ23NotApplicableMentees,
+          PoorMentees: dmQ23PoorMentees,
+          AverageMentees: dmQ23AverageMentees,
+          GoodMentees: dmQ23GoodMentees,
         },
         counts: countBy(dmQ23Data),
         statistics: {
+          total: dmQ23Data.length,
           mean: mean(dmQ23Data),
           median: median(dmQ23Data),
           mode: mode(dmQ23Data),
@@ -2546,13 +2568,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ24: {
         mentees: {
-          dmQ24NotApplicableMentees: dmQ24NotApplicableMentees,
-          dmQ24PoorMentees: dmQ24PoorMentees,
-          dmQ24AverageMentees: dmQ24AverageMentees,
-          dmQ24GoodMentees: dmQ24GoodMentees,
+          NotApplicableMentees: dmQ24NotApplicableMentees,
+          PoorMentees: dmQ24PoorMentees,
+          AverageMentees: dmQ24AverageMentees,
+          GoodMentees: dmQ24GoodMentees,
         },
         counts: countBy(dmQ24Data),
         statistics: {
+          total: dmQ24Data.length,
           mean: mean(dmQ24Data),
           median: median(dmQ24Data),
           mode: mode(dmQ24Data),
@@ -2563,13 +2586,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ25: {
         mentees: {
-          dmQ25NotApplicableMentees: dmQ25NotApplicableMentees,
-          dmQ25PoorMentees: dmQ25PoorMentees,
-          dmQ25AverageMentees: dmQ25AverageMentees,
-          dmQ25GoodMentees: dmQ25GoodMentees,
+          NotApplicableMentees: dmQ25NotApplicableMentees,
+          PoorMentees: dmQ25PoorMentees,
+          AverageMentees: dmQ25AverageMentees,
+          GoodMentees: dmQ25GoodMentees,
         },
         counts: countBy(dmQ25Data),
         statistics: {
+          total: dmQ25Data.length,
           mean: mean(dmQ25Data),
           median: median(dmQ25Data),
           mode: mode(dmQ25Data),
@@ -2580,13 +2604,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ26: {
         mentees: {
-          dmQ26NotApplicableMentees: dmQ26NotApplicableMentees,
-          dmQ26PoorMentees: dmQ26PoorMentees,
-          dmQ26AverageMentees: dmQ26AverageMentees,
-          dmQ26GoodMentees: dmQ26GoodMentees,
+          NotApplicableMentees: dmQ26NotApplicableMentees,
+          PoorMentees: dmQ26PoorMentees,
+          AverageMentees: dmQ26AverageMentees,
+          GoodMentees: dmQ26GoodMentees,
         },
         counts: countBy(dmQ26Data),
         statistics: {
+          total: dmQ26Data.length,
           mean: mean(dmQ26Data),
           median: median(dmQ26Data),
           mode: mode(dmQ26Data),
@@ -2597,13 +2622,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ27: {
         mentees: {
-          dmQ27NotApplicableMentees: dmQ27NotApplicableMentees,
-          dmQ27PoorMentees: dmQ27PoorMentees,
-          dmQ27AverageMentees: dmQ27AverageMentees,
-          dmQ27GoodMentees: dmQ27GoodMentees,
+          NotApplicableMentees: dmQ27NotApplicableMentees,
+          PoorMentees: dmQ27PoorMentees,
+          AverageMentees: dmQ27AverageMentees,
+          GoodMentees: dmQ27GoodMentees,
         },
         counts: countBy(dmQ27Data),
         statistics: {
+          total: dmQ27Data.length,
           mean: mean(dmQ27Data),
           median: median(dmQ27Data),
           mode: mode(dmQ27Data),
@@ -2614,13 +2640,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ28: {
         mentees: {
-          dmQ28NotApplicableMentees: dmQ28NotApplicableMentees,
-          dmQ28PoorMentees: dmQ28PoorMentees,
-          dmQ28AverageMentees: dmQ28AverageMentees,
-          dmQ28GoodMentees: dmQ28GoodMentees,
+          NotApplicableMentees: dmQ28NotApplicableMentees,
+          PoorMentees: dmQ28PoorMentees,
+          AverageMentees: dmQ28AverageMentees,
+          GoodMentees: dmQ28GoodMentees,
         },
         counts: countBy(dmQ28Data),
         statistics: {
+          total: dmQ28Data.length,
           mean: mean(dmQ28Data),
           median: median(dmQ28Data),
           mode: mode(dmQ28Data),
@@ -2631,13 +2658,14 @@ const useDataForScoreTables = (data: any) => {
       },
       dmQ29: {
         mentees: {
-          dmQ29NotApplicableMentees: dmQ29NotApplicableMentees,
-          dmQ29PoorMentees: dmQ29PoorMentees,
-          dmQ29AverageMentees: dmQ29AverageMentees,
-          dmQ29GoodMentees: dmQ29GoodMentees,
+          NotApplicableMentees: dmQ29NotApplicableMentees,
+          PoorMentees: dmQ29PoorMentees,
+          AverageMentees: dmQ29AverageMentees,
+          GoodMentees: dmQ29GoodMentees,
         },
         counts: countBy(dmQ29Data),
         statistics: {
+          total: dmQ29Data.length,
           mean: mean(dmQ29Data),
           median: median(dmQ29Data),
           mode: mode(dmQ29Data),

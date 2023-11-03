@@ -3,6 +3,11 @@ import { useEvaluationsStore } from '../../stores/evaluations';
 import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
 import { useAsyncState } from '@vueuse/core';
 
+
+const iamStore = useIamProfileStore();
+
+const { useLogUserOut, profile } = useAuthStuff()
+
 const route = useRoute()
 
 const itemId = route.params.item
@@ -73,36 +78,108 @@ const items = (row: { id: any; }) => [
     ]
 ]
 
-const filteredRows = (data: any) => {
+/// table data
 
-    const people = data[item].mentees.dmQ1NotApplicableMentees;
+///not applicable
+const getRowsNotApplicable = (menteeData: any) => {
+
+    const data = menteeData[item].mentees.NotApplicableMentees;
 
     if (!q.value) {
-        return people
+        return data
     }
-    return people.filter((person: any) => {
+
+    return data.filter((person: any) => {
         return Object.values(person).some((value) => {
             return String(value).toLowerCase().includes(q.value.toLowerCase())
         });
-    }).slice((page.value - 1) * pageCount, (page.value) * pageCount);
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+
+}
+
+
+///poor
+const getRowsPoor = (menteeData: any) => {
+
+const data = menteeData[item].mentees.PoorMentees;
+
+if (!q.value) {
+    return data
+}
+
+return data.filter((person: any) => {
+    return Object.values(person).some((value) => {
+        return String(value).toLowerCase().includes(q.value.toLowerCase())
+    });
+}).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+
+}
+
+//Average
+
+const getRowsAverage = (menteeData: any) => {
+
+const data = menteeData[item].mentees.AverageMentees;
+
+if (!q.value) {
+    return data
+}
+
+return data.filter((person: any) => {
+    return Object.values(person).some((value) => {
+        return String(value).toLowerCase().includes(q.value.toLowerCase())
+    });
+}).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+
+}
+
+
+//good
+
+const getRowsGood = (menteeData: any) => {
+
+const data = menteeData[item].mentees.GoodMentees;
+
+if (!q.value) {
+    return data
+}
+
+return data.filter((person: any) => {
+    return Object.values(person).some((value) => {
+        return String(value).toLowerCase().includes(q.value.toLowerCase())
+    });
+}).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+
 }
 
 </script>
 <template>
     <header class="bg-white fixed top-0 w-full shadow-md">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex  items-center">
-                <NuxtLink :to="{ name: 'iam-dashboard' }">
-                    <p class="p-1 hover:text-green-500">Dashboard</p>
-                </NuxtLink>
-                <p>|</p>
-                <NuxtLink :to="{ name: 'scores-view' }">
-                    <p class="p-1 hover:text-green-500">Eval-Items</p>
-                </NuxtLink>
-                <P>|</P>
-                <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>EI-Analysis </strong></p>
-            </div>
+        <nav class="container mx-auto px-6 py-3 flex">
+            <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                <div class="flex flex-wrap items-center">
+                    <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
 
+                        <NuxtLink :to="{ name: 'iam-dashboard' }">
+                            <p class="p-1 hover:text-green-500">Dashboard</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <NuxtLink :to="{ name: 'scores-view' }">
+                            <p class="p-1 hover:text-green-500">Eval-Items</p>
+                        </NuxtLink>
+                        <P>|</P>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>EI-Analysis </strong></p>
+                    </div>
+                    <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
+                        <button
+                            class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                            type="button" @click="useLogUserOut(iamStore)">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -169,37 +246,139 @@ const filteredRows = (data: any) => {
                     </div>
                 </div>
             </UCard>
-
-            <UCard>
+<!--not applicables-->
+            <UCard class="pb-5">
                 <template #header>
                     <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-gray-500">(0) Not
                             Applicable</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
                 </template>
                 <div>
-                    <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-                        <UInput v-model="q" placeholder="Filter people..." />
-                    </div>
-                    <UTable :columns=columns :rows="filteredRows(qdata)">
-                        <template #empty-state>
-                            <div class="flex flex-col items-center justify-center py-6 gap-3">
-                                <span class="italic text-sm">No one here!</span>
-                                <UButton label="Add people" />
-                            </div>
-                        </template>
-                        <template #actions-data="{ row }">
-                            <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
-                                <UButton  :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
-                                    square variant="outline">
-                                    Eval report | <span class=" text-red-500">view</span></UButton>
-                            </NuxtLink>
+                    <div>
+                        <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                            <UInput v-model="q" placeholder="Filter mentees..." />
+                        </div>
+                        <UTable :columns=columns :rows="getRowsNotApplicable(qdata)">
+                            <template #empty-state>
+                                <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                    <span class="italic text-sm">No one here!</span>
+                                    <UButton label="Add people" />
+                                </div>
+                            </template>
+                            <template #actions-data="{ row }">
+                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
+                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
+                                        square variant="outline">
+                                        Eval report | <span class=" text-red-500">view</span></UButton>
+                                </NuxtLink>
 
-                        </template>
-                    </UTable>
-                    <UPagination v-model="page" :page-count="pageCount" :total="qdata.length" />
+                            </template>
+                        </UTable>
+                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsNotApplicable(qdata).length" />
+                    </div>
+                </div>
+            </UCard>
+
+<!--poor-->
+
+<UCard class="pb-5">
+                <template #header>
+                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-red-500">(1) Poor</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
+                </template>
+                <div>
+                    <div>
+                        <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                            <UInput v-model="q" placeholder="Filter mentees..." />
+                        </div>
+                        <UTable :columns=columns :rows="getRowsPoor(qdata)">
+                            <template #empty-state>
+                                <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                    <span class="italic text-sm">No one here!</span>
+                                    <UButton label="Add people" />
+                                </div>
+                            </template>
+                            <template #actions-data="{ row }">
+                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
+                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
+                                        square variant="outline">
+                                        Eval report | <span class=" text-red-500">view</span></UButton>
+                                </NuxtLink>
+
+                            </template>
+                        </UTable>
+                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsPoor(qdata).length" />
+                    </div>
+                </div>
+            </UCard>
+
+            <!--avergae-->
+            <UCard class="pb-5">
+                <template #header>
+                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-yellow-500">(2) Average</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
+                </template>
+                <div>
+                    <div>
+                        <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                            <UInput v-model="q" placeholder="Filter mentees..." />
+                        </div>
+                        <UTable :columns=columns :rows="getRowsAverage(qdata)">
+                            <template #empty-state>
+                                <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                    <span class="italic text-sm">No one here!</span>
+                                    <UButton label="Add people" />
+                                </div>
+                            </template>
+                            <template #actions-data="{ row }">
+                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
+                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
+                                        square variant="outline">
+                                        Eval report | <span class=" text-red-500">view</span></UButton>
+                                </NuxtLink>
+
+                            </template>
+                        </UTable>
+                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsAverage(qdata).length" />
+                    </div>
+                </div>
+            </UCard>
+
+            <!--good-->
+
+            <UCard class="pb-5">
+                <template #header>
+                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-green-500">(3) Good</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
+                </template>
+                <div>
+                    <div>
+                        <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                            <UInput v-model="q" placeholder="Filter mentees..." />
+                        </div>
+                        <UTable :columns=columns :rows="getRowsGood(qdata)">
+                            <template #empty-state>
+                                <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                    <span class="italic text-sm">No one here!</span>
+                                    <UButton label="Add people" />
+                                </div>
+                            </template>
+                            <template #actions-data="{ row }">
+                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
+                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
+                                        square variant="outline">
+                                        Eval report | <span class=" text-red-500">view</span></UButton>
+                                </NuxtLink>
+
+                            </template>
+                        </UTable>
+                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsGood(qdata).length" />
+                    </div>
                 </div>
             </UCard>
 
         </UContainer>
+
+        <!--average-->
+
+
+ 
 
         <!-- {{ filteredRows }} -->
         <!-- {{ getFilteredRows(qdata[item].mentees.dmQ1NotApplicableMentees) }} -->

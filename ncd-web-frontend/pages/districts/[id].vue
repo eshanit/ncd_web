@@ -4,6 +4,10 @@ import chartSegmentDistrict from '../../composables/charts/chartSegmentDistrict'
 import { useEvaluationsStore } from '../../stores/evaluations'
 import { uniqBy } from 'lodash';
 
+const iamStore = useIamProfileStore();
+
+const { useLogUserOut, profile } = useAuthStuff()
+
 const isOpenIIEKnowledge = ref(false)
 const isOpenIIEAcquiredSkill = ref(false)
 const isOpenIIEBehaviour = ref(false)
@@ -104,18 +108,33 @@ const items = (row: { id: any; }) => [
 
 </script>
 <template>
+
     <header class="bg-white fixed top-0 w-full shadow-md">
         <nav class="container mx-auto px-6 py-3 flex">
-            <div class="flex  items-center">
-                <NuxtLink :to="{ name: 'iam-dashboard' }">
-                    <p class="p-1 hover:text-green-500">Dashboard</p>
-                </NuxtLink>
-                <p>|</p>
-                <NuxtLink :to="{ name: 'districts-list' }">
-                    <p class="p-1 hover:text-green-500">Districts</p>
-                </NuxtLink>
-                <p>|</p>
-                <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Districts Analysis</strong></p>
+            <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                <div class="flex flex-wrap items-center">
+                    <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
+
+                        <NuxtLink :to="{ name: 'iam-dashboard' }">
+                            <p class="p-1 hover:text-green-500">Dashboard</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <NuxtLink :to="{ name: 'districts-list' }">
+                            <p class="p-1 hover:text-green-500">Districts</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Districts Analysis</strong></p>
+
+                    </div>
+                    <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
+                        <button
+                            class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                            type="button" @click="useLogUserOut(iamStore)">
+                            Logout
+                        </button>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -125,11 +144,14 @@ const items = (row: { id: any; }) => [
             <UCard class="my-5">
                 <template #header>
                     <div class="flex my-2">
-                        <div class="text-orange-500 text-sm pr-1"><strong>Mentees</strong></div> | <div class="text-green-500 text-sm pl-1">
+                        <div class="text-orange-500 text-sm pr-1"><strong>Mentees</strong></div> | <div
+                            class="text-green-500 text-sm pl-1">
                             {{
                                 districtId }}</div>
                     </div>
-                    <div class="text-sm"><p>Below is a list of all the mentees in this district.</p></div>
+                    <div class="text-sm">
+                        <p>Below is a list of all the mentees in this district.</p>
+                    </div>
                 </template>
                 <UTable :columns=columns :rows="getRows(evals)">
                     <template #empty-state>
@@ -159,15 +181,20 @@ const items = (row: { id: any; }) => [
                         <div class="text-orange-500 pr-1 text-sm"><strong>DM Segment Analysis</strong></div>|<div
                             class="text-green-500 pl-1 ext-sm">{{ districtId }}</div>
                     </div>
-                    <div class="text-sm"><p>The DM Evaluation Form has two segements 1. <span class="text-red-500"><strong>Introduction and Initial Evaluation</strong></span> and 2. <span class="text-cyan-500"><strong>Management of DM</strong></span> each of which are further devided into 3 subsections. 
-                        The charts below gives a visual represantation of the distribution of scores in each of those sub-sections and their proportions.</p></div>
+                    <div class="text-sm">
+                        <p>The DM Evaluation Form has two segements 1. <span class="text-red-500"><strong>Introduction and
+                                    Initial Evaluation</strong></span> and 2. <span class="text-cyan-500"><strong>Management
+                                    of DM</strong></span> each of which are further devided into 3 subsections.
+                            The charts below gives a visual represantation of the distribution of scores in each of those
+                            sub-sections and their proportions.</p>
+                    </div>
                 </template>
                 <!--IIE CHARTS-->
                 <div v-if="chartSegmentData">
                     <div class="  border-b border-gray-300 pb-2 pt-2 ">
                         <p> Section A: <strong> Introduction and Initial Evaluation</strong></p>
                     </div>
-                    <div class="grid grid-cols-3" >
+                    <div class="grid grid-cols-3">
                         <div>
                             <div class="flex border-r border-green-600 text-center p-2">
                                 <div class="flex-0 justify-end text-gray-500 text-xl pb-1"> Knowledge</div>
@@ -396,10 +423,9 @@ const items = (row: { id: any; }) => [
                                 }" :series="chartSegmentData.pie.values.mngtbehaviour"></apexchart>
                             </div>
                         </div>
-                    </div>
                 </div>
+            </div>
 
-            </UCard>
-        </UContainer>
-    </div>
-</template>
+        </UCard>
+    </UContainer>
+</div></template>

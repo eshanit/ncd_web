@@ -3,6 +3,11 @@ import { useEvaluationsStore } from '../../stores/evaluations';
 import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
 import { useAsyncState } from '@vueuse/core';
 
+
+const iamStore = useIamProfileStore();
+
+const { useLogUserOut, profile } = useAuthStuff()
+
 const route = useRoute()
 
 const itemId = route.params.item
@@ -50,63 +55,71 @@ const columns = [
     {
         key: 'date',
         label: 'Evaluation Date'
+    },
+    {
+        key: 'actions',
+        label: 'View'
     }
 ]
 
-// const getPeople = (data: any) => (
-//     data.map((item: any) => {
-//         return {
-//             firstname: item.firstname,
-//             lastname: item.lastname,
-//             gender: item.gender,
-//             district: item.district,
-//             facility: item.facility,
-//             date: item.date
-//         }
-//     })
-// )
-const q = ref('');
+
+const q = ref('')
+const page = ref(1)
+const pageCount = 5
 
 
-const getFilteredRows:any = (data: any) => {
-
-   let people = data
-    
-    const filteredRows = computed(() => {
-
-        if (!q.value) {
-            return people
+const items = (row: { id: any; }) => [
+    [
+        {
+            label: 'Edit',
+            icon: 'i-heroicons-pencil-square-20-solid',
+            click: () => console.log('Edit', row.id)
         }
-        return people.filter((person: any) => {
-            return Object.values(person).some((value) => {
-                return String(value).toLowerCase().includes(q.value.toLowerCase())
-            })
-        })
-    })
+    ]
+]
 
-    return filteredRows;
+const filteredRows = (data: any) => {
 
+    const people = data[item].mentees.NotApplicableMentees;
+
+    if (!q.value) {
+        return people
+    }
+    return people.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount);
 }
-
-
-//
 
 </script>
 <template>
     <header class="bg-white fixed top-0 w-full shadow-md">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex  items-center">
-                <NuxtLink :to="{ name: 'iam-dashboard' }">
-                    <p class="p-1 hover:text-green-500">Dashboard</p>
-                </NuxtLink>
-                <p>|</p>
-                <NuxtLink :to="{ name: 'scores-view' }">
-                    <p class="p-1 hover:text-green-500">Eval-Items</p>
-                </NuxtLink>
-                <P>|</P>
-                <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>EI-Analysis </strong></p>
-            </div>
+        <nav class="container mx-auto px-6 py-3 flex">
+            <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                <div class="flex flex-wrap items-center">
+                    <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
 
+                        <NuxtLink :to="{ name: 'iam-dashboard' }">
+                            <p class="p-1 hover:text-green-500">Dashboard</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <NuxtLink :to="{ name: 'scores-view' }">
+                            <p class="p-1 hover:text-green-500">Eval-Items</p>
+                        </NuxtLink>
+                        <P>|</P>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>EI-Analysis </strong></p>
+                    </div>
+                    <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
+                        <button
+                            class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                            type="button" @click="useLogUserOut(iamStore)">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -183,11 +196,29 @@ const getFilteredRows:any = (data: any) => {
                     <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                         <UInput v-model="q" placeholder="Filter people..." />
                     </div>
-                    <UTable :rows="getFilteredRows(qdata[item].mentees.dmQ1NotApplicableMentees)" :columns="columns" />
+                    <UTable :columns=columns :rows="filteredRows(qdata)">
+                        <template #empty-state>
+                            <div class="flex flex-col items-center justify-center py-6 gap-3">
+                                <span class="italic text-sm">No one here!</span>
+                                <UButton label="Add people" />
+                            </div>
+                        </template>
+                        <template #actions-data="{ row }">
+                            <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
+                                <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
+                                    square variant="outline">
+                                    Eval report | <span class=" text-red-500">view</span></UButton>
+                            </NuxtLink>
+
+                        </template>
+                    </UTable>
+                    <UPagination v-model="page" :page-count="pageCount" :total="qdata.length" />
                 </div>
             </UCard>
 
         </UContainer>
-{{ getFilteredRows(qdata[item].mentees.dmQ1NotApplicableMentees) }}
+
+        <!-- {{ filteredRows }} -->
+        <!-- {{ getFilteredRows(qdata[item].mentees.dmQ1NotApplicableMentees) }} -->
     </div>
 </template>

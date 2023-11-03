@@ -5,6 +5,11 @@ import { sortBy, countBy } from 'lodash';
 import { format } from 'date-fns'
 import { mean, mode, standardDeviation, sampleSkewness } from 'simple-statistics'
 
+
+const iamStore = useIamProfileStore();
+
+const { useLogUserOut, profile } = useAuthStuff()
+
 const route = useRoute()
 
 const perc = ref(false)
@@ -532,32 +537,45 @@ const getflatPercScores = scorePercArrays.state
 </script>
 <template>
     <header class="bg-white fixed top-0 w-full shadow-md">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex  items-center">
-                <NuxtLink :to="{ name: 'iam-dashboard' }">
-                    <p class="p-1 hover:text-green-500">Dashboard</p>
-                </NuxtLink>
-                <p>|</p>
-                <NuxtLink :to="{ name: 'mentees-report' }">
-                    <p class="p-1 hover:text-green-500">Mentees</p>
-                </NuxtLink>
-                <p>|</p>
-                <NuxtLink :to="{
-                    name: 'mentees-id',
-                    params: { id: menteeId }
-                }">
-                    <p class="p-1 hover:text-green-500">Mentees Stats</p>
-                </NuxtLink>
-                <p>|</p>
-                <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Analysis</strong></p>
-            </div>
+        <nav class="container mx-auto px-6 py-3 flex">
+            <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+                <div class="flex flex-wrap items-center">
+                    <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
 
+                        <NuxtLink :to="{ name: 'iam-dashboard' }">
+                            <p class="p-1 hover:text-green-500">Dashboard</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <NuxtLink :to="{ name: 'mentees-report' }">
+                            <p class="p-1 hover:text-green-500">Mentees</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <NuxtLink :to="{
+                            name: 'mentees-id',
+                            params: { id: menteeId }
+                        }">
+                            <p class="p-1 hover:text-green-500">Mentees Stats</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Analysis</strong></p>
+
+                    </div>
+                    <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
+                        <button
+                            class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                            type="button" @click="useLogUserOut(iamStore)">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
-    <div v-if="mentee">
+    <div v-if="mentee" class="my-24">
         <UContainer>
-            <div class="my-12 pl-6 py-3" v-if="mentee">
+            <div class=" pl-6 py-3" v-if="mentee">
                 <strong><span class="text-green-500 text-2xl p-1">{{ mentee[0].info.menteeInfo[0].firstname
                 }}</span></strong>|<span class="text-orange-500 p-1">{{
     (mentee[0].info.menteeInfo[0].lastname).toLowerCase() }}</span>
@@ -566,9 +584,10 @@ const getflatPercScores = scorePercArrays.state
             <UCard class="mx-auto">
                 <template #header>
                     <div class="text-orange-500 text-sm my-2"><strong>List of Evaluations</strong></div>
-                    <div class="text-sm">Below is a list of all the evaluations for <span class="italic text-green-500"> {{ mentee[0].info.menteeInfo[0].firstname
-                }} {{ mentee[0].info.menteeInfo[0].lastname
-                }}</span>. To see a report on an evaluation, click the evaluation report button. </div>
+                    <div class="text-sm">Below is a list of all the evaluations for <span class="italic text-green-500"> {{
+                        mentee[0].info.menteeInfo[0].firstname
+                    }} {{ mentee[0].info.menteeInfo[0].lastname
+}}</span>. To see a report on an evaluation, click the evaluation report button. </div>
                 </template>
                 <div>
                     <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
@@ -598,9 +617,11 @@ const getflatPercScores = scorePercArrays.state
             <UCard class="pt-5 mx-auto my-5">
                 <template #header>
                     <div class="text-sm text-orange-500 my-2"><strong>Bar Chart for Mean Scores</strong></div>
-                    <div class="text-sm">Each evaluation that <span class="italic bold"> {{ mentee[0].info.menteeInfo[0].firstname
-                }} {{ mentee[0].info.menteeInfo[0].lastname
-                }}</span> completed has its mean score calculated over the 29 evaluation items. Below is a bar chart which gives a visual representation of the mean scores over time. </div>
+                    <div class="text-sm">Each evaluation that <span class="italic bold"> {{
+                        mentee[0].info.menteeInfo[0].firstname
+                    }} {{ mentee[0].info.menteeInfo[0].lastname
+}}</span> completed has its mean score calculated over the 29 evaluation items. Below is a bar
+                        chart which gives a visual representation of the mean scores over time. </div>
                 </template>
                 <div class="w-full border-solid hover:border-dotted border-black" v-if="tableData">
                     <apexchart class="pr-3" width="1200" height="400" type="bar" :options="chartOptions(tableData)"
@@ -614,9 +635,12 @@ const getflatPercScores = scorePercArrays.state
             <UCard class="pt-5 mx-auto my-5">
                 <template #header>
                     <div class="text-sm text-orange-500 my-2"><strong>Line Chart Comparison of Scores</strong></div>
-                    <div class="text-sm">Each evaluation that <span class="italic bold"> {{ mentee[0].info.menteeInfo[0].firstname
-                }} {{ mentee[0].info.menteeInfo[0].lastname
-                }}</span> completed has 29 evaluation items. Below is a line chart which gives a visual representation of hpw the mentee faired on each question. The graph is interactive, you can select and deselect the dates which you want to analyse. </div>
+                    <div class="text-sm">Each evaluation that <span class="italic bold"> {{
+                        mentee[0].info.menteeInfo[0].firstname
+                    }} {{ mentee[0].info.menteeInfo[0].lastname
+}}</span> completed has 29 evaluation items. Below is a line chart which gives a visual
+                        representation of hpw the mentee faired on each question. The graph is interactive, you can select
+                        and deselect the dates which you want to analyse. </div>
                 </template>
                 <div class="w-full border-solid hover:border-dotted border-black" v-if="chartData">
                     <apexchart width="1200" height="500" type="line" :options="chartData.options"
@@ -643,7 +667,8 @@ const getflatPercScores = scorePercArrays.state
                         </div>
 
                     </div>
-                    <div class="text-sm">The graph below shows score counts for each evaluation session. To toggle between percentages and counts click the button above.</div>
+                    <div class="text-sm">The graph below shows score counts for each evaluation session. To toggle between
+                        percentages and counts click the button above.</div>
                 </template>
                 <div v-show="!perc">
                     <div class="w-full border-solid hover:border-dotted border-black" v-if="getflatScores">
@@ -663,8 +688,7 @@ const getflatPercScores = scorePercArrays.state
 
             </UCard>
 
-        </UContainer>
+    </UContainer>
 
 
-    </div>
-</template>
+</div></template>

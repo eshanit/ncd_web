@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core';
 
+const iamStore = useIamProfileStore();
+
+const { useLogUserOut, profile } = useAuthStuff()
+
 const menteesStore = useMenteesStore();
 const coMentorStore = useCoMentorsStore();
 const evaluatorStore = useEvaluatorsStore();
 const districtStore = useDistrictStore();
 const facilityStore = useFacilityStore();
 const evaluationsStore = useEvaluationsStore();
+
+
 
 //mentees
 const menteesData = useAsyncState(async () => {
@@ -57,14 +63,27 @@ const incompleteEvalsData = useAsyncState(async () => {
 
 const incompleteEvals: any = incompleteEvalsData.state
 
+
 </script>
 <template>
   <header class="bg-white fixed top-0 w-full shadow-md">
     <nav class="container mx-auto px-6 py-3 flex">
-      <div class="flex  items-center">
-        <NuxtLink :to="{ name: 'iam-dashboard' }">
-          <p class="p-1 hover:text-green-500">Dashboard</p>
-        </NuxtLink>
+      <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+        <div class="flex flex-wrap items-center">
+          <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+            <NuxtLink :to="{ name: 'iam-dashboard' }">
+              <p class="p-1 hover:text-green-500">Dashboard</p>
+            </NuxtLink>
+          </div>
+          <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
+            <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
+              <button
+                class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+                type="button" @click="useLogUserOut(iamStore)">
+                Logout
+              </button>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -73,7 +92,7 @@ const incompleteEvals: any = incompleteEvalsData.state
     <UContainer>
       <div class="items-center justify-center h-screen">
         <div class=" flex ">
-
+          <!-- {{ profile?.data.first_name }} -->
           <UCard class=" border-slate-700 border-2 text-center w-1/3 m-2 hover:bg-slate-200 hover:text-white"
             v-if="mentees">
             <NuxtLink :to="{ name: 'mentees-report' }">
