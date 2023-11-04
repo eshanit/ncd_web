@@ -66,22 +66,22 @@ const incompleteEvals: any = incompleteEvalsData.state
 
 </script>
 <template>
-  <header class="bg-white fixed top-0 w-full shadow-md">
-    <nav class="container mx-auto px-6 py-3 flex">
+  <header class="bg-white fixed top-0 w-full">
+    <nav class=" mx-auto  flex">
       <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
             <NuxtLink :to="{ name: 'iam-dashboard' }">
-              <p class="p-1 hover:text-green-500">Dashboard</p>
+              <p class="p-1 hover:text-green-500 text-orange-500"><strong>Dashboard</strong></p>
             </NuxtLink>
           </div>
           <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-            <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
-              <button
-                class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-                type="button" @click="useLogUserOut(iamStore)">
-                Logout
-              </button>
+            <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+            <button
+              class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+              type="button" @click="useLogUserOut(iamStore)">
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -116,11 +116,13 @@ const incompleteEvals: any = incompleteEvalsData.state
 
           <UCard class=" border-pink-800 border-2 text-center w-1/3 m-2  hover:bg-pink-200 hover:text-white"
             v-if="evaluators">
-            <h3 class=""><strong>Evaluators</strong></h3>
-            <div class=" w-full h-px max-w-6xl mx-auto my-1"
-              style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
-            </div>
-            <p class=" text-4xl text-pink-800">{{ evaluators.length }} </p>
+            <NuxtLink to="/evaluators/view">
+              <h3 class=""><strong>Evaluators</strong></h3>
+              <div class=" w-full h-px max-w-6xl mx-auto my-1"
+                style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
+              </div>
+              <p class=" text-4xl text-pink-800">{{ evaluators.length }} </p>
+            </NuxtLink>
           </UCard>
 
           <UCard class=" border-amber-500 border-2 text-center w-1/3 m-2  hover:bg-amber-200 hover:text-white"

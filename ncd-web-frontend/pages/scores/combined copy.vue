@@ -23,9 +23,9 @@ const qdata = dmQData.state
 //
 const columns = [
     {
-        key: 'actions',
+        key: 'item',
         label: 'Evaluation Item',
-
+        sortable: true
     }, {
         key: 'total',
         label: 'Number of Entries',
@@ -70,17 +70,21 @@ const columns = [
 
 </script>
 <template>
-   <header class="bg-white fixed top-0 w-full">
+    <header class="bg-white fixed top-0 w-full">
         <nav class="mx-auto  flex">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
                 <div class="flex flex-wrap items-center">
                     <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
                         <NuxtLink :to="{ name: 'iam-dashboard' }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            <p class="p-1 hover:text-green-500">Dashboard</p>
                         </NuxtLink>
                         <p>|</p>
-                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Scores</strong></p>
-
+                        <NuxtLink :to="{ name: 'scores-view' }">
+                            <p class="p-1 hover:text-green-500">Scores</p>
+                        </NuxtLink>
+                        <p>|</p>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Combined Score Analysis </strong>
+                        </p>
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
                         <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
@@ -109,15 +113,9 @@ const columns = [
                     </p>
                 </div>
 
-                <UTable :columns="columns" :rows="qdata.combinedTableData">
-                    <template #actions-data="{ row }">
-                        <NuxtLink :to="{ name: 'scores-item', params: { item: row.item } }">
-                            <UButton icon="i-heroicons-clipboard-document" size="sm" color="purple" square
-                                variant="outline">{{ row.item }}</UButton>
-                        </NuxtLink>
-                    </template>
+                <!-- {{ qdata.combinedTableData }} -->
 
-                </UTable>
+                <UTable :columns="columns" :rows="qdata.combinedTableData"  />
 
             </UCard>
         </UContainer>

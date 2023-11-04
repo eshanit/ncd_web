@@ -17,6 +17,11 @@ export const useEvaluationsStore = defineStore("evaluations", {
       if (this.rawEvaluations) {
         return (evals: any) =>groupBy(evals, "menteeId") 
       }
+    },
+    evaluationsByEvaluator(): any {
+      if (this.rawEvaluations) {
+        return (evals: any) =>groupBy(evals, "evaluatorId") 
+      }
     }
   },
 
@@ -78,6 +83,13 @@ export const useEvaluationsStore = defineStore("evaluations", {
         return resp.filter((evaluation: any) => evaluation.district === district);
       })
     },
+    async getEvalByEvaluator(evaluatorId: string | string[]){
+      const evals = this.evaluations()
+      return evals.then((resp: any)=>{
+        return resp.filter((evaluation: any) => evaluation.info.evaluatorInfo[0].id === evaluatorId);
+      })
+    }
+    ,
     async getIncompleteEvals(){
       const config = useRuntimeConfig();
 

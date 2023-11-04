@@ -38,7 +38,8 @@ export class EvaluationsService {
           newArray.forEach(function (el){
             el.menteeId = el.info.menteeInfo[0].id
             el.district = el.info.menteeInfo[0].district
-            el.facility = el.info.menteeInfo[0].facility
+            el.facility = el.info.menteeInfo[0].facility,
+            el.evaluatorId = el.info.evaluatorInfo[0].id
           })
 
           return newArray;

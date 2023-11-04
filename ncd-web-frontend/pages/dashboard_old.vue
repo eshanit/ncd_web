@@ -77,7 +77,8 @@ const incompleteEvals: any = incompleteEvalsData.state
         </UCard>
 
 
-        <UCard class=" border-green-700 border-2 text-center w-1/3 m-2  hover:bg-green-200 hover:text-white" v-if="comentors">
+        <UCard class=" border-green-700 border-2 text-center w-1/3 m-2  hover:bg-green-200 hover:text-white"
+          v-if="comentors">
           <h3 class=""><strong>Co-Mentors</strong></h3>
           <div class=" w-full h-px max-w-6xl mx-auto my-1"
             style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
@@ -85,25 +86,30 @@ const incompleteEvals: any = incompleteEvalsData.state
           <p class=" text-4xl text-orange-500">{{ comentors.length }} </p>
         </UCard>
 
-        <UCard class=" border-pink-800 border-2 text-center w-1/3 m-2  hover:bg-pink-200 hover:text-white" v-if="evaluators">
-          <h3 class=""><strong>Evaluators</strong></h3>
-          <div class=" w-full h-px max-w-6xl mx-auto my-1"
-            style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
-          </div>
-          <p class=" text-4xl text-orange-500">{{ evaluators.length }} </p>
+        <UCard class=" border-pink-800 border-2 text-center w-1/3 m-2  hover:bg-pink-200 hover:text-white"
+          v-if="evaluators">
+          <NuxtLink to="/evaluators/view">
+            <h3 class=""><strong>Evaluators</strong></h3>
+            <div class=" w-full h-px max-w-6xl mx-auto my-1"
+              style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
+            </div>
+            <p class=" text-4xl text-orange-500">{{ evaluators.length }} </p>
+          </NuxtLink>
         </UCard>
 
-        <UCard class=" border-amber-500 border-2 text-center w-1/3 m-2  hover:bg-amber-200 hover:text-white" v-if="districts">
+        <UCard class=" border-amber-500 border-2 text-center w-1/3 m-2  hover:bg-amber-200 hover:text-white"
+          v-if="districts">
           <NuxtLink to="/districts/list">
-          <h3 class=""><strong>Districts</strong></h3>
-          <div class=" w-full h-px max-w-6xl mx-auto my-1"
-            style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
-          </div>
-          <p class=" text-4xl text-orange-500">{{ districts.length }} </p>
-        </NuxtLink>
+            <h3 class=""><strong>Districts</strong></h3>
+            <div class=" w-full h-px max-w-6xl mx-auto my-1"
+              style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
+            </div>
+            <p class=" text-4xl text-orange-500">{{ districts.length }} </p>
+          </NuxtLink>
         </UCard>
 
-        <UCard class=" border-cyan-700 border-2 text-center w-1/3 m-2  hover:bg-cyan-200 hover:text-white" v-if="facilities">
+        <UCard class=" border-cyan-700 border-2 text-center w-1/3 m-2  hover:bg-cyan-200 hover:text-white"
+          v-if="facilities">
           <h3 class=""><strong>Facilities</strong></h3>
           <div class=" w-full h-px max-w-6xl mx-auto my-1"
             style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
@@ -139,6 +145,5 @@ const incompleteEvals: any = incompleteEvalsData.state
       </div>
     </div>
 
-  </UContainer>
-</template>
+  </UContainer></template>
 

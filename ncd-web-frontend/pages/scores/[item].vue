@@ -2,6 +2,7 @@
 import { useEvaluationsStore } from '../../stores/evaluations';
 import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
 import { useAsyncState } from '@vueuse/core';
+import barChartForEvalItems from '~/composables/charts/barChartForEvalItems';
 
 
 const iamStore = useIamProfileStore();
@@ -101,17 +102,17 @@ const getRowsNotApplicable = (menteeData: any) => {
 ///poor
 const getRowsPoor = (menteeData: any) => {
 
-const data = menteeData[item].mentees.PoorMentees;
+    const data = menteeData[item].mentees.PoorMentees;
 
-if (!q.value) {
-    return data
-}
+    if (!q.value) {
+        return data
+    }
 
-return data.filter((person: any) => {
-    return Object.values(person).some((value) => {
-        return String(value).toLowerCase().includes(q.value.toLowerCase())
-    });
-}).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return data.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
 
@@ -119,17 +120,17 @@ return data.filter((person: any) => {
 
 const getRowsAverage = (menteeData: any) => {
 
-const data = menteeData[item].mentees.AverageMentees;
+    const data = menteeData[item].mentees.AverageMentees;
 
-if (!q.value) {
-    return data
-}
+    if (!q.value) {
+        return data
+    }
 
-return data.filter((person: any) => {
-    return Object.values(person).some((value) => {
-        return String(value).toLowerCase().includes(q.value.toLowerCase())
-    });
-}).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return data.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
 
@@ -138,40 +139,70 @@ return data.filter((person: any) => {
 
 const getRowsGood = (menteeData: any) => {
 
-const data = menteeData[item].mentees.GoodMentees;
+    const data = menteeData[item].mentees.GoodMentees;
 
-if (!q.value) {
-    return data
+    if (!q.value) {
+        return data
+    }
+
+    return data.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+
 }
 
-return data.filter((person: any) => {
-    return Object.values(person).some((value) => {
-        return String(value).toLowerCase().includes(q.value.toLowerCase())
-    });
-}).slice((page.value - 1) * pageCount, (page.value) * pageCount)
+//chart data
 
+const { chartSeries, chartOptions } = barChartForEvalItems()
+
+//small table data
+
+const smallTableData = (data: any) => {
+
+    let countsNA: number = data.counts['0']
+    let countsPoor: number = data.counts['1']
+    let countsAverage: number = data.counts['2']
+    let countsGood: number = data.counts['3']
+    let total: number = data.statistics.total
+
+    return {
+        counts: {
+            na: countsNA,
+            poor: countsPoor,
+            average: countsAverage,
+            good: countsGood,
+        },
+        percerntages: {
+            na: (100 * countsNA / total).toFixed(1),
+            poor: (100 * countsPoor / total).toFixed(1),
+            average: (100 * countsAverage / total).toFixed(1),
+            good: (100 * countsGood / total).toFixed(1)
+        }
+    }
 }
 
 </script>
 <template>
-    <header class="bg-white fixed top-0 w-full shadow-md">
-        <nav class="container mx-auto px-6 py-3 flex">
+    <header class="bg-white fixed top-0 w-full">
+        <nav class=" mx-auto flex">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
                 <div class="flex flex-wrap items-center">
                     <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
 
                         <NuxtLink :to="{ name: 'iam-dashboard' }">
-                            <p class="p-1 hover:text-green-500">Dashboard</p>
+                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
                         </NuxtLink>
                         <p>|</p>
                         <NuxtLink :to="{ name: 'scores-view' }">
-                            <p class="p-1 hover:text-green-500">Eval-Items</p>
+                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Eval-Items</strong></p>
                         </NuxtLink>
                         <P>|</P>
                         <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>EI-Analysis </strong></p>
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span>
+                        <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
@@ -184,7 +215,7 @@ return data.filter((person: any) => {
     </header>
 
     <div class="container mx-auto px-6 py-24" v-if="qdata">
-        {{ qdata[item].mentees.dmQ1NotApplicableMentees }}
+
         <UContainer>
             <UCard class="mb-5">
                 <template #header>
@@ -197,56 +228,117 @@ return data.filter((person: any) => {
                         }}</span>
                     </p>
                 </div>
-                <div class="grid grid-cols-7 mt-2 text-center">
+                <div class="w-full my-2 border-b border-gray-300 py-5">
+                    <div class="grid grid-cols-7 mt-2 text-center bg-slate-400">
 
-                    <div class=" border border-l border-green-500">
-                        <strong>Number of Entries</strong>
+                        <div class=" border border-l border-gray-500">
+                            <strong>Number of Entries</strong>
+                        </div>
+                        <div class=" border border-l border-gray-500">
+                            <strong>Mean</strong>
+                        </div>
+                        <div class=" border border-gray-500">
+                            <strong>Median</strong>
+                        </div>
+                        <div class=" border border-gray-500">
+                            <strong>Mode</strong>
+                        </div>
+                        <div class=" border border-gray-500">
+                            <strong>Standard Deviation</strong>
+                        </div>
+                        <div class=" border border-gray-500">
+                            <strong>Sample Kurtosis</strong>
+                        </div>
+                        <div class=" border border-gray-500">
+                            <strong>Sample Skewness</strong>
+                        </div>
+
                     </div>
-                    <div class=" border border-l border-green-500">
-                        <strong>Mean</strong>
+                    <div class="grid grid-cols-7 text-center">
+                        <div class=" border border-l border-gray-500">
+                            {{ qdata.majorData[item].statistics.total }}
+                        </div>
+                        <div class=" border border-l border-gray-500">
+                            {{ qdata.majorData[item].statistics.mean.toFixed(2) }}
+                        </div>
+                        <div class=" border border-gray-500">
+                            {{ qdata.majorData[item].statistics.median.toFixed(2) }}
+                        </div>
+                        <div class=" border border-gray-500">
+                            {{ qdata.majorData[item].statistics.mode }}
+                        </div>
+                        <div class=" border border-gray-500">
+                            {{ qdata.majorData[item].statistics.standardDeviation.toFixed(4) }}
+                        </div>
+                        <div class=" border border-gray-500">
+                            {{ qdata.majorData[item].statistics.sampleKurtosis.toFixed(4) }}
+                        </div>
+                        <div class=" border border-gray-500">
+                            {{ qdata.majorData[item].statistics.sampleSkewness.toFixed(4) }}
+                        </div>
                     </div>
-                    <div class=" border border-green-500">
-                        <strong>Median</strong>
+                </div>
+
+                <div class="grid grid-cols-2 gap-10">
+                    <div class="flex pt-5 pr-2">
+                        <div class=" border border-gray-400 rounded-md ">
+                            <h1 class="p-2"><strong>Count of Scores</strong> | <span class="text-green-500 italic">{{ itemId
+                            }}</span> </h1>
+                            <apexchart width="600" type="bar" :options="chartOptions(qdata.majorData[item])"
+                                :series="chartSeries(qdata.majorData[item])"></apexchart>
+                        </div>
                     </div>
-                    <div class=" border border-green-500">
-                        <strong>Mode</strong>
-                    </div>
-                    <div class=" border border-green-500">
-                        <strong>Standard Deviation</strong>
-                    </div>
-                    <div class=" border border-green-500">
-                        <strong>Sample Kurtosis</strong>
-                    </div>
-                    <div class=" border border-green-500">
-                        <strong>Sample Skewness</strong>
+
+                    <div class="pl-2">
+                        <div>
+                            <div class="grid grid-cols-3 border-b border-spacing-1 border-cyan-950 p-2">
+                                <div class="text-center"><strong>Rating</strong></div>
+                                <div class="text-center"><strong>Count</strong></div>
+                                <div class="text-center"><strong>Percentage</strong></div>
+                            </div>
+                            <div class="grid grid-cols-3 text-gray-500 border-b border-gray-500 pb-2">
+                                <div class="text-center"><span><strong>Not Applicable</strong></span></div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).counts.na }}</div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.na }}%</div>
+                            </div>
+                            <div class="grid grid-cols-3 text-red-500 border-b border-red-500 pb-2">
+                                <div class="text-center"><span class=""><strong>Poor</strong></span></div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).counts.poor }}</div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.poor }}%</div>
+                            </div>
+                            <div class="grid grid-cols-3 text-yellow-500 border-b border-yellow-500 pb-2">
+                                <div class="text-center"><span class=""><strong>Average</strong></span></div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).counts.average }}</div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.average }}%
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 text-green-500 border-b border-green-500 pb-2">
+                                <div class="text-center"><span class=""><strong>Good</strong></span></div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).counts.good }}</div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.good }}%</div>
+                            </div>
+                            <div class="grid grid-cols-3 border-b-4 border-black pb-2">
+                                <div class="text-center"><span class=""><strong>Total</strong></span></div>
+                                <div class="text-center">{{ qdata.majorData[item].statistics.total  }}</div>
+                                <div class="text-center">100%</div>
+                            </div>
+                        </div>
+                        <div class="pt-5">
+                            <UCard class="border border-cyan-500">
+                                <template #header>
+                                    <div class="text-center border-b border-gray-400 pb-3"><strong>Evaluation Item - </strong><span class="text-green-500">{{ itemId }}</span></div>
+                                </template>
+                                {{ qdata.majorData[item].evalItem }}
+                            </UCard>
+                        </div>
                     </div>
 
                 </div>
-                <div class="grid grid-cols-7 text-center">
-                    <div class=" border border-l border-green-500">
-                        {{ qdata[item].statistics.total }}
-                    </div>
-                    <div class=" border border-l border-green-500">
-                        {{ qdata[item].statistics.mean.toFixed(2) }}
-                    </div>
-                    <div class=" border border-green-500">
-                        {{ qdata[item].statistics.median.toFixed(2) }}
-                    </div>
-                    <div class=" border border-green-500">
-                        {{ qdata[item].statistics.mode }}
-                    </div>
-                    <div class=" border border-green-500">
-                        {{ qdata[item].statistics.standardDeviation.toFixed(4) }}
-                    </div>
-                    <div class=" border border-green-500">
-                        {{ qdata[item].statistics.sampleKurtosis.toFixed(4) }}
-                    </div>
-                    <div class=" border border-green-500">
-                        {{ qdata[item].statistics.sampleSkewness.toFixed(4) }}
-                    </div>
-                </div>
+
+
+
             </UCard>
-<!--not applicables-->
+            <!--not applicables-->
             <UCard class="pb-5">
                 <template #header>
                     <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-gray-500">(0) Not
@@ -257,7 +349,7 @@ return data.filter((person: any) => {
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsNotApplicable(qdata)">
+                        <UTable :columns=columns :rows="getRowsNotApplicable(qdata.majorData)">
                             <template #empty-state>
                                 <div class="flex flex-col items-center justify-center py-6 gap-3">
                                     <span class="italic text-sm">No one here!</span>
@@ -273,23 +365,25 @@ return data.filter((person: any) => {
 
                             </template>
                         </UTable>
-                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsNotApplicable(qdata).length" />
+                        <UPagination v-model="page" :page-count="pageCount"
+                            :total="getRowsNotApplicable(qdata.majorData).length" />
                     </div>
                 </div>
             </UCard>
 
-<!--poor-->
+            <!--poor-->
 
-<UCard class="pb-5">
+            <UCard class="pb-5">
                 <template #header>
-                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-red-500">(1) Poor</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
+                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-red-500">(1) Poor</span>
+                        for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
                 </template>
                 <div>
                     <div>
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsPoor(qdata)">
+                        <UTable :columns=columns :rows="getRowsPoor(qdata.majorData)">
                             <template #empty-state>
                                 <div class="flex flex-col items-center justify-center py-6 gap-3">
                                     <span class="italic text-sm">No one here!</span>
@@ -305,7 +399,7 @@ return data.filter((person: any) => {
 
                             </template>
                         </UTable>
-                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsPoor(qdata).length" />
+                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsPoor(qdata.majorData).length" />
                     </div>
                 </div>
             </UCard>
@@ -313,14 +407,15 @@ return data.filter((person: any) => {
             <!--avergae-->
             <UCard class="pb-5">
                 <template #header>
-                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-yellow-500">(2) Average</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
+                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-yellow-500">(2)
+                            Average</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
                 </template>
                 <div>
                     <div>
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsAverage(qdata)">
+                        <UTable :columns=columns :rows="getRowsAverage(qdata.majorData)">
                             <template #empty-state>
                                 <div class="flex flex-col items-center justify-center py-6 gap-3">
                                     <span class="italic text-sm">No one here!</span>
@@ -336,7 +431,8 @@ return data.filter((person: any) => {
 
                             </template>
                         </UTable>
-                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsAverage(qdata).length" />
+                        <UPagination v-model="page" :page-count="pageCount"
+                            :total="getRowsAverage(qdata.majorData).length" />
                     </div>
                 </div>
             </UCard>
@@ -345,14 +441,15 @@ return data.filter((person: any) => {
 
             <UCard class="pb-5">
                 <template #header>
-                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-green-500">(3) Good</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
+                    <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-green-500">(3)
+                            Good</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
                 </template>
                 <div>
                     <div>
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsGood(qdata)">
+                        <UTable :columns=columns :rows="getRowsGood(qdata.majorData)">
                             <template #empty-state>
                                 <div class="flex flex-col items-center justify-center py-6 gap-3">
                                     <span class="italic text-sm">No one here!</span>
@@ -368,7 +465,7 @@ return data.filter((person: any) => {
 
                             </template>
                         </UTable>
-                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsGood(qdata).length" />
+                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsGood(qdata.majorData).length" />
                     </div>
                 </div>
             </UCard>
@@ -378,9 +475,9 @@ return data.filter((person: any) => {
         <!--average-->
 
 
- 
+
 
         <!-- {{ filteredRows }} -->
-        <!-- {{ getFilteredRows(qdata[item].mentees.dmQ1NotApplicableMentees) }} -->
+        <!-- {{ getFilteredRows(qdata.majorData[item].mentees.dmQ1NotApplicableMentees) }} -->
     </div>
 </template>

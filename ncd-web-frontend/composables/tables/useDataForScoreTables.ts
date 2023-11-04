@@ -2153,6 +2153,7 @@ const useDataForScoreTables = (data: any) => {
 
     const majorData = {
       dmQ1: {
+        evalItem: "Defines Diabetes Mellitus.",
         mentees: {
           NotApplicableMentees: dmQ1NotApplicableMentees,
           PoorMentees: dmQ1PoorMentees,
@@ -2171,6 +2172,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ2: {
+        evalItem: "Describes three common types of diabetesemellitus (DM)",
         mentees: {
           NotApplicableMentees: dmQ2NotApplicableMentees,
           PoorMentees: dmQ2PoorMentees,
@@ -2189,6 +2191,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ3: {
+        evalItem: "Lists at least five risk factors of TD2M.",
         mentees: {
           NotApplicableMentees: dmQ3NotApplicableMentees,
           PoorMentees: dmQ3PoorMentees,
@@ -2207,6 +2210,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ4: {
+        evalItem: "Lists at least three acute symptoms and three chronic symptoms of DM",
         mentees: {
           NotApplicableMentees: dmQ4NotApplicableMentees,
           PoorMentees: dmQ4PoorMentees,
@@ -2225,6 +2229,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ5: {
+        evalItem: "Identifies at least five at risk groups of people that need to be screened for DM.",
         mentees: {
           NotApplicableMentees: dmQ5NotApplicableMentees,
           PoorMentees: dmQ5PoorMentees,
@@ -2243,6 +2248,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ6: {
+        evalItem: "Explains the two steps in screening and diagnosing diabetes mellitus in at risk asymptoatic patients.",
         mentees: {
           NotApplicableMentees: dmQ6NotApplicableMentees,
           PoorMentees: dmQ6PoorMentees,
@@ -2261,6 +2267,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ7: {
+        evalItem: "Lists and explains the purpose of the three tests offered to monitor patients in the pilot project.",
         mentees: {
           NotApplicableMentees: dmQ7NotApplicableMentees,
           PoorMentees: dmQ7PoorMentees,
@@ -2279,6 +2286,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ8: {
+        evalItem: "Performs DM Screening in five groups of people at risk of developing DM.",
         mentees: {
           NotApplicableMentees: dmQ8NotApplicableMentees,
           PoorMentees: dmQ8PoorMentees,
@@ -2297,6 +2305,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ9: {
+        evalItem: "Performs six step systematic history taking relevant for diabetes mellitus per checklist.",
         mentees: {
           NotApplicableMentees: dmQ9NotApplicableMentees,
           PoorMentees: dmQ9PoorMentees,
@@ -2315,6 +2324,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ10: {
+        evalItem: "Evaluate a DM patient using the seven step physical examination per protocol.",
         mentees: {
           NotApplicableMentees: dmQ10NotApplicableMentees,
           PoorMentees: dmQ10PoorMentees,
@@ -2333,6 +2343,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ11: {
+        evalItem: "Uses effective and appropriate level of communication with patients.",
         mentees: {
           NotApplicableMentees: dmQ11NotApplicableMentees,
           PoorMentees: dmQ11PoorMentees,
@@ -2351,6 +2362,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ12: {
+        evalItem: "Perfoms physical examination in a gentle manner.",
         mentees: {
           NotApplicableMentees: dmQ12NotApplicableMentees,
           PoorMentees: dmQ12PoorMentees,
@@ -2369,6 +2381,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ13: {
+        evalItem: "Perfoms physical examination in private conditions.",
         mentees: {
           NotApplicableMentees: dmQ13NotApplicableMentees,
           PoorMentees: dmQ13PoorMentees,
@@ -2387,6 +2400,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ14: {
+        evalItem: "Describes the three main aims for treating diabetes mellitus.",
         mentees: {
           NotApplicableMentees: dmQ14NotApplicableMentees,
           PoorMentees: dmQ14PoorMentees,
@@ -2405,6 +2419,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ15: {
+        evalItem: " Explains the three lifestyle changes to be given to patients as part of management of DM.",
         mentees: {
           NotApplicableMentees: dmQ15NotApplicableMentees,
           PoorMentees: dmQ15PoorMentees,
@@ -2423,6 +2438,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ16: {
+        evalItem: "Lists the three medications used in DM (Type 1 and Type 2) management and gives one common side effect of each.",
         mentees: {
           NotApplicableMentees: dmQ16NotApplicableMentees,
           PoorMentees: dmQ16PoorMentees,
@@ -2441,6 +2457,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ17: {
+        evalItem: " Lists at least five symptoms of hypoglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ17NotApplicableMentees,
           PoorMentees: dmQ17PoorMentees,
@@ -2459,6 +2476,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ18: {
+        evalItem: "Lists at least five symptoms of hyperglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ18NotApplicableMentees,
           PoorMentees: dmQ18PoorMentees,
@@ -2477,6 +2495,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ19: {
+        evalItem: "Gives at least two acute and at least two chronic complications of uncontrolled DM",
         mentees: {
           NotApplicableMentees: dmQ19NotApplicableMentees,
           PoorMentees: dmQ19PoorMentees,
@@ -2495,6 +2514,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ20: {
+        evalItem: " Lists the three diagnostic criteria for DKA.",
         mentees: {
           NotApplicableMentees: dmQ20NotApplicableMentees,
           PoorMentees: dmQ20PoorMentees,
@@ -2513,6 +2533,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ21: {
+        evalItem: "Explains the <b>three</b> categories of DM patients that need to be referred to the doctors.",
         mentees: {
           NotApplicableMentees: dmQ21NotApplicableMentees,
           PoorMentees: dmQ21PoorMentees,
@@ -2531,6 +2552,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ22: {
+        evalItem: " Gives the two principles in management of diabetic foot.",
         mentees: {
           NotApplicableMentees: dmQ22NotApplicableMentees,
           PoorMentees: dmQ22PoorMentees,
@@ -2549,6 +2571,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ23: {
+        evalItem: "Gives the patients the six key messages to aid management of DM.",
         mentees: {
           NotApplicableMentees: dmQ23NotApplicableMentees,
           PoorMentees: dmQ23PoorMentees,
@@ -2567,6 +2590,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ24: {
+        evalItem: "Follows correctly the schedules of the six aspects to monitor in a DM patient.",
         mentees: {
           NotApplicableMentees: dmQ24NotApplicableMentees,
           PoorMentees: dmQ24PoorMentees,
@@ -2585,6 +2609,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ25: {
+        evalItem: "Recognizes patient with hypoglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ25NotApplicableMentees,
           PoorMentees: dmQ25PoorMentees,
@@ -2603,6 +2628,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ26: {
+        evalItem: "Implements the four step management of hypoglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ26NotApplicableMentees,
           PoorMentees: dmQ26PoorMentees,
@@ -2621,6 +2647,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ27: {
+        evalItem: "Recognizes patients with hyperglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ27NotApplicableMentees,
           PoorMentees: dmQ27PoorMentees,
@@ -2639,6 +2666,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ28: {
+        evalItem: "Follows the three procedures in managing hyperglycaemia depending on the level of hyperglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ28NotApplicableMentees,
           PoorMentees: dmQ28PoorMentees,
@@ -2657,6 +2685,7 @@ const useDataForScoreTables = (data: any) => {
         },
       },
       dmQ29: {
+        evalItem: "Explains the importance of adherence to treatment in an appropriate manner",
         mentees: {
           NotApplicableMentees: dmQ29NotApplicableMentees,
           PoorMentees: dmQ29PoorMentees,
@@ -2676,7 +2705,303 @@ const useDataForScoreTables = (data: any) => {
       },
     };
 
-    return majorData;
+    const combinedTableData = [
+      {
+        item: "dmQ1",
+        total: dmQ1Data.length,
+        mean: mean(dmQ1Data),
+        median: median(dmQ1Data),
+        mode: mode(dmQ1Data),
+        standardDeviation: standardDeviation(dmQ1Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ1Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ1Data).toFixed(4),
+      },
+      {
+        item: "dmQ2",
+        total: dmQ2Data.length,
+        mean: mean(dmQ2Data),
+        median: median(dmQ2Data),
+        mode: mode(dmQ2Data),
+        standardDeviation: standardDeviation(dmQ2Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ2Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ2Data).toFixed(4),
+      },
+      {
+        item: "dmQ3",
+        total: dmQ3Data.length,
+        mean: mean(dmQ3Data),
+        median: median(dmQ3Data),
+        mode: mode(dmQ3Data),
+        standardDeviation: standardDeviation(dmQ3Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ3Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ3Data).toFixed(4),
+      },
+      {
+        item: "dmQ4",
+        total: dmQ4Data.length,
+        mean: mean(dmQ4Data),
+        median: median(dmQ4Data),
+        mode: mode(dmQ4Data),
+        standardDeviation: standardDeviation(dmQ4Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ4Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ4Data).toFixed(4),
+      },
+      {
+        item: "dmQ5",
+        total: dmQ5Data.length,
+        mean: mean(dmQ5Data),
+        median: median(dmQ5Data),
+        mode: mode(dmQ5Data),
+        standardDeviation: standardDeviation(dmQ5Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ5Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ5Data).toFixed(4),
+      },
+      {
+        item: "dmQ6",
+        total: dmQ6Data.length,
+        mean: mean(dmQ6Data),
+        median: median(dmQ6Data),
+        mode: mode(dmQ6Data),
+        standardDeviation: standardDeviation(dmQ6Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ6Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ6Data).toFixed(4),
+      },
+      {
+        item: "dmQ7",
+        total: dmQ7Data.length,
+        mean: mean(dmQ7Data),
+        median: median(dmQ7Data),
+        mode: mode(dmQ7Data),
+        standardDeviation: standardDeviation(dmQ7Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ7Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ7Data).toFixed(4),
+      },
+      {
+        item: "dmQ8",
+        total: dmQ8Data.length,
+        mean: mean(dmQ8Data),
+        median: median(dmQ8Data),
+        mode: mode(dmQ8Data),
+        standardDeviation: standardDeviation(dmQ8Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ8Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ8Data).toFixed(4),
+      },
+      {
+        item: "dmQ9",
+        total: dmQ9Data.length,
+        mean: mean(dmQ9Data),
+        median: median(dmQ9Data),
+        mode: mode(dmQ9Data),
+        standardDeviation: standardDeviation(dmQ9Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ9Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ9Data).toFixed(4),
+      },
+      {
+        item: "dmQ10",
+        total: dmQ10Data.length,
+        mean: mean(dmQ10Data),
+        median: median(dmQ10Data),
+        mode: mode(dmQ10Data),
+        standardDeviation: standardDeviation(dmQ10Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ10Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ10Data).toFixed(4),
+      },
+      {
+        item: "dmQ11",
+        total: dmQ11Data.length,
+        mean: mean(dmQ11Data),
+        median: median(dmQ11Data),
+        mode: mode(dmQ11Data),
+        standardDeviation: standardDeviation(dmQ11Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ11Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ11Data).toFixed(4),
+      },
+      {
+        item: "dmQ12",
+        total: dmQ12Data.length,
+        mean: mean(dmQ12Data),
+        median: median(dmQ12Data),
+        mode: mode(dmQ12Data),
+        standardDeviation: standardDeviation(dmQ12Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ12Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ12Data).toFixed(4),
+      },
+      {
+        item: "dmQ13",
+        total: dmQ13Data.length,
+        mean: mean(dmQ13Data),
+        median: median(dmQ13Data),
+        mode: mode(dmQ13Data),
+        standardDeviation: standardDeviation(dmQ13Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ13Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ13Data).toFixed(4),
+      },
+      {
+        item: "dmQ14",
+        total: dmQ14Data.length,
+        mean: mean(dmQ14Data),
+        median: median(dmQ14Data),
+        mode: mode(dmQ14Data),
+        standardDeviation: standardDeviation(dmQ14Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ14Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ14Data).toFixed(4),
+      },
+      {
+        item: "dmQ15",
+        total: dmQ15Data.length,
+        mean: mean(dmQ15Data),
+        median: median(dmQ15Data),
+        mode: mode(dmQ15Data),
+        standardDeviation: standardDeviation(dmQ15Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ15Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ15Data).toFixed(4),
+      },
+      {
+        item: "dmQ16",
+        total: dmQ16Data.length,
+        mean: mean(dmQ16Data),
+        median: median(dmQ16Data),
+        mode: mode(dmQ16Data),
+        standardDeviation: standardDeviation(dmQ16Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ16Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ16Data).toFixed(4),
+      },
+      {
+        item: "dmQ17",
+        total: dmQ17Data.length,
+        mean: mean(dmQ17Data),
+        median: median(dmQ17Data),
+        mode: mode(dmQ17Data),
+        standardDeviation: standardDeviation(dmQ17Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ17Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ17Data).toFixed(4),
+      },
+      {
+        item: "dmQ18",
+        total: dmQ18Data.length,
+        mean: mean(dmQ18Data),
+        median: median(dmQ18Data),
+        mode: mode(dmQ18Data),
+        standardDeviation: standardDeviation(dmQ18Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ18Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ18Data).toFixed(4),
+      },
+      {
+        item: "dmQ19",
+        total: dmQ19Data.length,
+        mean: mean(dmQ19Data),
+        median: median(dmQ19Data),
+        mode: mode(dmQ19Data),
+        standardDeviation: standardDeviation(dmQ19Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ19Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ19Data).toFixed(4),
+      },
+      {
+        item: "dmQ20",
+        total: dmQ20Data.length,
+        mean: mean(dmQ20Data),
+        median: median(dmQ20Data),
+        mode: mode(dmQ20Data),
+        standardDeviation: standardDeviation(dmQ20Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ20Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ20Data).toFixed(4),
+      },
+      {
+        item: "dmQ21",
+        total: dmQ21Data.length,
+        mean: mean(dmQ21Data),
+        median: median(dmQ21Data),
+        mode: mode(dmQ21Data),
+        standardDeviation: standardDeviation(dmQ21Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ21Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ21Data).toFixed(4),
+      },
+      {
+        item: "dmQ22",
+        total: dmQ22Data.length,
+        mean: mean(dmQ22Data),
+        median: median(dmQ22Data),
+        mode: mode(dmQ22Data),
+        standardDeviation: standardDeviation(dmQ22Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ22Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ22Data).toFixed(4),
+      },
+      {
+        item: "dmQ23",
+        total: dmQ23Data.length,
+        mean: mean(dmQ23Data),
+        median: median(dmQ23Data),
+        mode: mode(dmQ23Data),
+        standardDeviation: standardDeviation(dmQ23Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ23Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ23Data).toFixed(4),
+      },
+      {
+        item: "dmQ24",
+        total: dmQ24Data.length,
+        mean: mean(dmQ24Data),
+        median: median(dmQ24Data),
+        mode: mode(dmQ24Data),
+        standardDeviation: standardDeviation(dmQ24Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ24Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ24Data).toFixed(4),
+      },
+      {
+        item: "dmQ25",
+        total: dmQ25Data.length,
+        mean: mean(dmQ25Data),
+        median: median(dmQ25Data),
+        mode: mode(dmQ25Data),
+        standardDeviation: standardDeviation(dmQ25Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ25Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ25Data).toFixed(4),
+      },
+      {
+        item: "dmQ26",
+        total: dmQ26Data.length,
+        mean: mean(dmQ26Data),
+        median: median(dmQ26Data),
+        mode: mode(dmQ26Data),
+        standardDeviation: standardDeviation(dmQ26Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ26Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ26Data).toFixed(4),
+      },
+      {
+        item: "dmQ27",
+        total: dmQ27Data.length,
+        mean: mean(dmQ27Data),
+        median: median(dmQ27Data),
+        mode: mode(dmQ27Data),
+        standardDeviation: standardDeviation(dmQ27Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ27Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ27Data).toFixed(4),
+      },
+      {
+        item: "dmQ28",
+        total: dmQ28Data.length,
+        mean: mean(dmQ28Data),
+        median: median(dmQ28Data),
+        mode: mode(dmQ28Data),
+        standardDeviation: standardDeviation(dmQ28Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ28Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ28Data).toFixed(4),
+      },
+      {
+        item: "dmQ29",
+        total: dmQ29Data.length,
+        mean: mean(dmQ29Data),
+        median: median(dmQ29Data),
+        mode: mode(dmQ29Data),
+        standardDeviation: standardDeviation(dmQ29Data).toFixed(4),
+        sampleKurtosis: sampleKurtosis(dmQ29Data).toFixed(4),
+        sampleSkewness: sampleSkewness(dmQ29Data).toFixed(4),
+      },
+    ];
+
+    return {
+      majorData: majorData,
+      combinedTableData: combinedTableData,
+    };
   });
 };
 
