@@ -15,11 +15,11 @@ export const useMenteesStore = defineStore("mentees", {
     //     return (mentees: any) => groupBy(mentees, "district");
     //   }
     // },
-    menteesByFacility() {
-      if (this.rawMentees) {
-        return (mentees: any) => groupBy(mentees, "facilities");
-      }
-    },
+    // menteesByFacility() {
+    //   if (this.rawMentees) {
+    //     return (mentees: any) => groupBy(mentees, "facilities");
+    //   }
+    // },
     menteesByGender(): any {
       if (this.rawMentees) {
         return (mentees: any) => groupBy(mentees, "gender");
@@ -42,6 +42,12 @@ export const useMenteesStore = defineStore("mentees", {
       const evals = this.mentees();
       return evals.then((resp: any) => {
         return groupBy(resp, "district");
+      });
+    },
+    async menteesByFacility() {
+      const evals = this.mentees();
+      return evals.then((resp: any) => {
+        return groupBy(resp, "facility");
       });
     },
   },

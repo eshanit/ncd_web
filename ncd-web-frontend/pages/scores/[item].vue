@@ -1,8 +1,47 @@
 <script setup lang="ts">
 import { useEvaluationsStore } from '../../stores/evaluations';
-import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
+import useDataForScoreTablesItem from '../../composables/tables/useDataForScoreTablesItem'
 import { useAsyncState } from '@vueuse/core';
 import barChartForEvalItems from '~/composables/charts/barChartForEvalItems';
+
+
+let tables = reactive({
+    showNA: true,
+    showPoor: false,
+    showAverage: false,
+    showGood: false
+})
+
+
+const showTables = (e: string) => {
+
+    console.log(e)
+
+    if (e == '0') {
+        tables.showNA = true
+        tables.showPoor = false
+        tables.showAverage = false
+        tables.showGood = false
+    } else if (e == '1') {
+        tables.showNA = false
+        tables.showPoor = true
+        tables.showAverage = false
+        tables.showGood = false
+    } else if (e == '2') {
+        tables.showNA = false
+        tables.showPoor = false
+        tables.showAverage = true
+        tables.showGood = false
+    } else if (e == '3') {
+        tables.showNA = false
+        tables.showPoor = false
+        tables.showAverage = false
+        tables.showGood = true
+    }
+
+    return tables
+
+}
 
 
 const iamStore = useIamProfileStore();
@@ -26,7 +65,7 @@ const evals: any = evalData.state
 //
 
 const dmQData = useAsyncState(async () => {
-    return await useDataForScoreTables(evalData);
+    return await useDataForScoreTablesItem(evalData);
 }, undefined);
 
 const qdata = dmQData.state
@@ -215,7 +254,6 @@ const smallTableData = (data: any) => {
     </header>
 
     <div class="container mx-auto px-6 py-24" v-if="qdata">
-
         <UContainer>
             <UCard class="mb-5">
                 <template #header>
@@ -279,7 +317,7 @@ const smallTableData = (data: any) => {
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-10">
+                <div class="grid lg:grid-cols-2  md:grid-cols-1 sm:grid-cols-1 gap-10">
                     <div class="flex pt-5 pr-2">
                         <div class=" border border-gray-400 rounded-md ">
                             <h1 class="p-2"><strong>Count of Scores</strong> | <span class="text-green-500 italic">{{ itemId
@@ -304,7 +342,8 @@ const smallTableData = (data: any) => {
                             <div class="grid grid-cols-3 text-red-500 border-b border-red-500 pb-2">
                                 <div class="text-center"><span class=""><strong>Poor</strong></span></div>
                                 <div class="text-center">{{ smallTableData(qdata.majorData[item]).counts.poor }}</div>
-                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.poor }}%</div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.poor }}%
+                                </div>
                             </div>
                             <div class="grid grid-cols-3 text-yellow-500 border-b border-yellow-500 pb-2">
                                 <div class="text-center"><span class=""><strong>Average</strong></span></div>
@@ -315,18 +354,20 @@ const smallTableData = (data: any) => {
                             <div class="grid grid-cols-3 text-green-500 border-b border-green-500 pb-2">
                                 <div class="text-center"><span class=""><strong>Good</strong></span></div>
                                 <div class="text-center">{{ smallTableData(qdata.majorData[item]).counts.good }}</div>
-                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.good }}%</div>
+                                <div class="text-center">{{ smallTableData(qdata.majorData[item]).percerntages.good }}%
+                                </div>
                             </div>
                             <div class="grid grid-cols-3 border-b-4 border-black pb-2">
                                 <div class="text-center"><span class=""><strong>Total</strong></span></div>
-                                <div class="text-center">{{ qdata.majorData[item].statistics.total  }}</div>
+                                <div class="text-center">{{ qdata.majorData[item].statistics.total }}</div>
                                 <div class="text-center">100%</div>
                             </div>
                         </div>
                         <div class="pt-5">
                             <UCard class="border border-cyan-500">
                                 <template #header>
-                                    <div class="text-center border-b border-gray-400 pb-3"><strong>Evaluation Item - </strong><span class="text-green-500">{{ itemId }}</span></div>
+                                    <div class="text-center border-b border-gray-400 pb-3"><strong>Evaluation Item -
+                                        </strong><span class="text-green-500">{{ itemId }}</span></div>
                                 </template>
                                 {{ qdata.majorData[item].evalItem }}
                             </UCard>
@@ -335,11 +376,40 @@ const smallTableData = (data: any) => {
 
                 </div>
 
-
+                <div class="text-center border-b border-gray-500">
+                    <div>Click on the buttons below to view list of mentees according to scores they got: </div>
+                    <div class="grid grid-cols-4 border-b border-spacing-1 border-cyan-950 p-2">
+                        <div class="text-center">
+                            <strong>
+                                <UButton color="gray" variant="solid" size="xl" @click="showTables('0')">Not Applicable |
+                                    Score: 0</UButton>
+                            </strong>
+                        </div>
+                        <div class="text-center">
+                            <strong>
+                                <UButton color="red" variant="solid" size="xl" @click="showTables('1')">Poor| Score: 1
+                                </UButton>
+                            </strong>
+                        </div>
+                        <div class="text-center">
+                            <strong>
+                                <UButton color="yellow" variant="solid" size="xl" @click="showTables('2')">Average | Score:
+                                    2
+                                </UButton>
+                            </strong>
+                        </div>
+                        <div class="text-center">
+                            <strong>
+                                <UButton color="green" variant="solid" size="xl" @click="showTables('3')">Not Applicable |
+                                    Score: 3</UButton>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
 
             </UCard>
             <!--not applicables-->
-            <UCard class="pb-5">
+            <UCard class="pb-5" v-show="tables.showNA">
                 <template #header>
                     <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-gray-500">(0) Not
                             Applicable</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
@@ -373,7 +443,7 @@ const smallTableData = (data: any) => {
 
             <!--poor-->
 
-            <UCard class="pb-5">
+            <UCard class="pb-5" v-show="tables.showPoor">
                 <template #header>
                     <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-red-500">(1) Poor</span>
                         for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
@@ -405,7 +475,7 @@ const smallTableData = (data: any) => {
             </UCard>
 
             <!--avergae-->
-            <UCard class="pb-5">
+            <UCard class="pb-5" v-show="tables.showAverage">
                 <template #header>
                     <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-yellow-500">(2)
                             Average</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>
@@ -439,7 +509,7 @@ const smallTableData = (data: any) => {
 
             <!--good-->
 
-            <UCard class="pb-5">
+            <UCard class="pb-5" v-show="tables.showGood">
                 <template #header>
                     <h1 class="text-sm font-semibold">List of Mentees who scored: <span class="text-green-500">(3)
                             Good</span> for Evaluation Item <span class="text-orange-500">{{ itemId }}</span></h1>

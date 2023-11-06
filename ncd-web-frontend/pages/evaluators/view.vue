@@ -92,7 +92,7 @@ const getRows = (data: any) => {
             </div>
         </nav>
     </header>
-    <div class="my-12" v-if="evaluators" >
+    <div class="my-24" v-if="evaluators" >
         <UContainer>
             <UCard>
                 <template #header>

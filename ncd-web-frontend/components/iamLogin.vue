@@ -134,8 +134,8 @@ useHead({
 
     <!-- Login Form -->
     <NxCard
-      header="Login"
-      text="Login using Google or your email address and password"
+      header=""
+      text=""
       class="login-card"
     >
       <div v-if="allowGoogleAuth">
@@ -144,8 +144,9 @@ useHead({
           @error="handleGoogleLoginError"
         ></GoogleSignInButton>
       </div>
-      <IamOrSeparator />
+      <!-- <IamOrSeparator /> -->
       <NxForm :data="inputData" submit-text="Login" @submit="loginUser" />
+       <IamOrSeparator />
       <div class="register-forgot">
         <div>
           <NuxtLink to="/iam/register">Register</NuxtLink>

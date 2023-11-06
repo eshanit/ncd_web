@@ -200,7 +200,7 @@ const boxPlotPerformanceChart = distPerformanceChartData.state;
         </div>
       </UCard>
 
-      <UCard>
+      <UCard class="my-5">
         <template #header>
           <div class="text-orange-500 text-sm  my-2"><strong>Distric-Mentee-Evaluation Analysis</strong></div>
           <p class="text-sm">This is a composite chart which shows 1. Number of <span

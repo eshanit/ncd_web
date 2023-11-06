@@ -82,6 +82,11 @@ export const useEvaluationsStore = defineStore("evaluations", {
       return evals.then((resp: any)=>{
         return resp.filter((evaluation: any) => evaluation.district === district);
       })
+    }, async getEvalByFacility(facility: string | string[]){
+      const evals = this.evaluations()
+      return evals.then((resp: any)=>{
+        return resp.filter((evaluation: any) => evaluation.facility === facility);
+      })
     },
     async getEvalByEvaluator(evaluatorId: string | string[]){
       const evals = this.evaluations()

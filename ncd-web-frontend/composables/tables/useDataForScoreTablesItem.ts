@@ -8,33 +8,10 @@ import {
   sampleSkewness,
   sampleKurtosis,
 } from "simple-statistics";
-import { useEvaluationsStore } from "../../stores/evaluations";
 
-const useDataForScoreTables = ( filter: any, source: any) => {
+const useDataForScoreTablesItem = (data: any) => {
 
-  const evaluationsStore = useEvaluationsStore();
-
-  let evalData: any = undefined;
-
-  if (filter == "All") {
-
-   evalData = useAsyncState(async () => {
-      return await evaluationsStore.evaluations();
-    }, undefined);
-
-  } else if (source == "district") {
-    
-    evalData = useAsyncState(async () => {
-      return await evaluationsStore.getEvalByDistrict(filter);
-    }, undefined);
-  } else {
-    
-    evalData = useAsyncState(async () => {
-      return await evaluationsStore.getEvalByFacility(filter);
-    }, undefined);
-  }
-
-  return evalData.then((response: any) => {
+  return data.then((response: any) => {
     const state: any = response.state.value;
 
     let dmQData: any[] = [];
@@ -2234,8 +2211,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ4: {
-        evalItem:
-          "Lists at least three acute symptoms and three chronic symptoms of DM",
+        evalItem: "Lists at least three acute symptoms and three chronic symptoms of DM",
         mentees: {
           NotApplicableMentees: dmQ4NotApplicableMentees,
           PoorMentees: dmQ4PoorMentees,
@@ -2254,8 +2230,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ5: {
-        evalItem:
-          "Identifies at least five at risk groups of people that need to be screened for DM.",
+        evalItem: "Identifies at least five at risk groups of people that need to be screened for DM.",
         mentees: {
           NotApplicableMentees: dmQ5NotApplicableMentees,
           PoorMentees: dmQ5PoorMentees,
@@ -2274,8 +2249,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ6: {
-        evalItem:
-          "Explains the two steps in screening and diagnosing diabetes mellitus in at risk asymptoatic patients.",
+        evalItem: "Explains the two steps in screening and diagnosing diabetes mellitus in at risk asymptoatic patients.",
         mentees: {
           NotApplicableMentees: dmQ6NotApplicableMentees,
           PoorMentees: dmQ6PoorMentees,
@@ -2294,8 +2268,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ7: {
-        evalItem:
-          "Lists and explains the purpose of the three tests offered to monitor patients in the pilot project.",
+        evalItem: "Lists and explains the purpose of the three tests offered to monitor patients in the pilot project.",
         mentees: {
           NotApplicableMentees: dmQ7NotApplicableMentees,
           PoorMentees: dmQ7PoorMentees,
@@ -2314,8 +2287,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ8: {
-        evalItem:
-          "Performs DM Screening in five groups of people at risk of developing DM.",
+        evalItem: "Performs DM Screening in five groups of people at risk of developing DM.",
         mentees: {
           NotApplicableMentees: dmQ8NotApplicableMentees,
           PoorMentees: dmQ8PoorMentees,
@@ -2334,8 +2306,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ9: {
-        evalItem:
-          "Performs six step systematic history taking relevant for diabetes mellitus per checklist.",
+        evalItem: "Performs six step systematic history taking relevant for diabetes mellitus per checklist.",
         mentees: {
           NotApplicableMentees: dmQ9NotApplicableMentees,
           PoorMentees: dmQ9PoorMentees,
@@ -2354,8 +2325,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ10: {
-        evalItem:
-          "Evaluate a DM patient using the seven step physical examination per protocol.",
+        evalItem: "Evaluate a DM patient using the seven step physical examination per protocol.",
         mentees: {
           NotApplicableMentees: dmQ10NotApplicableMentees,
           PoorMentees: dmQ10PoorMentees,
@@ -2374,8 +2344,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ11: {
-        evalItem:
-          "Uses effective and appropriate level of communication with patients.",
+        evalItem: "Uses effective and appropriate level of communication with patients.",
         mentees: {
           NotApplicableMentees: dmQ11NotApplicableMentees,
           PoorMentees: dmQ11PoorMentees,
@@ -2432,8 +2401,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ14: {
-        evalItem:
-          "Describes the three main aims for treating diabetes mellitus.",
+        evalItem: "Describes the three main aims for treating diabetes mellitus.",
         mentees: {
           NotApplicableMentees: dmQ14NotApplicableMentees,
           PoorMentees: dmQ14PoorMentees,
@@ -2452,8 +2420,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ15: {
-        evalItem:
-          " Explains the three lifestyle changes to be given to patients as part of management of DM.",
+        evalItem: " Explains the three lifestyle changes to be given to patients as part of management of DM.",
         mentees: {
           NotApplicableMentees: dmQ15NotApplicableMentees,
           PoorMentees: dmQ15PoorMentees,
@@ -2472,8 +2439,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ16: {
-        evalItem:
-          "Lists the three medications used in DM (Type 1 and Type 2) management and gives one common side effect of each.",
+        evalItem: "Lists the three medications used in DM (Type 1 and Type 2) management and gives one common side effect of each.",
         mentees: {
           NotApplicableMentees: dmQ16NotApplicableMentees,
           PoorMentees: dmQ16PoorMentees,
@@ -2530,8 +2496,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ19: {
-        evalItem:
-          "Gives at least two acute and at least two chronic complications of uncontrolled DM",
+        evalItem: "Gives at least two acute and at least two chronic complications of uncontrolled DM",
         mentees: {
           NotApplicableMentees: dmQ19NotApplicableMentees,
           PoorMentees: dmQ19PoorMentees,
@@ -2569,8 +2534,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ21: {
-        evalItem:
-          "Explains the <b>three</b> categories of DM patients that need to be referred to the doctors.",
+        evalItem: "Explains the <b>three</b> categories of DM patients that need to be referred to the doctors.",
         mentees: {
           NotApplicableMentees: dmQ21NotApplicableMentees,
           PoorMentees: dmQ21PoorMentees,
@@ -2608,8 +2572,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ23: {
-        evalItem:
-          "Gives the patients the six key messages to aid management of DM.",
+        evalItem: "Gives the patients the six key messages to aid management of DM.",
         mentees: {
           NotApplicableMentees: dmQ23NotApplicableMentees,
           PoorMentees: dmQ23PoorMentees,
@@ -2628,8 +2591,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ24: {
-        evalItem:
-          "Follows correctly the schedules of the six aspects to monitor in a DM patient.",
+        evalItem: "Follows correctly the schedules of the six aspects to monitor in a DM patient.",
         mentees: {
           NotApplicableMentees: dmQ24NotApplicableMentees,
           PoorMentees: dmQ24PoorMentees,
@@ -2705,8 +2667,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ28: {
-        evalItem:
-          "Follows the three procedures in managing hyperglycaemia depending on the level of hyperglycaemia.",
+        evalItem: "Follows the three procedures in managing hyperglycaemia depending on the level of hyperglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ28NotApplicableMentees,
           PoorMentees: dmQ28PoorMentees,
@@ -2725,8 +2686,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
         },
       },
       dmQ29: {
-        evalItem:
-          "Explains the importance of adherence to treatment in an appropriate manner",
+        evalItem: "Explains the importance of adherence to treatment in an appropriate manner",
         mentees: {
           NotApplicableMentees: dmQ29NotApplicableMentees,
           PoorMentees: dmQ29PoorMentees,
@@ -3044,6 +3004,7 @@ const useDataForScoreTables = ( filter: any, source: any) => {
       combinedTableData: combinedTableData,
     };
   });
+
 };
 
-export default useDataForScoreTables;
+export default useDataForScoreTablesItem;

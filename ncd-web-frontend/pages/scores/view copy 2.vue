@@ -3,16 +3,8 @@ import { ref, watch } from 'vue'
 import { useDistrictStore } from '../../stores/districts'
 import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
 import { useField } from 'vee-validate';
-import '../../validators/district';
 import { useAsyncState } from '@vueuse/core';
-
 const iamStore = useIamProfileStore();
-
-let qdata = ref({
-    combinedTableData: []
-})
-
-const selectedDistrict = ref('')
 
 const { useLogUserOut, profile } = useAuthStuff();
 
@@ -38,28 +30,12 @@ const formData = computed(() => {
 const districtField = ref(useField('district', 'district'));
 
 
-watch(selectedDistrict, (newDistrict, oldDistrict) => {
-
-    if (newDistrict) {
-      
-        const dmQData = useAsyncState(async () => {
-            return await useDataForScoreTables(newDistrict, 'district');
-        }, undefined);
-
-        qdata = dmQData.state
-
-    }
-
-})
-
 const dmQData = useAsyncState(async () => {
-            return await useDataForScoreTables('All', 'all');
-        }, undefined);
-
-        qdata = dmQData.state
+    return await useDataForScoreTables('All','all');
+}, undefined);
 
 
-
+const qdata = dmQData.state
 
 //
 const columns: any = [
@@ -122,7 +98,7 @@ const columns: any = [
                             <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
                         </NuxtLink>
                         <p>|</p>
-                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Eval-Items</strong></p>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Scores</strong></p>
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
@@ -140,7 +116,7 @@ const columns: any = [
     <!-- <p>{{ qdata }}</p> -->
     <div class="my-28" v-if="qdata">
         <!-- {{ getDistricts(districts) }} -->
-        <!-- {{ selectedDistrict }} -->
+        {{ districtField.value }}
 
 
         <UContainer>
@@ -157,35 +133,32 @@ const columns: any = [
                 <div class="pr-4">
                     <div class="text-gray-700 text-sm border-b border-gray-500 pb-2.5">
                         Below is summary statistics of the evaluations for
-                        <span class="text-red-500 text-2xl italic" v-if="!selectedDistrict">
+                        <span class="text-red-500 text-2xl italic" v-if="!districtField.value">
                             <strong>ALL</strong>
                         </span>
                         <span class="text-green-500 text-2xl italic" v-else>
-                            <strong>{{ selectedDistrict }}</strong>
+                            <strong>{{ districtField.value }}</strong>
                         </span>
                         mentees. If you would like to filter the
                         results by district or facility please use the filters below:
                     </div>
                     <div class=" grid grid-cols-2 pt-2.5">
-
                         <div class="mb-4 pt-2 border-r border-gray-500">
-
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="country">
                                 Filter by Districct
                             </label>
-                            <select id="district"
+                            <select required id="district"
                                 class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
-                                v-model="selectedDistrict" v-validate="'required'">
-                                <option class=" text-gray-500" disabled value="">--Choose District--</option>
-                                <option class=" text-cyan-500" value="All">All</option>
+                                @change="$emit('update:district', ($event.target as any).checked)"
+                                @input="districtField.handleChange" @blur="districtField.handleBlur">
+                                <option class=" text-gray-500" value="">--Choose District--</option>
+
                                 <option class="dark:bg-gray-50" v-for=" (district, i) in districts" :key="i"
                                     :value="district.district" :selected="district.district == formData.district">
                                     {{ district.district }}
                                 </option>
 
                             </select>
-
-
                         </div>
                     </div>
 

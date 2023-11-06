@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.0",
+    "@nuxt/image": "^1.0.0",
     "@nuxt/ui": "^2.9.0",
     "@nuxtjs/moment": "^1.6.1",
     "@pinia/nuxt": "^0.5.1",
@@ -32,6 +33,8 @@
     "@types/nodemailer": "^6.4.13",
     "@types/uuid": "^9.0.6",
     "@types/uuid4": "^2.0.2",
+    "@vee-validate/nuxt": "^4.11.8",
+    "@vee-validate/rules": "^4.11.8",
     "@vueuse/nuxt": "^10.5.0",
     "apexcharts": "^3.44.0",
     "argon2": "^0.31.1",

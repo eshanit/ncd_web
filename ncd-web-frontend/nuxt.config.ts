@@ -1,3 +1,4 @@
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -55,8 +56,9 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-icon',
     'nuxt-lodash',
-    '@formkit/auto-animate/nuxt'
-
+    '@formkit/auto-animate/nuxt',
+    '@vee-validate/nuxt',
+    '@nuxt/image',
   ],
   // Google sign in
   googleSignIn: {
