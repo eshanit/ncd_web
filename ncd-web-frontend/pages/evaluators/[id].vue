@@ -3,16 +3,22 @@ import { useEvaluationsStore } from '../../stores/evaluations';
 import { useAsyncState } from '@vueuse/core';
 import evaluatorEvalsTable from '../../composables/tables/evaluatorEvalsTable'
 
+
 const iamStore = useIamProfileStore();
 
 const { useLogUserOut, profile } = useAuthStuff()
-
 
 const route = useRoute()
 
 const evaluatorId = route.params.id
 
 const evaluationsStore = useEvaluationsStore();
+
+//set 
+
+localStorage.setItem('from','evaluators-id');
+
+localStorage.setItem('id',evaluatorId.toString())
 
 //evals
 const evaluationsData = useAsyncState(async () => {
@@ -79,7 +85,7 @@ const getRows = (data: any) => {
 
 </script>
 <template>
-        <header class="bg-white fixed top-0 w-full">
+    <header class="bg-white fixed top-0 w-full">
         <nav class=" mx-auto flex">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
                 <div class="flex flex-wrap items-center">
@@ -113,8 +119,10 @@ const getRows = (data: any) => {
             <UCard>
                 <template #header>
                     <div class="text-orange-500 text-sm my-2"><strong>List of Evaluations</strong></div>
-                    <div class="text-sm">Below is a list of all the <span class=" text-orange-500 italic"><strong>{{ evalsData.length }}</strong></span> evaluations  done by <span class="italic text-green-500">
-                           <strong>{{ evalsData[0].evalInfo }}</strong> </span>.  To see the report on an evaluation, click the evaluation report button.
+                    <div class="text-sm">Below is a list of all the <span class=" text-orange-500 italic"><strong>{{
+                        evalsData.length }}</strong></span> evaluations done by <span class="italic text-green-500">
+                            <strong>{{ evalsData[0].evalInfo }}</strong> </span>. To see the report on an evaluation, click
+                        the evaluation report button.
                         button. </div>
                 </template>
                 <div>
@@ -129,7 +137,13 @@ const getRows = (data: any) => {
                             </div>
                         </template>
                         <template #actions-data="{ row }">
-                            <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.evalId } }">
+                            <NuxtLink :to="{
+                                name: 'mentees-evaluations-scoreid',
+                                params: {
+                                    scoreid: row.evalId,
+                                }
+                            }
+                                ">
                                 <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
                                     square variant="outline">
                                     Eval report | <span class=" text-red-500">view</span></UButton>

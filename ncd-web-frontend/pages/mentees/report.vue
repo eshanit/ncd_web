@@ -11,6 +11,13 @@ const { useLogUserOut, profile } = useAuthStuff()
 const menteesStore = useMenteesStore();
 const evaluationsStore = useEvaluationsStore();
 
+//set
+
+//set
+localStorage.setItem('from', 'mentees-report')
+
+localStorage.setItem('id', '')
+
 //mentees
 const menteesData = useAsyncState(async () => {
     return await menteesStore.mentees();

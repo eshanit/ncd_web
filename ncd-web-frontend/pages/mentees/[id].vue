@@ -18,6 +18,16 @@ const route = useRoute()
 
 const menteeId = route.params.id;
 
+//get for brach back
+
+const from = localStorage.getItem('from');
+
+const id = localStorage.getItem('id');
+
+
+
+///
+
 const evaluationsStore = useEvaluationsStore();
 
 const menteeData = useAsyncState(async () => {
@@ -93,15 +103,64 @@ const getflatScores = scoreArrays.state
                 <div class="flex flex-wrap items-center">
                     <div class="flex relative w-full px-4 max-w-full flex-grow flex-1">
 
-                        <NuxtLink :to="{ name: 'iam-dashboard' }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
-                        </NuxtLink>
-                        <p>|</p>
-                        <NuxtLink :to="{ name: 'mentees-report' }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees</strong></p>
-                        </NuxtLink>
-                        <p>|</p>
-                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Stats</strong></p>
+                        <div class="flex" v-if="from == 'districts-id'">
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'districts-list' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Districts</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'districts-id', params: { id: id } }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Districts Analysis</strong>
+                                </p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Stats</strong></p>
+                        </div>
+                        <div class="flex" v-else-if="from == 'facilities-id'">
+
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'facilities-list' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Facilities</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: from, params: { id: id } }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Facility Analysis</strong>
+                                </p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Report</strong></p>
+                        </div>
+                        <div class="flex" v-else-if="from == 'mentees-report'">
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'mentees-report' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Stats</strong></p>
+
+                        </div>
+                        <div class="flex" v-else>
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'mentees-report' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Stats</strong></p>
+                        </div>
+
+
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">

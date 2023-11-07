@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useDistrictStore } from '../../stores/districts'
+import { useFacilityStore } from '../../stores/facilities'
 import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
 import { useField } from 'vee-validate';
 import '../../validators/district';
@@ -12,9 +13,12 @@ let qdata = ref({
     combinedTableData: []
 })
 
-const selectedDistrict = ref('')
+let selectedDistrict = ref('')
+let selectedFacility = ref('')
 
 const { useLogUserOut, profile } = useAuthStuff();
+
+/// districts
 
 const districtStore = useDistrictStore();
 
@@ -24,6 +28,18 @@ const districtData = useAsyncState(async () => {
 
 const districts: any = districtData.state;
 
+/// facilities
+
+const facilityStore = useFacilityStore();
+
+const facilityData = useAsyncState(async () => {
+    return await facilityStore.facilities();
+}, undefined);
+
+const facilities = facilityData.state
+
+
+
 ///
 defineEmits([
     'update:district'
@@ -32,31 +48,48 @@ defineEmits([
 const formData = computed(() => {
     return {
         district: '',
+        facility: ''
 
     }
 })
-const districtField = ref(useField('district', 'district'));
-
 
 watch(selectedDistrict, (newDistrict, oldDistrict) => {
 
     if (newDistrict) {
-      
+
         const dmQData = useAsyncState(async () => {
             return await useDataForScoreTables(newDistrict, 'district');
         }, undefined);
 
+        selectedFacility = ref('')
         qdata = dmQData.state
 
     }
 
+
 })
 
-const dmQData = useAsyncState(async () => {
-            return await useDataForScoreTables('All', 'all');
+
+watch(selectedFacility, (newFacility, oldFacility) => {
+    if (newFacility) {
+        const dmQData = useAsyncState(async () => {
+            return await useDataForScoreTables(newFacility, 'facility');
         }, undefined);
 
+        selectedDistrict = ref('')
         qdata = dmQData.state
+
+    }
+})
+
+
+
+
+const dmQData = useAsyncState(async () => {
+    return await useDataForScoreTables('All', 'all');
+}, undefined);
+
+qdata = dmQData.state
 
 
 
@@ -137,12 +170,7 @@ const columns: any = [
             </div>
         </nav>
     </header>
-    <!-- <p>{{ qdata }}</p> -->
     <div class="my-28" v-if="qdata">
-        <!-- {{ getDistricts(districts) }} -->
-        <!-- {{ selectedDistrict }} -->
-
-
         <UContainer>
             <UCard>
                 <template #header>
@@ -157,21 +185,23 @@ const columns: any = [
                 <div class="pr-4">
                     <div class="text-gray-700 text-sm border-b border-gray-500 pb-2.5">
                         Below is summary statistics of the evaluations for
-                        <span class="text-red-500 text-2xl italic" v-if="!selectedDistrict">
+                        <span class="text-red-500 text-2xl italic" v-if="!selectedDistrict && !selectedFacility">
                             <strong>ALL</strong>
                         </span>
-                        <span class="text-green-500 text-2xl italic" v-else>
+                        <span class="text-green-500 text-2xl italic" v-else-if="selectedDistrict">
                             <strong>{{ selectedDistrict }}</strong>
+                        </span>
+                        <span class="text-green-500 text-2xl italic" v-else-if="selectedFacility">
+                            <strong>{{ selectedFacility }}</strong>
                         </span>
                         mentees. If you would like to filter the
                         results by district or facility please use the filters below:
                     </div>
                     <div class=" grid grid-cols-2 pt-2.5">
-
                         <div class="mb-4 pt-2 border-r border-gray-500">
 
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="country">
-                                Filter by Districct
+                                Filter by District
                             </label>
                             <select id="district"
                                 class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
@@ -187,6 +217,28 @@ const columns: any = [
 
 
                         </div>
+
+                        <!--filter by facilities-->
+                        <!-- <div class="mb-4 pt-2 pl-2">
+                            <label class="block text-teal-700 text-sm font-bold mb-2" for="country">
+                                Filter by Facility
+                            </label>
+                            <select id="district"
+                                class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                                v-model="selectedFacility" v-validate="'required'">
+                                <option class=" text-gray-500" disabled value="" selected>--Choose Facility--</option>
+                                <option class=" text-cyan-500" value="All">All</option>
+                                <option class="dark:bg-gray-50" v-for=" (facility, i) in facilities" :key="i"
+                                    :value="facility" :selected="facility == formData.facility">
+                                    {{ facility }}
+                                </option>
+
+                            </select>
+
+
+                        </div> -->
+
+
                     </div>
 
                 </div>

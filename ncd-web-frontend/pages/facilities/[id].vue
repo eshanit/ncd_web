@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core';
-import chartSegmentDistrict from '../../composables/charts/chartSegmentDistrict'
+import chartSegmentFacility from '../../composables/charts/chartSegmentFacility'
 import { useEvaluationsStore } from '../../stores/evaluations'
 import { uniqBy } from 'lodash';
 
@@ -17,35 +17,35 @@ const isOpenMngtBehaviour = ref(false)
 
 const evaluationsStore = useEvaluationsStore()
 
-
 const route = useRoute()
 
 const perc = ref(false)
 
-const districtId = route.params.id;
+const facilityId = route.params.id;
 
-//set
-localStorage.setItem('from', 'districts-id')
+//set 
 
-localStorage.setItem('id', districtId.toString())
+localStorage.setItem('from', 'facilities-id')
+localStorage.setItem('id', facilityId.toString())
+
+
+///
+
+const getFacilityEvals = evaluationsStore.getEvalByFacility(facilityId)
+
+const facilityEvals = useAsyncState(async () => {
+    return await getFacilityEvals;
+}, undefined);
+
+const evals = facilityEvals.state
 
 //
 
-const getDistrictEvals = evaluationsStore.getEvalByDistrict(districtId)
-
-const districtEvals = useAsyncState(async () => {
-    return await getDistrictEvals;
+const getChartSegmentFacilityData = useAsyncState(async () => {
+    return await chartSegmentFacility(facilityEvals);
 }, undefined);
 
-const evals = districtEvals.state
-//
-
-const getChartSegmentDistrictData = useAsyncState(async () => {
-    return await chartSegmentDistrict(districtEvals);
-}, undefined);
-
-const chartSegmentData = getChartSegmentDistrictData.state
-
+const chartSegmentData = getChartSegmentFacilityData.state
 
 // table stuff
 const page = ref(1)
@@ -62,7 +62,6 @@ const getRows = (data: any) => {
     return data2.slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
-
 
 const getEvaLength = (data: any) => {
 
@@ -110,12 +109,8 @@ const items = (row: { id: any; }) => [
         }
     ]
 ]
-
-
-
 </script>
 <template>
-
     <header class="bg-white fixed top-0 w-full">
         <nav class=" mx-auto flex">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -126,11 +121,11 @@ const items = (row: { id: any; }) => [
                             <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
                         </NuxtLink>
                         <p>|</p>
-                        <NuxtLink :to="{ name: 'districts-list' }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Districts</strong></p>
+                        <NuxtLink :to="{ name: 'facilities-list' }">
+                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Facilities</strong></p>
                         </NuxtLink>
                         <p>|</p>
-                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Districts Analysis</strong></p>
+                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Facility Analysis</strong></p>
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
@@ -145,6 +140,7 @@ const items = (row: { id: any; }) => [
             </div>
         </nav>
     </header>
+
     <div v-if="evals" class="my-24">
 
         <UContainer>
@@ -154,7 +150,7 @@ const items = (row: { id: any; }) => [
                         <div class="text-orange-500 text-sm pr-1"><strong>Mentees</strong></div> | <div
                             class="text-green-500 text-sm pl-1">
                             {{
-                                districtId }}</div>
+                                facilityId }}</div>
                     </div>
                     <div class="text-sm">
                         <p>Below is a list of all the mentees in this district.</p>
@@ -186,7 +182,7 @@ const items = (row: { id: any; }) => [
                 <template #header>
                     <div class="flex my-2">
                         <div class="text-orange-500 pr-1 text-sm"><strong>DM Segment Analysis</strong></div>|<div
-                            class="text-green-500 pl-1 ext-sm">{{ districtId }}</div>
+                            class="text-green-500 pl-1 ext-sm">{{ facilityId }}</div>
                     </div>
                     <div class="text-sm">
                         <p>The DM Evaluation Form has two segements 1. <span class="text-red-500"><strong>Introduction and
@@ -430,10 +426,10 @@ const items = (row: { id: any; }) => [
                                 }" :series="chartSegmentData.pie.values.mngtbehaviour"></apexchart>
                             </div>
                         </div>
+                    </div>
                 </div>
-            </div>
 
-        </UCard>
-    </UContainer>
-</div>
+            </UCard>
+        </UContainer>
+    </div>
 </template>

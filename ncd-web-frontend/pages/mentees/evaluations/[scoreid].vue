@@ -19,6 +19,14 @@ const route = useRoute()
 
 const scoreId = route.params.scoreid;
 
+//
+
+const from = localStorage.getItem('from');
+
+const fromId = localStorage.getItem('id');
+
+//
+
 const evaluationsStore = useEvaluationsStore();
 
 const menteeData = useAsyncState(async () => {
@@ -43,37 +51,84 @@ const pieData: any = scorePieData.state
 
 </script>
 <template>
-
     <header class="bg-white fixed top-0 w-full ">
         <nav class="mx-auto flex">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
                 <div class="flex flex-wrap items-center">
                     <div class="flex relative w-full px-4 max-w-full flex-grow flex-1" v-if="mentee">
 
-                        <NuxtLink :to="{ name: 'iam-dashboard' }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
-                        </NuxtLink>
-                        <p>|</p>
-                        <NuxtLink :to="{ name: 'mentees-report' }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees</strong></p>
-                        </NuxtLink>
-                        <p>|</p>
-                        <NuxtLink :to="{
-                            name: 'mentees-id',
-                            params: { id: mentee.info.menteeInfo[0].id }
-                        }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees Stats</strong></p>
-                        </NuxtLink>
-                        <p>|</p>
-                        <NuxtLink :to="{
-                            name: 'mentees-analysis-id',
-                            params: { id: mentee.info.menteeInfo[0].id }
-                        }">
-                            <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees Analysis</strong></p>
-                        </NuxtLink>
-                        <p>|</p>
-                        <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Report</strong></p>
+                        <div class="flex" v-if="from == 'evaluators-id'">
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500">
+                                    <strong>Dashboard</strong>
+                                </p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'evaluators-view' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500">
+                                    <strong>Evaluators</strong>
+                                </p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{
+                                name: from,
+                                params: {
+                                    id: fromId
+                                }
+                            }">
+                                <p class="p-1 hover:text-green-500 text-gray-500">
+                                    <strong>Evaluations</strong>
+                                </p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500">
+                                <strong>Mentee Report</strong>
+                            </p>
 
+                        </div>
+                        <div class="flex" v-else-if="from == 'mentees-analysis-id'">
+
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'mentees-report' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{
+                                name: 'mentees-id',
+                                params: { id: mentee.info.menteeInfo[0].id }
+                            }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees Stats</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{
+                                name: 'mentees-analysis-id',
+                                params: { id: mentee.info.menteeInfo[0].id }
+                            }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Mentees Analysis</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Report</strong></p>
+
+                        </div>
+                        <div class="flex" v-else-if="from == 'scores-item'">
+                            <NuxtLink :to="{ name: 'iam-dashboard' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Dashboard</strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <NuxtLink :to="{ name: 'scores-view' }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>Eval-Items</strong></p>
+                            </NuxtLink>
+                            <P>|</P>
+                            <NuxtLink :to="{ name: from,
+                                 params: { item: fromId } }">
+                                <p class="p-1 hover:text-green-500 text-gray-500"><strong>EI-Analysis </strong></p>
+                            </NuxtLink>
+                            <p>|</p>
+                            <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>Mentee Report</strong></p>
+                        </div>
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
                         <!-- <span class="text-xs pr-1 text-gray-500" v-if="profile"><strong>{{ profile?.data.first_name }}</strong></span> -->
@@ -96,6 +151,7 @@ const pieData: any = scorePieData.state
                 {{ mentee }} -->
                 </template>
                 <div v-if="mentee">
+
                     <UCard class="border-solid border-2 border-green-300">
                         <template #header>
                             <p class=" text-green-500"><strong>Mentee Demographics:</strong></p>
@@ -1144,30 +1200,31 @@ const pieData: any = scorePieData.state
             <div class="grid grid-cols-2">
                 <div class=" justify-start border-b border-gray-300 p-2"><strong>Score Level</strong></div>
                 <div class=" justify-end border-b border-gray-300 text-center p-2"><strong>Occurences/Count</strong></div>
-            <div class=" justify-start  p-2">Competent</div>
-            <div class=" justify-end  text-center p-2">
-                {{ pieData.raw.mngtbehaviour[3] }}
+                <div class=" justify-start  p-2">Competent</div>
+                <div class=" justify-end  text-center p-2">
+                    {{ pieData.raw.mngtbehaviour[3] }}
+                </div>
+                <div class=" justify-start  p-2">Moderate</div>
+                <div class=" justify-end  text-center p-2">
+                    {{ pieData.raw.mngtbehaviour[2] }}
+                </div>
+
+                <div class=" justify-start   p-2">Poor</div>
+                <div class=" justify-end  text-center p-2">
+                    {{ pieData.raw.mngtbehaviour[1] }}
+                </div>
+
+                <div class=" justify-start p-2">Not Applicable</div>
+                <div class=" justify-end  text-center p-2">
+                    {{ pieData.raw.mngtbehaviour[0] }}
+                </div>
+
             </div>
-            <div class=" justify-start  p-2">Moderate</div>
-            <div class=" justify-end  text-center p-2">
-                {{ pieData.raw.mngtbehaviour[2] }}
-            </div>
 
-            <div class=" justify-start   p-2">Poor</div>
-            <div class=" justify-end  text-center p-2">
-                {{ pieData.raw.mngtbehaviour[1] }}
-            </div>
+            <template #footer>
+                <!-- Content -->
 
-            <div class=" justify-start p-2">Not Applicable</div>
-            <div class=" justify-end  text-center p-2">
-                {{ pieData.raw.mngtbehaviour[0] }}
-            </div>
-
-        </div>
-
-        <template #footer>
-            <!-- Content -->
-
-        </template>
-    </UCard>
-</USlideover></template>
+            </template>
+        </UCard>
+    </USlideover>
+</template>

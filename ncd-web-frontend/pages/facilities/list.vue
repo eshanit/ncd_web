@@ -150,7 +150,7 @@ const facilsChart: any = facilsChartData.state;
                 </div>
               </template>
               <template #actions-data="{ row }">
-                <NuxtLink :to="{ name: 'districts-id', params: { id: row.facility } }">
+                <NuxtLink :to="{ name: 'facilities-id', params: { id: row.facility } }">
                   <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="teal" square
                     variant="outline"> view </UButton>
                 </NuxtLink>

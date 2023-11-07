@@ -52,6 +52,11 @@ const route = useRoute()
 
 const itemId = route.params.item
 
+//
+localStorage.setItem('from','scores-item')
+localStorage.setItem('id',itemId.toString())
+//
+
 const item = itemId.toString();
 
 const evaluationsStore = useEvaluationsStore();

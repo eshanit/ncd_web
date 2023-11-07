@@ -16,6 +16,14 @@ const perc = ref(false)
 
 const menteeId = route.params.id;
 
+//set
+localStorage.setItem('from', 'mentees-analysis-id');
+
+localStorage.setItem('id', menteeId.toString())
+
+
+//
+
 const evaluationsStore = useEvaluationsStore();
 
 const menteeData = useAsyncState(async () => {
@@ -582,7 +590,7 @@ const getflatPercScores = scorePercArrays.state
             </div>
 
             <UCard class="mx-auto">
-              
+
                 <div>
                     <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                         <UInput v-model="q" placeholder="Filter people..." />
@@ -595,7 +603,13 @@ const getflatPercScores = scorePercArrays.state
                             </div>
                         </template>
                         <template #actions-data="{ row }">
-                            <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.id } }">
+                            <NuxtLink :to="{
+                                name: 'mentees-evaluations-scoreid', params: {
+                                    scoreid: row.id,
+                                    from: 'mentees-analysis',
+                                    menteeId: menteeId
+                                }
+                            }">
                                 <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
                                     square variant="outline">
                                     Eval report | <span class=" text-red-500">view</span></UButton>
@@ -682,7 +696,8 @@ const getflatPercScores = scorePercArrays.state
 
             </UCard>
 
-    </UContainer>
+        </UContainer>
 
 
-</div></template>
+    </div>
+</template>
