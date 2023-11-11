@@ -9,9 +9,27 @@ import {
   sampleKurtosis,
 } from "simple-statistics";
 
-const useDataForScoreTablesItem = (data: any) => {
+const useDataForScoreTablesItem = (filter: any, source: any) => {
 
-  return data.then((response: any) => {
+  const evaluationsStore = useEvaluationsStore();
+
+  let evalData: any = undefined;
+
+  if (filter == "All") {
+    evalData = useAsyncState(async () => {
+      return await evaluationsStore.evaluations();
+    }, undefined);
+  } else if (source == "district") {
+    evalData = useAsyncState(async () => {
+      return await evaluationsStore.getEvalByDistrict(filter);
+    }, undefined);
+  } else {
+    evalData = useAsyncState(async () => {
+      return await evaluationsStore.getEvalByFacility(filter);
+    }, undefined);
+  }
+
+ return evalData.then((response: any) => {
     const state: any = response.state.value;
 
     let dmQData: any[] = [];
@@ -2150,7 +2168,60 @@ const useDataForScoreTablesItem = (data: any) => {
     });
 
     //select
-    let dmQFiltered: any[] = [];
+    ///kurtosis and skewiness
+
+    const getMean = (itemData: any[]) => {
+      if (itemData.length > 0) {
+        return mean(itemData).toFixed(2);
+      } else {
+        return "-";
+      }
+    };
+
+      const getMedian = (itemData: any[]) => {
+        if (itemData.length > 0) {
+          return median(itemData);
+        } else {
+          return "-";
+        }
+      };
+  
+
+    const getMode = (itemData: any[]) => {
+      if (itemData.length > 0) {
+        return mode(itemData);
+      } else {
+        return "-";
+      }
+    };
+
+    const getStandardDeviation = (itemData: any[]) => {
+      if (itemData.length > 0) {
+        return standardDeviation(itemData).toFixed(4);
+      } else {
+        return "-";
+      }
+    };
+
+    const getKurtosis = (itemData: any[]) => {
+      if (itemData.length >= 4) {
+        return sampleKurtosis(itemData).toFixed(4);
+      } else {
+        return "-";
+      }
+    };
+
+    ///
+
+    const getSkewness = (itemData: any[]) => {
+      if (itemData.length >= 3) {
+        return sampleSkewness(itemData).toFixed(4);
+      } else {
+        return "-";
+      }
+    };
+
+    ///
 
     const majorData = {
       dmQ1: {
@@ -2164,12 +2235,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ1Data),
         statistics: {
           total: dmQ1Data.length,
-          mean: mean(dmQ1Data),
-          median: median(dmQ1Data),
-          mode: mode(dmQ1Data),
-          standardDeviation: standardDeviation(dmQ1Data),
-          sampleKurtosis: sampleKurtosis(dmQ1Data),
-          sampleSkewness: sampleSkewness(dmQ1Data),
+          mean: getMean(dmQ1Data),
+          median: getMedian(dmQ1Data),
+          mode: getMode(dmQ1Data),
+          standardDeviation: getStandardDeviation(dmQ1Data),
+          kurtosis: getKurtosis(dmQ1Data),
+          skewness: getSkewness(dmQ1Data),
         },
       },
       dmQ2: {
@@ -2183,12 +2254,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ2Data),
         statistics: {
           total: dmQ2Data.length,
-          mean: mean(dmQ2Data),
-          median: median(dmQ2Data),
-          mode: mode(dmQ2Data),
-          standardDeviation: standardDeviation(dmQ2Data),
-          sampleKurtosis: sampleKurtosis(dmQ2Data),
-          sampleSkewness: sampleSkewness(dmQ2Data),
+          mean: getMean(dmQ2Data),
+          median: getMedian(dmQ2Data),
+          mode: getMode(dmQ2Data),
+          standardDeviation: getStandardDeviation(dmQ2Data),
+          kurtosis: getKurtosis(dmQ2Data),
+          skewness: getSkewness(dmQ2Data),
         },
       },
       dmQ3: {
@@ -2202,16 +2273,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ3Data),
         statistics: {
           total: dmQ3Data.length,
-          mean: mean(dmQ3Data),
-          median: median(dmQ3Data),
-          mode: mode(dmQ3Data),
-          standardDeviation: standardDeviation(dmQ3Data),
-          sampleKurtosis: sampleKurtosis(dmQ3Data),
-          sampleSkewness: sampleSkewness(dmQ3Data),
+          mean: getMean(dmQ3Data),
+          median: getMedian(dmQ3Data),
+          mode: getMode(dmQ3Data),
+          standardDeviation: getStandardDeviation(dmQ3Data),
+          kurtosis: getKurtosis(dmQ3Data),
+          skewness: getSkewness(dmQ3Data),
         },
       },
       dmQ4: {
-        evalItem: "Lists at least three acute symptoms and three chronic symptoms of DM",
+        evalItem:
+          "Lists at least three acute symptoms and three chronic symptoms of DM",
         mentees: {
           NotApplicableMentees: dmQ4NotApplicableMentees,
           PoorMentees: dmQ4PoorMentees,
@@ -2221,16 +2293,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ4Data),
         statistics: {
           total: dmQ4Data.length,
-          mean: mean(dmQ4Data),
-          median: median(dmQ4Data),
-          mode: mode(dmQ4Data),
-          standardDeviation: standardDeviation(dmQ4Data),
-          sampleKurtosis: sampleKurtosis(dmQ4Data),
-          sampleSkewness: sampleSkewness(dmQ4Data),
+          mean: getMean(dmQ4Data),
+          median: getMedian(dmQ4Data),
+          mode: getMode(dmQ4Data),
+          standardDeviation: getStandardDeviation(dmQ4Data),
+          kurtosis: getKurtosis(dmQ4Data),
+          skewness: getSkewness(dmQ4Data),
         },
       },
       dmQ5: {
-        evalItem: "Identifies at least five at risk groups of people that need to be screened for DM.",
+        evalItem:
+          "Identifies at least five at risk groups of people that need to be screened for DM.",
         mentees: {
           NotApplicableMentees: dmQ5NotApplicableMentees,
           PoorMentees: dmQ5PoorMentees,
@@ -2240,16 +2313,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ5Data),
         statistics: {
           total: dmQ5Data.length,
-          mean: mean(dmQ5Data),
-          median: median(dmQ5Data),
-          mode: mode(dmQ5Data),
-          standardDeviation: standardDeviation(dmQ5Data),
-          sampleKurtosis: sampleKurtosis(dmQ5Data),
-          sampleSkewness: sampleSkewness(dmQ5Data),
+          mean: getMean(dmQ5Data),
+          median: getMedian(dmQ5Data),
+          mode: getMode(dmQ5Data),
+          standardDeviation: getStandardDeviation(dmQ5Data),
+          kurtosis: getKurtosis(dmQ5Data),
+          skewness: getSkewness(dmQ5Data),
         },
       },
       dmQ6: {
-        evalItem: "Explains the two steps in screening and diagnosing diabetes mellitus in at risk asymptoatic patients.",
+        evalItem:
+          "Explains the two steps in screening and diagnosing diabetes mellitus in at risk asymptoatic patients.",
         mentees: {
           NotApplicableMentees: dmQ6NotApplicableMentees,
           PoorMentees: dmQ6PoorMentees,
@@ -2259,16 +2333,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ6Data),
         statistics: {
           total: dmQ6Data.length,
-          mean: mean(dmQ6Data),
-          median: median(dmQ6Data),
-          mode: mode(dmQ6Data),
-          standardDeviation: standardDeviation(dmQ6Data),
-          sampleKurtosis: sampleKurtosis(dmQ6Data),
-          sampleSkewness: sampleSkewness(dmQ6Data),
+          mean: getMean(dmQ6Data),
+          median: getMedian(dmQ6Data),
+          mode: getMode(dmQ6Data),
+          standardDeviation: getStandardDeviation(dmQ6Data),
+          kurtosis: getKurtosis(dmQ6Data),
+          skewness: getSkewness(dmQ6Data),
         },
       },
       dmQ7: {
-        evalItem: "Lists and explains the purpose of the three tests offered to monitor patients in the pilot project.",
+        evalItem:
+          "Lists and explains the purpose of the three tests offered to monitor patients in the pilot project.",
         mentees: {
           NotApplicableMentees: dmQ7NotApplicableMentees,
           PoorMentees: dmQ7PoorMentees,
@@ -2278,16 +2353,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ7Data),
         statistics: {
           total: dmQ7Data.length,
-          mean: mean(dmQ7Data),
-          median: median(dmQ7Data),
-          mode: mode(dmQ7Data),
-          standardDeviation: standardDeviation(dmQ7Data),
-          sampleKurtosis: sampleKurtosis(dmQ7Data),
-          sampleSkewness: sampleSkewness(dmQ7Data),
+          mean: getMean(dmQ7Data),
+          median: getMedian(dmQ7Data),
+          mode: getMode(dmQ7Data),
+          standardDeviation: getStandardDeviation(dmQ7Data),
+          kurtosis: getKurtosis(dmQ7Data),
+          skewness: getSkewness(dmQ7Data),
         },
       },
       dmQ8: {
-        evalItem: "Performs DM Screening in five groups of people at risk of developing DM.",
+        evalItem:
+          "Performs DM Screening in five groups of people at risk of developing DM.",
         mentees: {
           NotApplicableMentees: dmQ8NotApplicableMentees,
           PoorMentees: dmQ8PoorMentees,
@@ -2297,16 +2373,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ8Data),
         statistics: {
           total: dmQ8Data.length,
-          mean: mean(dmQ8Data),
-          median: median(dmQ8Data),
-          mode: mode(dmQ8Data),
-          standardDeviation: standardDeviation(dmQ8Data),
-          sampleKurtosis: sampleKurtosis(dmQ8Data),
-          sampleSkewness: sampleSkewness(dmQ8Data),
+          mean: getMean(dmQ8Data),
+          median: getMedian(dmQ8Data),
+          mode: getMode(dmQ8Data),
+          standardDeviation: getStandardDeviation(dmQ8Data),
+          kurtosis: getKurtosis(dmQ8Data),
+          skewness: getSkewness(dmQ8Data),
         },
       },
       dmQ9: {
-        evalItem: "Performs six step systematic history taking relevant for diabetes mellitus per checklist.",
+        evalItem:
+          "Performs six step systematic history taking relevant for diabetes mellitus per checklist.",
         mentees: {
           NotApplicableMentees: dmQ9NotApplicableMentees,
           PoorMentees: dmQ9PoorMentees,
@@ -2316,16 +2393,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ9Data),
         statistics: {
           total: dmQ9Data.length,
-          mean: mean(dmQ9Data),
-          median: median(dmQ9Data),
-          mode: mode(dmQ9Data),
-          standardDeviation: standardDeviation(dmQ9Data),
-          sampleKurtosis: sampleKurtosis(dmQ9Data),
-          sampleSkewness: sampleSkewness(dmQ9Data),
+          mean: getMean(dmQ9Data),
+          median: getMedian(dmQ9Data),
+          mode: getMode(dmQ9Data),
+          standardDeviation: getStandardDeviation(dmQ9Data),
+          kurtosis: getKurtosis(dmQ9Data),
+          skewness: getSkewness(dmQ9Data),
         },
       },
       dmQ10: {
-        evalItem: "Evaluate a DM patient using the seven step physical examination per protocol.",
+        evalItem:
+          "Evaluate a DM patient using the seven step physical examination per protocol.",
         mentees: {
           NotApplicableMentees: dmQ10NotApplicableMentees,
           PoorMentees: dmQ10PoorMentees,
@@ -2335,16 +2413,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ10Data),
         statistics: {
           total: dmQ10Data.length,
-          mean: mean(dmQ10Data),
-          median: median(dmQ10Data),
-          mode: mode(dmQ10Data),
-          standardDeviation: standardDeviation(dmQ10Data),
-          sampleKurtosis: sampleKurtosis(dmQ10Data),
-          sampleSkewness: sampleSkewness(dmQ10Data),
+          mean: getMean(dmQ10Data),
+          median: getMedian(dmQ10Data),
+          mode: getMode(dmQ10Data),
+          standardDeviation: getStandardDeviation(dmQ10Data),
+          kurtosis: getKurtosis(dmQ10Data),
+          skewness: getSkewness(dmQ10Data),
         },
       },
       dmQ11: {
-        evalItem: "Uses effective and appropriate level of communication with patients.",
+        evalItem:
+          "Uses effective and appropriate level of communication with patients.",
         mentees: {
           NotApplicableMentees: dmQ11NotApplicableMentees,
           PoorMentees: dmQ11PoorMentees,
@@ -2354,12 +2433,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ11Data),
         statistics: {
           total: dmQ11Data.length,
-          mean: mean(dmQ11Data),
-          median: median(dmQ11Data),
-          mode: mode(dmQ11Data),
-          standardDeviation: standardDeviation(dmQ11Data),
-          sampleKurtosis: sampleKurtosis(dmQ11Data),
-          sampleSkewness: sampleSkewness(dmQ11Data),
+          mean: getMean(dmQ11Data),
+          median: getMedian(dmQ11Data),
+          mode: getMode(dmQ11Data),
+          standardDeviation: getStandardDeviation(dmQ11Data),
+          kurtosis: getKurtosis(dmQ11Data),
+          skewness: getSkewness(dmQ11Data),
         },
       },
       dmQ12: {
@@ -2373,12 +2452,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ12Data),
         statistics: {
           total: dmQ12Data.length,
-          mean: mean(dmQ12Data),
-          median: median(dmQ12Data),
-          mode: mode(dmQ12Data),
-          standardDeviation: standardDeviation(dmQ12Data),
-          sampleKurtosis: sampleKurtosis(dmQ12Data),
-          sampleSkewness: sampleSkewness(dmQ12Data),
+          mean: getMean(dmQ12Data),
+          median: getMedian(dmQ12Data),
+          mode: getMode(dmQ12Data),
+          standardDeviation: getStandardDeviation(dmQ12Data),
+          kurtosis: getKurtosis(dmQ12Data),
+          skewness: getSkewness(dmQ12Data),
         },
       },
       dmQ13: {
@@ -2392,16 +2471,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ13Data),
         statistics: {
           total: dmQ13Data.length,
-          mean: mean(dmQ13Data),
-          median: median(dmQ13Data),
-          mode: mode(dmQ13Data),
-          standardDeviation: standardDeviation(dmQ13Data),
-          sampleKurtosis: sampleKurtosis(dmQ13Data),
-          sampleSkewness: sampleSkewness(dmQ13Data),
+          mean: getMean(dmQ13Data),
+          median: getMedian(dmQ13Data),
+          mode: getMode(dmQ13Data),
+          standardDeviation: getStandardDeviation(dmQ13Data),
+          kurtosis: getKurtosis(dmQ13Data),
+          skewness: getSkewness(dmQ13Data),
         },
       },
       dmQ14: {
-        evalItem: "Describes the three main aims for treating diabetes mellitus.",
+        evalItem:
+          "Describes the three main aims for treating diabetes mellitus.",
         mentees: {
           NotApplicableMentees: dmQ14NotApplicableMentees,
           PoorMentees: dmQ14PoorMentees,
@@ -2411,16 +2491,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ14Data),
         statistics: {
           total: dmQ14Data.length,
-          mean: mean(dmQ14Data),
-          median: median(dmQ14Data),
-          mode: mode(dmQ14Data),
-          standardDeviation: standardDeviation(dmQ14Data),
-          sampleKurtosis: sampleKurtosis(dmQ14Data),
-          sampleSkewness: sampleSkewness(dmQ14Data),
+          mean: getMean(dmQ14Data),
+          median: getMedian(dmQ14Data),
+          mode: getMode(dmQ14Data),
+          standardDeviation: getStandardDeviation(dmQ14Data),
+          kurtosis: getKurtosis(dmQ14Data),
+          skewness: getSkewness(dmQ14Data),
         },
       },
       dmQ15: {
-        evalItem: " Explains the three lifestyle changes to be given to patients as part of management of DM.",
+        evalItem:
+          " Explains the three lifestyle changes to be given to patients as part of management of DM.",
         mentees: {
           NotApplicableMentees: dmQ15NotApplicableMentees,
           PoorMentees: dmQ15PoorMentees,
@@ -2430,16 +2511,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ15Data),
         statistics: {
           total: dmQ15Data.length,
-          mean: mean(dmQ15Data),
-          median: median(dmQ15Data),
-          mode: mode(dmQ15Data),
-          standardDeviation: standardDeviation(dmQ15Data),
-          sampleKurtosis: sampleKurtosis(dmQ15Data),
-          sampleSkewness: sampleSkewness(dmQ15Data),
+          mean: getMean(dmQ15Data),
+          median: getMedian(dmQ15Data),
+          mode: getMode(dmQ15Data),
+          standardDeviation: getStandardDeviation(dmQ15Data),
+          kurtosis: getKurtosis(dmQ15Data),
+          skewness: getSkewness(dmQ15Data),
         },
       },
       dmQ16: {
-        evalItem: "Lists the three medications used in DM (Type 1 and Type 2) management and gives one common side effect of each.",
+        evalItem:
+          "Lists the three medications used in DM (Type 1 and Type 2) management and gives one common side effect of each.",
         mentees: {
           NotApplicableMentees: dmQ16NotApplicableMentees,
           PoorMentees: dmQ16PoorMentees,
@@ -2449,12 +2531,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ16Data),
         statistics: {
           total: dmQ16Data.length,
-          mean: mean(dmQ16Data),
-          median: median(dmQ16Data),
-          mode: mode(dmQ16Data),
-          standardDeviation: standardDeviation(dmQ16Data),
-          sampleKurtosis: sampleKurtosis(dmQ16Data),
-          sampleSkewness: sampleSkewness(dmQ16Data),
+          mean: getMean(dmQ16Data),
+          median: getMedian(dmQ16Data),
+          mode: getMode(dmQ16Data),
+          standardDeviation: getStandardDeviation(dmQ16Data),
+          kurtosis: getKurtosis(dmQ16Data),
+          skewness: getSkewness(dmQ16Data),
         },
       },
       dmQ17: {
@@ -2468,12 +2550,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ17Data),
         statistics: {
           total: dmQ17Data.length,
-          mean: mean(dmQ17Data),
-          median: median(dmQ17Data),
-          mode: mode(dmQ17Data),
-          standardDeviation: standardDeviation(dmQ17Data),
-          sampleKurtosis: sampleKurtosis(dmQ17Data),
-          sampleSkewness: sampleSkewness(dmQ17Data),
+          mean: getMean(dmQ17Data),
+          median: getMedian(dmQ17Data),
+          mode: getMode(dmQ17Data),
+          standardDeviation: getStandardDeviation(dmQ17Data),
+          kurtosis: getKurtosis(dmQ17Data),
+          skewness: getSkewness(dmQ17Data),
         },
       },
       dmQ18: {
@@ -2487,16 +2569,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ18Data),
         statistics: {
           total: dmQ18Data.length,
-          mean: mean(dmQ18Data),
-          median: median(dmQ18Data),
-          mode: mode(dmQ18Data),
-          standardDeviation: standardDeviation(dmQ18Data),
-          sampleKurtosis: sampleKurtosis(dmQ18Data),
-          sampleSkewness: sampleSkewness(dmQ18Data),
+          mean: getMean(dmQ18Data),
+          median: getMedian(dmQ18Data),
+          mode: getMode(dmQ18Data),
+          standardDeviation: getStandardDeviation(dmQ18Data),
+          kurtosis: getKurtosis(dmQ18Data),
+          skewness: getSkewness(dmQ18Data),
         },
       },
       dmQ19: {
-        evalItem: "Gives at least two acute and at least two chronic complications of uncontrolled DM",
+        evalItem:
+          "Gives at least two acute and at least two chronic complications of uncontrolled DM",
         mentees: {
           NotApplicableMentees: dmQ19NotApplicableMentees,
           PoorMentees: dmQ19PoorMentees,
@@ -2506,12 +2589,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ19Data),
         statistics: {
           total: dmQ19Data.length,
-          mean: mean(dmQ19Data),
-          median: median(dmQ19Data),
-          mode: mode(dmQ19Data),
-          standardDeviation: standardDeviation(dmQ19Data),
-          sampleKurtosis: sampleKurtosis(dmQ19Data),
-          sampleSkewness: sampleSkewness(dmQ19Data),
+          mean: getMean(dmQ19Data),
+          median: getMedian(dmQ19Data),
+          mode: getMode(dmQ19Data),
+          standardDeviation: getStandardDeviation(dmQ19Data),
+          kurtosis: getKurtosis(dmQ19Data),
+          skewness: getSkewness(dmQ19Data),
         },
       },
       dmQ20: {
@@ -2525,16 +2608,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ20Data),
         statistics: {
           total: dmQ20Data.length,
-          mean: mean(dmQ20Data),
-          median: median(dmQ20Data),
-          mode: mode(dmQ20Data),
-          standardDeviation: standardDeviation(dmQ20Data),
-          sampleKurtosis: sampleKurtosis(dmQ20Data),
-          sampleSkewness: sampleSkewness(dmQ20Data),
+          mean: getMean(dmQ20Data),
+          median: getMedian(dmQ20Data),
+          mode: getMode(dmQ20Data),
+          standardDeviation: getStandardDeviation(dmQ20Data),
+          kurtosis: getKurtosis(dmQ20Data),
+          skewness: getSkewness(dmQ20Data),
         },
       },
       dmQ21: {
-        evalItem: "Explains the <b>three</b> categories of DM patients that need to be referred to the doctors.",
+        evalItem:
+          "Explains the <b>three</b> categories of DM patients that need to be referred to the doctors.",
         mentees: {
           NotApplicableMentees: dmQ21NotApplicableMentees,
           PoorMentees: dmQ21PoorMentees,
@@ -2544,12 +2628,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ21Data),
         statistics: {
           total: dmQ21Data.length,
-          mean: mean(dmQ21Data),
-          median: median(dmQ21Data),
-          mode: mode(dmQ21Data),
-          standardDeviation: standardDeviation(dmQ21Data),
-          sampleKurtosis: sampleKurtosis(dmQ21Data),
-          sampleSkewness: sampleSkewness(dmQ21Data),
+          mean: getMean(dmQ21Data),
+          median: getMedian(dmQ21Data),
+          mode: getMode(dmQ21Data),
+          standardDeviation: getStandardDeviation(dmQ21Data),
+          kurtosis: getKurtosis(dmQ21Data),
+          skewness: getSkewness(dmQ21Data),
         },
       },
       dmQ22: {
@@ -2563,16 +2647,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ22Data),
         statistics: {
           total: dmQ22Data.length,
-          mean: mean(dmQ22Data),
-          median: median(dmQ22Data),
-          mode: mode(dmQ22Data),
-          standardDeviation: standardDeviation(dmQ22Data),
-          sampleKurtosis: sampleKurtosis(dmQ22Data),
-          sampleSkewness: sampleSkewness(dmQ22Data),
+          mean: getMean(dmQ22Data),
+          median: getMedian(dmQ22Data),
+          mode: getMode(dmQ22Data),
+          standardDeviation: getStandardDeviation(dmQ22Data),
+          kurtosis: getKurtosis(dmQ22Data),
+          skewness: getSkewness(dmQ22Data),
         },
       },
       dmQ23: {
-        evalItem: "Gives the patients the six key messages to aid management of DM.",
+        evalItem:
+          "Gives the patients the six key messages to aid management of DM.",
         mentees: {
           NotApplicableMentees: dmQ23NotApplicableMentees,
           PoorMentees: dmQ23PoorMentees,
@@ -2582,16 +2667,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ23Data),
         statistics: {
           total: dmQ23Data.length,
-          mean: mean(dmQ23Data),
-          median: median(dmQ23Data),
-          mode: mode(dmQ23Data),
-          standardDeviation: standardDeviation(dmQ23Data),
-          sampleKurtosis: sampleKurtosis(dmQ23Data),
-          sampleSkewness: sampleSkewness(dmQ23Data),
+          mean: getMean(dmQ23Data),
+          median: getMedian(dmQ23Data),
+          mode: getMode(dmQ23Data),
+          standardDeviation: getStandardDeviation(dmQ23Data),
+          kurtosis: getKurtosis(dmQ23Data),
+          skewness: getSkewness(dmQ23Data),
         },
       },
       dmQ24: {
-        evalItem: "Follows correctly the schedules of the six aspects to monitor in a DM patient.",
+        evalItem:
+          "Follows correctly the schedules of the six aspects to monitor in a DM patient.",
         mentees: {
           NotApplicableMentees: dmQ24NotApplicableMentees,
           PoorMentees: dmQ24PoorMentees,
@@ -2601,12 +2687,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ24Data),
         statistics: {
           total: dmQ24Data.length,
-          mean: mean(dmQ24Data),
-          median: median(dmQ24Data),
-          mode: mode(dmQ24Data),
-          standardDeviation: standardDeviation(dmQ24Data),
-          sampleKurtosis: sampleKurtosis(dmQ24Data),
-          sampleSkewness: sampleSkewness(dmQ24Data),
+          mean: getMean(dmQ24Data),
+          median: getMedian(dmQ24Data),
+          mode: getMode(dmQ24Data),
+          standardDeviation: getStandardDeviation(dmQ24Data),
+          kurtosis: getKurtosis(dmQ24Data),
+          skewness: getSkewness(dmQ24Data),
         },
       },
       dmQ25: {
@@ -2620,12 +2706,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ25Data),
         statistics: {
           total: dmQ25Data.length,
-          mean: mean(dmQ25Data),
-          median: median(dmQ25Data),
-          mode: mode(dmQ25Data),
-          standardDeviation: standardDeviation(dmQ25Data),
-          sampleKurtosis: sampleKurtosis(dmQ25Data),
-          sampleSkewness: sampleSkewness(dmQ25Data),
+          mean: getMean(dmQ25Data),
+          median: getMedian(dmQ25Data),
+          mode: getMode(dmQ25Data),
+          standardDeviation: getStandardDeviation(dmQ25Data),
+          kurtosis: getKurtosis(dmQ25Data),
+          skewness: getSkewness(dmQ25Data),
         },
       },
       dmQ26: {
@@ -2639,12 +2725,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ26Data),
         statistics: {
           total: dmQ26Data.length,
-          mean: mean(dmQ26Data),
-          median: median(dmQ26Data),
-          mode: mode(dmQ26Data),
-          standardDeviation: standardDeviation(dmQ26Data),
-          sampleKurtosis: sampleKurtosis(dmQ26Data),
-          sampleSkewness: sampleSkewness(dmQ26Data),
+          mean: getMean(dmQ26Data),
+          median: getMedian(dmQ26Data),
+          mode: getMode(dmQ26Data),
+          standardDeviation: getStandardDeviation(dmQ26Data),
+          kurtosis: getKurtosis(dmQ26Data),
+          skewness: getSkewness(dmQ26Data),
         },
       },
       dmQ27: {
@@ -2658,16 +2744,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ27Data),
         statistics: {
           total: dmQ27Data.length,
-          mean: mean(dmQ27Data),
-          median: median(dmQ27Data),
-          mode: mode(dmQ27Data),
-          standardDeviation: standardDeviation(dmQ27Data),
-          sampleKurtosis: sampleKurtosis(dmQ27Data),
-          sampleSkewness: sampleSkewness(dmQ27Data),
+          mean: getMean(dmQ27Data),
+          median: getMedian(dmQ27Data),
+          mode: getMode(dmQ27Data),
+          standardDeviation: getStandardDeviation(dmQ27Data),
+          kurtosis: getKurtosis(dmQ27Data),
+          skewness: getSkewness(dmQ27Data),
         },
       },
       dmQ28: {
-        evalItem: "Follows the three procedures in managing hyperglycaemia depending on the level of hyperglycaemia.",
+        evalItem:
+          "Follows the three procedures in managing hyperglycaemia depending on the level of hyperglycaemia.",
         mentees: {
           NotApplicableMentees: dmQ28NotApplicableMentees,
           PoorMentees: dmQ28PoorMentees,
@@ -2677,16 +2764,17 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ28Data),
         statistics: {
           total: dmQ28Data.length,
-          mean: mean(dmQ28Data),
-          median: median(dmQ28Data),
-          mode: mode(dmQ28Data),
-          standardDeviation: standardDeviation(dmQ28Data),
-          sampleKurtosis: sampleKurtosis(dmQ28Data),
-          sampleSkewness: sampleSkewness(dmQ28Data),
+          mean: getMean(dmQ28Data),
+          median: getMedian(dmQ28Data),
+          mode: getMode(dmQ28Data),
+          standardDeviation: getStandardDeviation(dmQ28Data),
+          kurtosis: getKurtosis(dmQ28Data),
+          skewness: getSkewness(dmQ28Data),
         },
       },
       dmQ29: {
-        evalItem: "Explains the importance of adherence to treatment in an appropriate manner",
+        evalItem:
+          "Explains the importance of adherence to treatment in an appropriate manner",
         mentees: {
           NotApplicableMentees: dmQ29NotApplicableMentees,
           PoorMentees: dmQ29PoorMentees,
@@ -2696,12 +2784,12 @@ const useDataForScoreTablesItem = (data: any) => {
         counts: countBy(dmQ29Data),
         statistics: {
           total: dmQ29Data.length,
-          mean: mean(dmQ29Data),
-          median: median(dmQ29Data),
-          mode: mode(dmQ29Data),
-          standardDeviation: standardDeviation(dmQ29Data),
-          sampleKurtosis: sampleKurtosis(dmQ29Data),
-          sampleSkewness: sampleSkewness(dmQ29Data),
+          mean: getMean(dmQ29Data),
+          median: getMedian(dmQ29Data),
+          mode: getMode(dmQ29Data),
+          standardDeviation: getStandardDeviation(dmQ29Data),
+          kurtosis: getKurtosis(dmQ29Data),
+          skewness: getSkewness(dmQ29Data),
         },
       },
     };
@@ -2710,294 +2798,296 @@ const useDataForScoreTablesItem = (data: any) => {
       {
         item: "dmQ1",
         total: dmQ1Data.length,
-        mean: mean(dmQ1Data),
-        median: median(dmQ1Data),
-        mode: mode(dmQ1Data),
-        standardDeviation: standardDeviation(dmQ1Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ1Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ1Data).toFixed(4),
+        mean: getMean(dmQ1Data),
+        median: getMedian(dmQ1Data),
+        mode: getMode(dmQ1Data),
+        standardDeviation: getStandardDeviation(dmQ1Data),
+        kurtosis: getKurtosis(dmQ1Data),
+        skewness: getSkewness(dmQ1Data),
       },
       {
         item: "dmQ2",
         total: dmQ2Data.length,
-        mean: mean(dmQ2Data),
-        median: median(dmQ2Data),
-        mode: mode(dmQ2Data),
-        standardDeviation: standardDeviation(dmQ2Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ2Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ2Data).toFixed(4),
+        mean: getMean(dmQ2Data),
+        median: getMedian(dmQ2Data),
+        mode: getMode(dmQ2Data),
+        standardDeviation: getStandardDeviation(dmQ2Data),
+        kurtosis: getKurtosis(dmQ2Data),
+        skewness: getSkewness(dmQ2Data),
       },
       {
         item: "dmQ3",
         total: dmQ3Data.length,
-        mean: mean(dmQ3Data),
-        median: median(dmQ3Data),
-        mode: mode(dmQ3Data),
-        standardDeviation: standardDeviation(dmQ3Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ3Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ3Data).toFixed(4),
+        mean: getMean(dmQ3Data),
+        median: getMedian(dmQ3Data),
+        mode: getMode(dmQ3Data),
+        standardDeviation: getStandardDeviation(dmQ3Data),
+        kurtosis: getKurtosis(dmQ3Data),
+        skewness: getSkewness(dmQ3Data),
       },
       {
         item: "dmQ4",
         total: dmQ4Data.length,
-        mean: mean(dmQ4Data),
-        median: median(dmQ4Data),
-        mode: mode(dmQ4Data),
-        standardDeviation: standardDeviation(dmQ4Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ4Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ4Data).toFixed(4),
+        mean: getMean(dmQ4Data),
+        median: getMedian(dmQ4Data),
+        mode: getMode(dmQ4Data),
+        standardDeviation: getStandardDeviation(dmQ4Data),
+        kurtosis: getKurtosis(dmQ4Data),
+        skewness: getSkewness(dmQ4Data),
       },
       {
         item: "dmQ5",
         total: dmQ5Data.length,
-        mean: mean(dmQ5Data),
-        median: median(dmQ5Data),
-        mode: mode(dmQ5Data),
-        standardDeviation: standardDeviation(dmQ5Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ5Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ5Data).toFixed(4),
+        mean: getMean(dmQ5Data),
+        median: getMedian(dmQ5Data),
+        mode: getMode(dmQ5Data),
+        standardDeviation: getStandardDeviation(dmQ5Data),
+        kurtosis: getKurtosis(dmQ5Data),
+        skewness: getSkewness(dmQ5Data),
       },
       {
         item: "dmQ6",
         total: dmQ6Data.length,
-        mean: mean(dmQ6Data),
-        median: median(dmQ6Data),
-        mode: mode(dmQ6Data),
-        standardDeviation: standardDeviation(dmQ6Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ6Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ6Data).toFixed(4),
+        mean: getMean(dmQ6Data),
+        median: getMedian(dmQ6Data),
+        mode: getMode(dmQ6Data),
+        standardDeviation: getStandardDeviation(dmQ6Data),
+        kurtosis: getKurtosis(dmQ6Data),
+        skewness: getSkewness(dmQ6Data),
       },
       {
         item: "dmQ7",
         total: dmQ7Data.length,
-        mean: mean(dmQ7Data),
-        median: median(dmQ7Data),
-        mode: mode(dmQ7Data),
-        standardDeviation: standardDeviation(dmQ7Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ7Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ7Data).toFixed(4),
+        mean: getMean(dmQ7Data),
+        median: getMedian(dmQ7Data),
+        mode: getMode(dmQ7Data),
+        standardDeviation: getStandardDeviation(dmQ7Data),
+        kurtosis: getKurtosis(dmQ7Data),
+        skewness: getSkewness(dmQ7Data),
       },
       {
         item: "dmQ8",
         total: dmQ8Data.length,
-        mean: mean(dmQ8Data),
-        median: median(dmQ8Data),
-        mode: mode(dmQ8Data),
-        standardDeviation: standardDeviation(dmQ8Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ8Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ8Data).toFixed(4),
+        mean: getMean(dmQ8Data),
+        median: getMedian(dmQ8Data),
+        mode: getMode(dmQ8Data),
+        standardDeviation: getStandardDeviation(dmQ8Data),
+        kurtosis: getKurtosis(dmQ8Data),
+        skewness: getSkewness(dmQ8Data),
       },
       {
         item: "dmQ9",
         total: dmQ9Data.length,
-        mean: mean(dmQ9Data),
-        median: median(dmQ9Data),
-        mode: mode(dmQ9Data),
-        standardDeviation: standardDeviation(dmQ9Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ9Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ9Data).toFixed(4),
+        mean: getMean(dmQ9Data),
+        median: getMedian(dmQ9Data),
+        mode: getMode(dmQ9Data),
+        standardDeviation: getStandardDeviation(dmQ9Data),
+        kurtosis: getKurtosis(dmQ9Data),
+        skewness: getSkewness(dmQ9Data),
       },
       {
         item: "dmQ10",
         total: dmQ10Data.length,
-        mean: mean(dmQ10Data),
-        median: median(dmQ10Data),
-        mode: mode(dmQ10Data),
-        standardDeviation: standardDeviation(dmQ10Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ10Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ10Data).toFixed(4),
+        mean: getMean(dmQ10Data),
+        median: getMedian(dmQ10Data),
+        mode: getMode(dmQ10Data),
+        standardDeviation: getStandardDeviation(dmQ10Data),
+        kurtosis: getKurtosis(dmQ10Data),
+        skewness: getSkewness(dmQ10Data),
       },
       {
         item: "dmQ11",
         total: dmQ11Data.length,
-        mean: mean(dmQ11Data),
-        median: median(dmQ11Data),
-        mode: mode(dmQ11Data),
-        standardDeviation: standardDeviation(dmQ11Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ11Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ11Data).toFixed(4),
+        mean: getMean(dmQ11Data),
+        median: getMedian(dmQ11Data),
+        mode: getMode(dmQ11Data),
+        standardDeviation: getStandardDeviation(dmQ11Data),
+        kurtosis: getKurtosis(dmQ11Data),
+        skewness: getSkewness(dmQ11Data),
       },
       {
         item: "dmQ12",
         total: dmQ12Data.length,
-        mean: mean(dmQ12Data),
-        median: median(dmQ12Data),
-        mode: mode(dmQ12Data),
-        standardDeviation: standardDeviation(dmQ12Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ12Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ12Data).toFixed(4),
+        mean: getMean(dmQ12Data),
+        median: getMedian(dmQ12Data),
+        mode: getMode(dmQ12Data),
+        standardDeviation: getStandardDeviation(dmQ12Data),
+        kurtosis: getKurtosis(dmQ12Data),
+        skewness: getSkewness(dmQ12Data),
       },
       {
         item: "dmQ13",
         total: dmQ13Data.length,
-        mean: mean(dmQ13Data),
-        median: median(dmQ13Data),
-        mode: mode(dmQ13Data),
-        standardDeviation: standardDeviation(dmQ13Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ13Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ13Data).toFixed(4),
+        mean: getMean(dmQ13Data),
+        median: getMedian(dmQ13Data),
+        mode: getMode(dmQ13Data),
+        standardDeviation: getStandardDeviation(dmQ13Data),
+        kurtosis: getKurtosis(dmQ13Data),
+        skewness: getSkewness(dmQ13Data),
       },
       {
         item: "dmQ14",
         total: dmQ14Data.length,
-        mean: mean(dmQ14Data),
-        median: median(dmQ14Data),
-        mode: mode(dmQ14Data),
-        standardDeviation: standardDeviation(dmQ14Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ14Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ14Data).toFixed(4),
+        mean: getMean(dmQ14Data),
+        median: getMedian(dmQ14Data),
+        mode: getMode(dmQ14Data),
+        standardDeviation: getStandardDeviation(dmQ14Data),
+        kurtosis: getKurtosis(dmQ14Data),
+        skewness: getSkewness(dmQ14Data),
       },
       {
         item: "dmQ15",
         total: dmQ15Data.length,
-        mean: mean(dmQ15Data),
-        median: median(dmQ15Data),
-        mode: mode(dmQ15Data),
-        standardDeviation: standardDeviation(dmQ15Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ15Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ15Data).toFixed(4),
+        mean: getMean(dmQ15Data),
+        median: getMedian(dmQ15Data),
+        mode: getMode(dmQ15Data),
+        standardDeviation: getStandardDeviation(dmQ15Data),
+        kurtosis: getKurtosis(dmQ15Data),
+        skewness: getSkewness(dmQ15Data),
       },
       {
         item: "dmQ16",
         total: dmQ16Data.length,
-        mean: mean(dmQ16Data),
-        median: median(dmQ16Data),
-        mode: mode(dmQ16Data),
-        standardDeviation: standardDeviation(dmQ16Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ16Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ16Data).toFixed(4),
+        mean: getMean(dmQ16Data),
+        median: getMedian(dmQ16Data),
+        mode: getMode(dmQ16Data),
+        standardDeviation: getStandardDeviation(dmQ16Data),
+        kurtosis: getKurtosis(dmQ16Data),
+        skewness: getSkewness(dmQ16Data),
       },
       {
         item: "dmQ17",
         total: dmQ17Data.length,
-        mean: mean(dmQ17Data),
-        median: median(dmQ17Data),
-        mode: mode(dmQ17Data),
-        standardDeviation: standardDeviation(dmQ17Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ17Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ17Data).toFixed(4),
+        mean: getMean(dmQ17Data),
+        median: getMedian(dmQ17Data),
+        mode: getMode(dmQ17Data),
+        standardDeviation: getStandardDeviation(dmQ17Data),
+        kurtosis: getKurtosis(dmQ17Data),
+        skewness: getSkewness(dmQ17Data),
       },
       {
         item: "dmQ18",
         total: dmQ18Data.length,
-        mean: mean(dmQ18Data),
-        median: median(dmQ18Data),
-        mode: mode(dmQ18Data),
-        standardDeviation: standardDeviation(dmQ18Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ18Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ18Data).toFixed(4),
+        mean: getMean(dmQ18Data),
+        median: getMedian(dmQ18Data),
+        mode: getMode(dmQ18Data),
+        standardDeviation: getStandardDeviation(dmQ18Data),
+        kurtosis: getKurtosis(dmQ18Data),
+        skewness: getSkewness(dmQ18Data),
       },
       {
         item: "dmQ19",
         total: dmQ19Data.length,
-        mean: mean(dmQ19Data),
-        median: median(dmQ19Data),
-        mode: mode(dmQ19Data),
-        standardDeviation: standardDeviation(dmQ19Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ19Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ19Data).toFixed(4),
+        mean: getMean(dmQ19Data),
+        median: getMedian(dmQ19Data),
+        mode: getMode(dmQ19Data),
+        standardDeviation: getStandardDeviation(dmQ19Data),
+        kurtosis: getKurtosis(dmQ19Data),
+        skewness: getSkewness(dmQ19Data),
       },
       {
         item: "dmQ20",
         total: dmQ20Data.length,
-        mean: mean(dmQ20Data),
-        median: median(dmQ20Data),
-        mode: mode(dmQ20Data),
-        standardDeviation: standardDeviation(dmQ20Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ20Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ20Data).toFixed(4),
+        mean: getMean(dmQ20Data),
+        median: getMedian(dmQ20Data),
+        mode: getMode(dmQ20Data),
+        standardDeviation: getStandardDeviation(dmQ20Data),
+        kurtosis: getKurtosis(dmQ20Data),
+        skewness: getSkewness(dmQ20Data),
       },
       {
         item: "dmQ21",
         total: dmQ21Data.length,
-        mean: mean(dmQ21Data),
-        median: median(dmQ21Data),
-        mode: mode(dmQ21Data),
-        standardDeviation: standardDeviation(dmQ21Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ21Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ21Data).toFixed(4),
+        mean: getMean(dmQ21Data),
+        median: getMedian(dmQ21Data),
+        mode: getMode(dmQ21Data),
+        standardDeviation: getStandardDeviation(dmQ21Data),
+        kurtosis: getKurtosis(dmQ21Data),
+        skewness: getSkewness(dmQ21Data),
       },
       {
         item: "dmQ22",
         total: dmQ22Data.length,
-        mean: mean(dmQ22Data),
-        median: median(dmQ22Data),
-        mode: mode(dmQ22Data),
-        standardDeviation: standardDeviation(dmQ22Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ22Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ22Data).toFixed(4),
+        mean: getMean(dmQ22Data),
+        median: getMedian(dmQ22Data),
+        mode: getMode(dmQ22Data),
+        standardDeviation: getStandardDeviation(dmQ22Data),
+        kurtosis: getKurtosis(dmQ22Data),
+        skewness: getSkewness(dmQ22Data),
       },
       {
         item: "dmQ23",
         total: dmQ23Data.length,
-        mean: mean(dmQ23Data),
-        median: median(dmQ23Data),
-        mode: mode(dmQ23Data),
-        standardDeviation: standardDeviation(dmQ23Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ23Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ23Data).toFixed(4),
+        mean: getMean(dmQ23Data),
+        median: getMedian(dmQ23Data),
+        mode: getMode(dmQ23Data),
+        standardDeviation: getStandardDeviation(dmQ23Data),
+        kurtosis: getKurtosis(dmQ23Data),
+        skewness: getSkewness(dmQ23Data),
       },
       {
         item: "dmQ24",
         total: dmQ24Data.length,
-        mean: mean(dmQ24Data),
-        median: median(dmQ24Data),
-        mode: mode(dmQ24Data),
-        standardDeviation: standardDeviation(dmQ24Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ24Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ24Data).toFixed(4),
+        mean: getMean(dmQ24Data),
+        median: getMedian(dmQ24Data),
+        mode: getMode(dmQ24Data),
+        standardDeviation: getStandardDeviation(dmQ24Data),
+        kurtosis: getKurtosis(dmQ24Data),
+        skewness: getSkewness(dmQ24Data),
       },
       {
         item: "dmQ25",
         total: dmQ25Data.length,
-        mean: mean(dmQ25Data),
-        median: median(dmQ25Data),
-        mode: mode(dmQ25Data),
-        standardDeviation: standardDeviation(dmQ25Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ25Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ25Data).toFixed(4),
+        mean: getMean(dmQ25Data),
+        median: getMedian(dmQ25Data),
+        mode: getMode(dmQ25Data),
+        standardDeviation: getStandardDeviation(dmQ25Data),
+        kurtosis: getKurtosis(dmQ25Data),
+        skewness: getSkewness(dmQ25Data),
       },
       {
         item: "dmQ26",
         total: dmQ26Data.length,
-        mean: mean(dmQ26Data),
-        median: median(dmQ26Data),
-        mode: mode(dmQ26Data),
-        standardDeviation: standardDeviation(dmQ26Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ26Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ26Data).toFixed(4),
+        mean: getMean(dmQ26Data),
+        median: getMedian(dmQ26Data),
+        mode: getMode(dmQ26Data),
+        standardDeviation: getStandardDeviation(dmQ26Data),
+        kurtosis: getKurtosis(dmQ26Data),
+        skewness: getSkewness(dmQ26Data),
       },
       {
         item: "dmQ27",
         total: dmQ27Data.length,
-        mean: mean(dmQ27Data),
-        median: median(dmQ27Data),
-        mode: mode(dmQ27Data),
-        standardDeviation: standardDeviation(dmQ27Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ27Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ27Data).toFixed(4),
+        mean: getMean(dmQ27Data),
+        median: getMedian(dmQ27Data),
+        mode: getMode(dmQ27Data),
+        standardDeviation: getStandardDeviation(dmQ27Data),
+        kurtosis: getKurtosis(dmQ27Data),
+        skewness: getSkewness(dmQ27Data),
       },
       {
         item: "dmQ28",
         total: dmQ28Data.length,
-        mean: mean(dmQ28Data),
-        median: median(dmQ28Data),
-        mode: mode(dmQ28Data),
-        standardDeviation: standardDeviation(dmQ28Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ28Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ28Data).toFixed(4),
+        mean: getMean(dmQ28Data),
+        median: getMedian(dmQ28Data),
+        mode: getMode(dmQ28Data),
+        standardDeviation: getStandardDeviation(dmQ28Data),
+        kurtosis: getKurtosis(dmQ28Data),
+        skewness: getSkewness(dmQ28Data),
       },
       {
         item: "dmQ29",
         total: dmQ29Data.length,
-        mean: mean(dmQ29Data),
-        median: median(dmQ29Data),
-        mode: mode(dmQ29Data),
-        standardDeviation: standardDeviation(dmQ29Data).toFixed(4),
-        sampleKurtosis: sampleKurtosis(dmQ29Data).toFixed(4),
-        sampleSkewness: sampleSkewness(dmQ29Data).toFixed(4),
+        mean: getMean(dmQ29Data),
+        median: getMedian(dmQ29Data),
+        mode: getMode(dmQ29Data),
+        standardDeviation: getStandardDeviation(dmQ29Data),
+        kurtosis: getKurtosis(dmQ29Data),
+        skewness: getSkewness(dmQ29Data),
       },
     ];
+
+
 
     return {
       majorData: majorData,

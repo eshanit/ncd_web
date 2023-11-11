@@ -3,9 +3,11 @@ import { ref, watch } from 'vue'
 import { useDistrictStore } from '../../stores/districts'
 import { useFacilityStore } from '../../stores/facilities'
 import useDataForScoreTables from '../../composables/tables/useDataForScoreTables'
-import { useField } from 'vee-validate';
+// import {  useField } from 'vee-validate';
 import '../../validators/district';
 import { useAsyncState } from '@vueuse/core';
+
+const firstname = localStorage.getItem('user')
 
 const iamStore = useIamProfileStore();
 
@@ -56,12 +58,10 @@ const formData = computed(() => {
 watch(selectedDistrict, (newDistrict, oldDistrict) => {
 
     if (newDistrict) {
-
         const dmQData = useAsyncState(async () => {
             return await useDataForScoreTables(newDistrict, 'district');
         }, undefined);
 
-        selectedFacility = ref('')
         qdata = dmQData.state
 
     }
@@ -76,7 +76,6 @@ watch(selectedFacility, (newFacility, oldFacility) => {
             return await useDataForScoreTables(newFacility, 'facility');
         }, undefined);
 
-        selectedDistrict = ref('')
         qdata = dmQData.state
 
     }
@@ -127,13 +126,13 @@ const columns: any = [
         direction: 'desc'
     },
     {
-        key: 'sampleKurtosis',
+        key: 'kurtosis',
         label: 'Sample Kurtosis',
         sortable: true,
         direction: 'desc'
     },
     {
-        key: 'sampleSkewness',
+        key: 'skewness',
         label: 'Sample Skewness',
         sortable: true,
         direction: 'desc'
@@ -159,7 +158,7 @@ const columns: any = [
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
@@ -171,6 +170,11 @@ const columns: any = [
         </nav>
     </header>
     <div class="my-28" v-if="qdata">
+        <!-- <div class="text-blue-500">{{ formData }}</div>
+        <div class="text-red-500">{{ selectedDistrict }}</div>
+        <div class="text-green-500">{{ selectedFacility }}</div> -->
+
+
         <UContainer>
             <UCard>
                 <template #header>
@@ -198,14 +202,19 @@ const columns: any = [
                         results by district or facility please use the filters below:
                     </div>
                     <div class=" grid grid-cols-2 pt-2.5">
+
+
                         <div class="mb-4 pt-2 border-r border-gray-500">
 
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="country">
-                                Filter by District
+                            <label class="block text-sm font-bold mb-2" for="country">
+                                Filter by <span class=" text-orange-500">District</span>
                             </label>
                             <select id="district"
                                 class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
-                                v-model="selectedDistrict" v-validate="'required'">
+                                v-model="selectedDistrict"
+                                v-validate="'required'"
+                                @change="selectedFacility = ''"
+                                >
                                 <option class=" text-gray-500" disabled value="">--Choose District--</option>
                                 <option class=" text-cyan-500" value="All">All</option>
                                 <option class="dark:bg-gray-50" v-for=" (district, i) in districts" :key="i"
@@ -219,13 +228,15 @@ const columns: any = [
                         </div>
 
                         <!--filter by facilities-->
-                        <!-- <div class="mb-4 pt-2 pl-2">
-                            <label class="block text-teal-700 text-sm font-bold mb-2" for="country">
-                                Filter by Facility
+                        <div class="mb-4 pt-2 pl-2">
+                            <label class="block text-sm font-bold mb-2" for="country">
+                                Filter by <span class=" text-orange-500">Facility</span>
                             </label>
                             <select id="district"
                                 class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
-                                v-model="selectedFacility" v-validate="'required'">
+                                v-model="selectedFacility" v-validate="'required'"
+                                @change="selectedDistrict = ''"
+                                >
                                 <option class=" text-gray-500" disabled value="" selected>--Choose Facility--</option>
                                 <option class=" text-cyan-500" value="All">All</option>
                                 <option class="dark:bg-gray-50" v-for=" (facility, i) in facilities" :key="i"
@@ -234,9 +245,8 @@ const columns: any = [
                                 </option>
 
                             </select>
+                        </div>
 
-
-                        </div> -->
 
 
                     </div>

@@ -1,4 +1,3 @@
-
 type JSONResponse = {
   status: "success" | "fail";
   data?: any;
@@ -105,6 +104,11 @@ async function getProfile(): Promise<JSONResponse> {
       "client-platform": "browser",
     },
   });
+
+  console.log(response);
+  if (response.status != "fail") {
+    localStorage.setItem("user", response.data.first_name);
+  }
 
   return response;
 }

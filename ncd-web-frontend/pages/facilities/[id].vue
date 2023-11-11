@@ -4,6 +4,7 @@ import chartSegmentFacility from '../../composables/charts/chartSegmentFacility'
 import { useEvaluationsStore } from '../../stores/evaluations'
 import { uniqBy } from 'lodash';
 
+const firstname = localStorage.getItem('user')
 const iamStore = useIamProfileStore();
 
 const { useLogUserOut, profile } = useAuthStuff()
@@ -48,6 +49,7 @@ const getChartSegmentFacilityData = useAsyncState(async () => {
 const chartSegmentData = getChartSegmentFacilityData.state
 
 // table stuff
+const q = ref('')
 const page = ref(1)
 const pageCount = 5
 
@@ -59,7 +61,11 @@ const getRows = (data: any) => {
 
     const data2 = uniqBy(weWant, (row: any) => row.lastname)
 
-    return data2.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return data2.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
 
@@ -129,7 +135,7 @@ const items = (row: { id: any; }) => [
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
@@ -156,6 +162,9 @@ const items = (row: { id: any; }) => [
                         <p>Below is a list of all the mentees in this district.</p>
                     </div>
                 </template>
+                <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                    <UInput v-model="q" placeholder="Filter mentees..." />
+                </div>
                 <UTable :columns=columns :rows="getRows(evals)">
                     <template #empty-state>
                         <div class="flex flex-col items-center justify-center py-6 gap-3">
@@ -178,7 +187,7 @@ const items = (row: { id: any; }) => [
                 <UPagination v-model="page" :page-count="pageCount" :total="getEvaLength(evals)" />
             </UCard>
 
-            <UCard>
+            <UCard class="my-5">
                 <template #header>
                     <div class="flex my-2">
                         <div class="text-orange-500 pr-1 text-sm"><strong>DM Segment Analysis</strong></div>|<div
@@ -430,6 +439,83 @@ const items = (row: { id: any; }) => [
                 </div>
 
             </UCard>
+            <UCard>
+                <template #header>
+
+                    <div class="flex my-2">
+                        <div class="text-orange-500 pr-1 text-sm"><strong>DM Segment analysis (Overview)</strong></div>|<div
+                            class="text-green-500 pl-1 text-sm">{{ facilityId }}</div>
+                            
+                    </div>
+                    <div class="text-sm">The overview radar charts gives insight at a top-level on perfomance of <span class="text-green-500 italic">{{ facilityId }}</span> mentees. With this analysis one can
+                    quicly see where there is high or low performance in each sub-section of the evaluation. The more the spread from the centre the better the performance.
+                    </div>
+                </template>
+
+
+                <div class="grid grid-cols-2">
+                    <div class="border-r border-green-500  pb-2 " v-if="chartSegmentData">
+                        <div class="text-orange-500">Mean Overview</div>
+                        <apexchart type="radar" :options="{
+                            labels: ['IIEKnowledge', 'IIEAcquredSkill', 'IIEBehaviour', 'MngtKnowledge', 'MngtAcquredSkill', 'MngtBehaviour'],
+                            responsive: [{
+                                breakpoint: 1000,
+                                options: {
+                                    chart: {
+                                        width: 1000
+                                    },
+                                    legend: {
+                                        position: 'top'
+                                    }
+                                }
+                            }],
+                            stroke: {
+                                show: true,
+                                width: 2,
+                                colors: [''],
+                                dashArray: 0
+                            }
+                        }" :series="chartSegmentData.radar.mean"></apexchart>
+                    </div>
+
+                    <div class=" pb-2 pl-5" v-if="chartSegmentData">
+                        <div class="text-green-500">Mode Overview</div>
+                        <apexchart type="radar" :options="{
+                            labels: ['IIEKnowledge', 'IIEAcquredSkill', 'IIEBehaviour', 'MngtKnowledge', 'MngtAcquredSkill', 'MngtBehaviour'],
+                            responsive: [{
+                                breakpoint: 1000,
+                                options: {
+                                    chart: {
+                                        width: 1000
+                                    },
+                                    legend: {
+                                        position: 'top'
+                                    }
+                                }
+                            }],
+                            // plotOptions: {
+                            //     radar: {
+                            //         polygons: {
+                            //             strokeColor: '#e8e8e8',
+                            //             fill: {
+                            //                 colors: ['#f8f8f8', '#fff']
+                            //             }
+                            //         }
+                            //     }
+                            // },
+                            stroke: {
+                                show: true,
+                                width: 2,
+                                colors: [''],
+                                dashArray: 0
+                            }
+                        }" :series="chartSegmentData.radar.mode"></apexchart>
+                    </div>
+
+                </div>
+
+            </UCard>
+
         </UContainer>
     </div>
 </template>

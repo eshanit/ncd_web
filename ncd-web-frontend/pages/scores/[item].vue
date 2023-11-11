@@ -3,7 +3,39 @@ import { useEvaluationsStore } from '../../stores/evaluations';
 import useDataForScoreTablesItem from '../../composables/tables/useDataForScoreTablesItem'
 import { useAsyncState } from '@vueuse/core';
 import barChartForEvalItems from '~/composables/charts/barChartForEvalItems';
+import { useDistrictStore } from '../../stores/districts'
+import { useFacilityStore } from '../../stores/facilities'
 
+const firstname = localStorage.getItem('user')
+
+/// districts
+
+const districtStore = useDistrictStore();
+
+const districtData = useAsyncState(async () => {
+    return await districtStore.districts();
+}, undefined);
+
+const districts: any = districtData.state;
+
+/// facilities
+
+const facilityStore = useFacilityStore();
+
+const facilityData = useAsyncState(async () => {
+    return await facilityStore.facilities();
+}, undefined);
+
+const facilities = facilityData.state
+
+
+let qdata: any = ref({
+    majorFatals: [],
+    combinedTableData: []
+})
+
+let selectedDistrict = ref('')
+let selectedFacility = ref('')
 
 let tables = reactive({
     showNA: true,
@@ -53,8 +85,8 @@ const route = useRoute()
 const itemId = route.params.item
 
 //
-localStorage.setItem('from','scores-item')
-localStorage.setItem('id',itemId.toString())
+localStorage.setItem('from', 'scores-item')
+localStorage.setItem('id', itemId.toString())
 //
 
 const item = itemId.toString();
@@ -66,14 +98,52 @@ const evalData = useAsyncState(async () => {
 }, undefined);
 
 const evals: any = evalData.state
+//
+const formData = computed(() => {
+    return {
+        district: '',
+        facility: ''
+
+    }
+})
+
+watch(selectedDistrict, (newDistrict, oldDistrict) => {
+
+    if (newDistrict) {
+
+
+        const dmQData = useAsyncState(async () => {
+            return await useDataForScoreTablesItem(newDistrict, 'district');
+        }, undefined);
+
+        qdata = dmQData.state
+
+    }
+
+
+})
+
+
+watch(selectedFacility, (newFacility, oldFacility) => {
+    if (newFacility) {
+
+
+        const dmQData = useAsyncState(async () => {
+            return await useDataForScoreTablesItem(newFacility, 'facility');
+        }, undefined);
+
+        qdata = dmQData.state
+
+    }
+})
 
 //
 
 const dmQData = useAsyncState(async () => {
-    return await useDataForScoreTablesItem(evalData);
+    return await useDataForScoreTablesItem('All', 'all');
 }, undefined);
 
-const qdata = dmQData.state
+qdata = dmQData.state
 
 
 ///
@@ -246,7 +316,7 @@ const smallTableData = (data: any) => {
                         <p class="p-1 text-orange-500 border-b-2 border-green-500"><strong>EI-Analysis </strong></p>
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
@@ -257,7 +327,6 @@ const smallTableData = (data: any) => {
             </div>
         </nav>
     </header>
-
     <div class="container mx-auto px-6 py-24" v-if="qdata">
         <UContainer>
             <UCard class="mb-5">
@@ -270,6 +339,67 @@ const smallTableData = (data: any) => {
                         Below is summary statistics for the evaluation Item <span class="text-green-500 italic">{{ itemId
                         }}</span>
                     </p>
+                    <div class="pr-4">
+                        <div class="text-gray-700 text-sm border-b border-gray-500 pb-2.5">
+                            Below is summary statistics of the evaluations for
+                            <span class="text-red-500 text-2xl italic" v-if="!selectedDistrict && !selectedFacility">
+                                <strong>ALL</strong>
+                            </span>
+                            <span class="text-green-500 text-2xl italic" v-else-if="selectedDistrict">
+                                <strong>{{ selectedDistrict }}</strong>
+                            </span>
+                            <span class="text-green-500 text-2xl italic" v-else-if="selectedFacility">
+                                <strong>{{ selectedFacility }}</strong>
+                            </span>
+                            mentees. If you would like to filter the
+                            results by district or facility please use the filters below:
+                        </div>
+                        <div class=" grid grid-cols-2 pt-2.5">
+
+
+                            <div class="mb-4 pt-2 border-r border-gray-500">
+
+                                <label class="block text-sm font-bold mb-2" for="country">
+                                    Filter by <span class=" text-orange-500">District</span>
+                                </label>
+                                <select id="district"
+                                    class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                                    v-model="selectedDistrict" v-validate="'required'" @change="selectedFacility = ''">
+                                    <option class=" text-gray-500" disabled value="">--Choose District--</option>
+                                    <option class=" text-cyan-500" value="All">All</option>
+                                    <option class="dark:bg-gray-50" v-for=" (district, i) in districts" :key="i"
+                                        :value="district.district" :selected="district.district == formData.district">
+                                        {{ district.district }}
+                                    </option>
+
+                                </select>
+
+
+                            </div>
+
+                            <!--filter by facilities-->
+                            <div class="mb-4 pt-2 pl-2">
+                                <label class="block text-sm font-bold mb-2" for="country">
+                                    Filter by <span class=" text-orange-500">Facility</span>
+                                </label>
+                                <select id="district"
+                                    class="block w-3/4 px-3 py-2 bg-transparent border border-gray-300 rounded-md shadow-sm dark:bg-transparent focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                                    v-model="selectedFacility" v-validate="'required'" @change="selectedDistrict = ''">
+                                    <option class=" text-gray-500" disabled value="" selected>--Choose Facility--</option>
+                                    <option class=" text-cyan-500" value="All">All</option>
+                                    <option class="dark:bg-gray-50" v-for=" (facility, i) in facilities" :key="i"
+                                        :value="facility" :selected="facility == formData.facility">
+                                        {{ facility }}
+                                    </option>
+
+                                </select>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
                 </div>
                 <div class="w-full my-2 border-b border-gray-300 py-5">
                     <div class="grid grid-cols-7 mt-2 text-center bg-slate-400">
@@ -297,27 +427,27 @@ const smallTableData = (data: any) => {
                         </div>
 
                     </div>
-                    <div class="grid grid-cols-7 text-center">
+                    <div class="grid grid-cols-7 text-center" v-if="qdata.majorData[item]">
                         <div class=" border border-l border-gray-500">
                             {{ qdata.majorData[item].statistics.total }}
                         </div>
                         <div class=" border border-l border-gray-500">
-                            {{ qdata.majorData[item].statistics.mean.toFixed(2) }}
+                            {{ qdata.majorData[item].statistics.mean }}
                         </div>
                         <div class=" border border-gray-500">
-                            {{ qdata.majorData[item].statistics.median.toFixed(2) }}
+                            {{ qdata.majorData[item].statistics.median }}
                         </div>
                         <div class=" border border-gray-500">
                             {{ qdata.majorData[item].statistics.mode }}
                         </div>
                         <div class=" border border-gray-500">
-                            {{ qdata.majorData[item].statistics.standardDeviation.toFixed(4) }}
+                            {{ qdata.majorData[item].statistics.standardDeviation }}
                         </div>
                         <div class=" border border-gray-500">
-                            {{ qdata.majorData[item].statistics.sampleKurtosis.toFixed(4) }}
+                            {{ qdata.majorData[item].statistics.sampleKurtosis }}
                         </div>
                         <div class=" border border-gray-500">
-                            {{ qdata.majorData[item].statistics.sampleSkewness.toFixed(4) }}
+                            {{ qdata.majorData[item].statistics.sampleSkewness }}
                         </div>
                     </div>
                 </div>
@@ -424,24 +554,7 @@ const smallTableData = (data: any) => {
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsNotApplicable(qdata.majorData)">
-                            <template #empty-state>
-                                <div class="flex flex-col items-center justify-center py-6 gap-3">
-                                    <span class="italic text-sm">No one here!</span>
-                                    <UButton label="Add people" />
-                                </div>
-                            </template>
-                            <template #actions-data="{ row }">
-                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
-                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
-                                        square variant="outline">
-                                        Eval report | <span class=" text-red-500">view</span></UButton>
-                                </NuxtLink>
-
-                            </template>
-                        </UTable>
-                        <UPagination v-model="page" :page-count="pageCount"
-                            :total="getRowsNotApplicable(qdata.majorData).length" />
+                        <TableComponet :rows="getRowsNotApplicable(qdata.majorData)" :columns="columns" ></TableComponet>
                     </div>
                 </div>
             </UCard>
@@ -458,23 +571,8 @@ const smallTableData = (data: any) => {
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsPoor(qdata.majorData)">
-                            <template #empty-state>
-                                <div class="flex flex-col items-center justify-center py-6 gap-3">
-                                    <span class="italic text-sm">No one here!</span>
-                                    <UButton label="Add people" />
-                                </div>
-                            </template>
-                            <template #actions-data="{ row }">
-                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
-                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
-                                        square variant="outline">
-                                        Eval report | <span class=" text-red-500">view</span></UButton>
-                                </NuxtLink>
-
-                            </template>
-                        </UTable>
-                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsPoor(qdata.majorData).length" />
+                        <TableComponet :rows="getRowsPoor(qdata.majorData)" :columns="columns" ></TableComponet>
+                      
                     </div>
                 </div>
             </UCard>
@@ -490,24 +588,7 @@ const smallTableData = (data: any) => {
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsAverage(qdata.majorData)">
-                            <template #empty-state>
-                                <div class="flex flex-col items-center justify-center py-6 gap-3">
-                                    <span class="italic text-sm">No one here!</span>
-                                    <UButton label="Add people" />
-                                </div>
-                            </template>
-                            <template #actions-data="{ row }">
-                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
-                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
-                                        square variant="outline">
-                                        Eval report | <span class=" text-red-500">view</span></UButton>
-                                </NuxtLink>
-
-                            </template>
-                        </UTable>
-                        <UPagination v-model="page" :page-count="pageCount"
-                            :total="getRowsAverage(qdata.majorData).length" />
+                        <TableComponet :rows="getRowsAverage(qdata.majorData)" :columns="columns" ></TableComponet>
                     </div>
                 </div>
             </UCard>
@@ -524,23 +605,7 @@ const smallTableData = (data: any) => {
                         <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
                             <UInput v-model="q" placeholder="Filter mentees..." />
                         </div>
-                        <UTable :columns=columns :rows="getRowsGood(qdata.majorData)">
-                            <template #empty-state>
-                                <div class="flex flex-col items-center justify-center py-6 gap-3">
-                                    <span class="italic text-sm">No one here!</span>
-                                    <UButton label="Add people" />
-                                </div>
-                            </template>
-                            <template #actions-data="{ row }">
-                                <NuxtLink :to="{ name: 'mentees-evaluations-scoreid', params: { scoreid: row.scoreId } }">
-                                    <UButton :items="items(row)" icon="i-heroicons-pencil-square" size="sm" color="primary"
-                                        square variant="outline">
-                                        Eval report | <span class=" text-red-500">view</span></UButton>
-                                </NuxtLink>
-
-                            </template>
-                        </UTable>
-                        <UPagination v-model="page" :page-count="pageCount" :total="getRowsGood(qdata.majorData).length" />
+                        <TableComponet :rows="getRowsGood(qdata.majorData)" :columns="columns" ></TableComponet>
                     </div>
                 </div>
             </UCard>

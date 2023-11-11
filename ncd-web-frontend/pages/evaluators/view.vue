@@ -4,6 +4,7 @@ import { useEvaluationsStore } from '../../stores/evaluations';
 import { useEvaluatorsStore } from '../../stores/evaluators'
 import { useAsyncState } from '@vueuse/core';
 
+const firstname = localStorage.getItem('user')
 const iamStore = useIamProfileStore();
 const { useLogUserOut, profile } = useAuthStuff()
 
@@ -53,14 +54,18 @@ const items = (row: { id: any; }) => [
     ]
 ]
 
-
+const q = ref('')
 const page = ref(1)
 const pageCount = 5
 
 const getRows = (data: any) => {
 
 
-    return data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return data.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
 
@@ -81,7 +86,7 @@ const getRows = (data: any) => {
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
@@ -99,6 +104,9 @@ const getRows = (data: any) => {
                     <h4 class="card-title my-1"><strong>Evaluators</strong></h4>
                     <p>Below is a list of the <span class="text-orange-500"><strong>{{ evaluators.length }}</strong></span> lead evaluators and the number of evaluations they have done, click the <span class="text-green-500 italic">green </span>button to see a breakdown of the evaluations.</p>
                 </template>
+                <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                        <UInput v-model="q" placeholder="Filter evaluators.." />
+                    </div>
                 <UTable :columns=columns :rows="getRows(evaluators)">
                     <template #empty-state>
                         <div class="flex flex-col items-center justify-center py-6 gap-3">

@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core';
+import useJsonToCsv from '../../composables/useJsonToCsv';
+
+const firstname = localStorage.getItem('user')
 
 const iamStore = useIamProfileStore();
 
 const { useLogUserOut, profile } = useAuthStuff()
+
+///
+
 
 const menteesStore = useMenteesStore();
 const coMentorStore = useCoMentorsStore();
@@ -63,6 +69,27 @@ const incompleteEvalsData = useAsyncState(async () => {
 
 const incompleteEvals: any = incompleteEvalsData.state
 
+//csv download
+
+const downloadableData = useAsyncState(async () => {
+  return await evaluationsStore.getDownloadableData();
+}, undefined);
+
+const downloadable: any = downloadableData.state
+
+const csvData = (data: any[]) => {
+  const content = useJsonToCsv(data);
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.setAttribute('download', 'evaluation_data.csv')
+  link.click()
+}
+
+
+
 
 </script>
 <template>
@@ -76,7 +103,7 @@ const incompleteEvals: any = incompleteEvalsData.state
             </NuxtLink>
           </div>
           <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-            <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+            <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
             <button
               class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
               type="button" @click="useLogUserOut(iamStore)">
@@ -87,6 +114,7 @@ const incompleteEvals: any = incompleteEvalsData.state
       </div>
     </nav>
   </header>
+
   <title>NCD Dashboard</title>
   <div class="my-24">
     <UContainer>
@@ -189,6 +217,22 @@ const incompleteEvals: any = incompleteEvalsData.state
         <div class=" w-full h-px max-w-6xl mx-auto my-5"
           style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
         </div>
+
+        <div v-if="downloadable" class="text-center">
+          <div class="pb-2">Want to download full evaluation data? click the button below to download:</div>
+          <div  class="">
+            <UButton 
+                icon="i-heroicons-arrow-down-tray" 
+                size="xl" 
+                color="primary" 
+                variant="solid"
+                 label="Download csv data file"
+                 @click="csvData(downloadable)"
+              :trailing="true" />
+          </div>
+
+        </div>
+
         <!-- 
         <div class="flex items-center justify-center">
           <NuxtLink :to="{ name: 'scores-view' }">

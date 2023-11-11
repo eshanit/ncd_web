@@ -1,12 +1,21 @@
 const chartSeries = (data: any) => {
   const dataCounts = data.counts;
 
-  const dataCountsLabeled = {
-    "Not Applicable": dataCounts["0"],
-    "Poor": dataCounts["1"],
-    "Average": dataCounts["2"],
-    "Good": dataCounts["3"],
-  };
+    const dataCountsZero = (counts: any) =>{
+
+      if(counts == undefined){
+        return 0
+      }else {
+        return counts
+      }
+    }
+
+    const dataCountsLabeled = {
+      "Not Applicable": dataCountsZero(dataCounts["0"]),
+      "Poor": dataCountsZero(dataCounts["1"]),
+      "Average": dataCountsZero(dataCounts["2"]),
+      "Good": dataCountsZero(dataCounts["3"]),
+    };
 
   return [
     {
@@ -18,11 +27,20 @@ const chartSeries = (data: any) => {
 const chartOptions = (data: any) => {
     const dataCounts = data.counts;
 
+    const dataCountsZero = (counts: any) =>{
+
+      if(counts !== undefined){
+        return 0
+      }else {
+        return counts
+      }
+    }
+
     const dataCountsLabeled = {
-      "Not Applicable": dataCounts["0"],
-      "Poor": dataCounts["1"],
-      "Average": dataCounts["2"],
-      "Good": dataCounts["3"],
+      "Not Applicable": dataCountsZero(dataCounts["0"]),
+      "Poor": dataCountsZero(dataCounts["1"]),
+      "Average": dataCountsZero(dataCounts["2"]),
+      "Good": dataCountsZero(dataCounts["3"]),
     };
 
   return {

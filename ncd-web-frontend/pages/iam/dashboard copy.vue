@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core';
 
+let firstname = ref('')
+
+const iamStore = useIamProfileStore();
+
+const { useLogUserOut, profile } = useAuthStuff()
+
+
 const menteesStore = useMenteesStore();
 const coMentorStore = useCoMentorsStore();
 const evaluatorStore = useEvaluatorsStore();
 const districtStore = useDistrictStore();
 const facilityStore = useFacilityStore();
 const evaluationsStore = useEvaluationsStore();
+
+
 
 //mentees
 const menteesData = useAsyncState(async () => {
@@ -57,14 +66,28 @@ const incompleteEvalsData = useAsyncState(async () => {
 
 const incompleteEvals: any = incompleteEvalsData.state
 
+
+
 </script>
 <template>
-  <header class="bg-white fixed top-0 w-full shadow-md">
-    <nav class="container mx-auto px-6 py-3 flex">
-      <div class="flex  items-center">
-        <NuxtLink :to="{ name: 'iam-dashboard' }">
-          <p class="p-1 hover:text-green-500">Dashboard</p>
-        </NuxtLink>
+  <header class="bg-white fixed top-0 w-full">
+    <nav class=" mx-auto  flex">
+      <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+        <div class="flex flex-wrap items-center">
+          <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+            <NuxtLink :to="{ name: 'iam-dashboard' }">
+              <p class="p-1 hover:text-green-500 text-orange-500"><strong>Dashboard</strong></p>
+            </NuxtLink>
+          </div>
+          <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
+            <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+            <button
+              class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+              type="button" @click="useLogUserOut(iamStore)">
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
   </header>
@@ -73,7 +96,7 @@ const incompleteEvals: any = incompleteEvalsData.state
     <UContainer>
       <div class="items-center justify-center h-screen">
         <div class=" flex ">
-
+          <!-- {{ profile?.data.first_name }} -->
           <UCard class=" border-slate-700 border-2 text-center w-1/3 m-2 hover:bg-slate-200 hover:text-white"
             v-if="mentees">
             <NuxtLink :to="{ name: 'mentees-report' }">
@@ -86,22 +109,25 @@ const incompleteEvals: any = incompleteEvalsData.state
           </UCard>
 
 
-          <UCard class=" border-green-700 border-2 text-center w-1/3 m-2  hover:bg-green-200 hover:text-white"
+
+          <!-- <UCard class=" border-green-700 border-2 text-center w-1/3 m-2  hover:bg-green-200 hover:text-white"
             v-if="comentors">
             <h3 class=""><strong>Co-Mentors</strong></h3>
             <div class=" w-full h-px max-w-6xl mx-auto my-1"
               style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
             </div>
             <p class=" text-4xl text-green-700">{{ comentors.length }} </p>
-          </UCard>
+          </UCard> -->
 
           <UCard class=" border-pink-800 border-2 text-center w-1/3 m-2  hover:bg-pink-200 hover:text-white"
             v-if="evaluators">
-            <h3 class=""><strong>Evaluators</strong></h3>
-            <div class=" w-full h-px max-w-6xl mx-auto my-1"
-              style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
-            </div>
-            <p class=" text-4xl text-pink-800">{{ evaluators.length }} </p>
+            <NuxtLink to="/evaluators/view">
+              <h3 class=""><strong>Evaluators</strong></h3>
+              <div class=" w-full h-px max-w-6xl mx-auto my-1"
+                style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
+              </div>
+              <p class=" text-4xl text-pink-800">{{ evaluators.length }} </p>
+            </NuxtLink>
           </UCard>
 
           <UCard class=" border-amber-500 border-2 text-center w-1/3 m-2  hover:bg-amber-200 hover:text-white"
@@ -117,11 +143,24 @@ const incompleteEvals: any = incompleteEvalsData.state
 
           <UCard class=" border-cyan-700 border-2 text-center w-1/3 m-2  hover:bg-cyan-200 hover:text-white"
             v-if="facilities">
-            <h3 class=""><strong>Facilities</strong></h3>
-            <div class=" w-full h-px max-w-6xl mx-auto my-1"
-              style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
-            </div>
-            <p class=" text-4xl text-cyan-700">{{ facilities.length }} </p>
+            <NuxtLink :to="{ name: 'facilities-list' }">
+              <h3 class=""><strong>Facilities</strong></h3>
+              <div class=" w-full h-px max-w-6xl mx-auto my-1"
+                style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
+              </div>
+              <p class=" text-4xl text-cyan-700">{{ facilities.length }} </p>
+            </NuxtLink>
+          </UCard>
+
+          <UCard class=" border-green-700 border-2 text-center w-1/3 m-2  hover:bg-green-200 hover:text-white"
+            v-if="comentors">
+            <NuxtLink :to="{ name: 'scores-view' }">
+              <h3 class=""><strong>Evaluation Items</strong></h3>
+              <div class=" w-full h-px max-w-6xl mx-auto my-1"
+                style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
+              </div>
+              <p class=" text-4xl text-green-700">29 </p>
+            </NuxtLink>
           </UCard>
         </div>
 
@@ -154,7 +193,7 @@ const incompleteEvals: any = incompleteEvalsData.state
         <div class=" w-full h-px max-w-6xl mx-auto my-5"
           style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
         </div>
-
+        <!-- 
         <div class="flex items-center justify-center">
           <NuxtLink :to="{ name: 'scores-view' }">
             <UCard class=" border-teal-900 border-2">
@@ -165,7 +204,7 @@ const incompleteEvals: any = incompleteEvalsData.state
               <p class="text-center text-4xl text-teal-900">29 </p>
             </UCard>
           </NuxtLink>
-        </div>
+        </div> -->
 
       </div>
 

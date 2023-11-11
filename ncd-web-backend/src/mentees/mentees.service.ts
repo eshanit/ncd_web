@@ -50,4 +50,13 @@ export class MenteesService {
   remove(id: number) {
     return `This action removes a #${id} mentee`;
   }
+
+
+  /// mentee evaluations
+  findMenteeEvaluations(id: number) {
+
+    
+    return `This action returns a #${id} mentee`;
+  }
+
 }

@@ -129,6 +129,7 @@ const chartSegmentDistrict = async (data: any) => {
     }
 
     return {
+
     test:mean(iieknowledgeArr),
       pie: {
         raw: {
@@ -861,6 +862,26 @@ const chartSegmentDistrict = async (data: any) => {
               } 
         },
       },
+      radar: {
+        mean: [
+          {
+            name: "mean",
+            data: [mean(iieknowledgeArr).toFixed(2), mean(iieAcquiredSkillArr).toFixed(2), mean(iieBehaviourArr).toFixed(2), mean(mngtknowledgeArr).toFixed(2), mean(mngtAcquiredSkillArr).toFixed(2), mean(mngtBehaviourArr).toFixed(2)]
+          }
+        ],
+      mode: [
+        {
+          name: "mode",
+          data:[mode(iieknowledgeArr), mode(iieAcquiredSkillArr), mode(iieBehaviourArr), mode(mngtknowledgeArr), mode(mngtAcquiredSkillArr), mode(mngtBehaviourArr)]
+        }
+      ],
+      median: [
+        {
+          name: "median",
+          data:[median(iieknowledgeArr), median(iieAcquiredSkillArr), median(iieBehaviourArr), median(mngtknowledgeArr), median(mngtAcquiredSkillArr), median(mngtBehaviourArr)]
+        }
+      ]
+      }
     };
   });
 };

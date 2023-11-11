@@ -3,6 +3,7 @@ import { useMenteesStore } from '../../stores/mentees';
 import { useEvaluationsStore } from '../../stores/evaluations';
 import { useAsyncState } from '@vueuse/core';
 
+const firstname = localStorage.getItem('user')
 const iamStore = useIamProfileStore();
 
 const { useLogUserOut, profile } = useAuthStuff()
@@ -25,13 +26,18 @@ const menteesData = useAsyncState(async () => {
 
 const mentees: any = menteesData.state
 
+const q = ref('')
 const page = ref(1)
 const pageCount = 5
 
 const getRows = (data: any) => {
 
 
-    return data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+    return data.filter((person: any) => {
+        return Object.values(person).some((value) => {
+            return String(value).toLowerCase().includes(q.value.toLowerCase())
+        });
+    }).slice((page.value - 1) * pageCount, (page.value) * pageCount)
 
 }
 
@@ -116,7 +122,7 @@ const series = (data: any) => {
 
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <!-- <span class="text-xs pr-1 text-gray-500"><strong>{{ profile?.data.first_name }}</strong></span> -->
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
@@ -151,6 +157,9 @@ const series = (data: any) => {
             <div class=" w-full h-px max-w-6xl mx-auto my-1"
                 style="background-image: linear-gradient(90deg, rgba(149, 131, 198, 0) 1.46%, rgba(149, 131, 198, 0.6) 40.83%, rgba(149, 131, 198, 0.3) 65.57%, rgba(149, 131, 198, 0) 107.92%);">
             </div>
+            <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+                <UInput v-model="q" placeholder="Filter mentees..." />
+            </div>
             <div class="pb-10">
                 <UTable :columns=columns :rows="getRows(mentees)">
                     <template #empty-state>
@@ -173,6 +182,7 @@ const series = (data: any) => {
                 </UTable>
                 <UPagination v-model="page" :page-count="pageCount" :total="mentees.length" />
             </div>
-    </UContainer>
+        </UContainer>
 
-</div></template>
+    </div>
+</template>

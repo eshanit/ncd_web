@@ -6,6 +6,8 @@ const getLoggedInProfile = useAsyncState(async () => {
 }, undefined);
 
 const profile = getLoggedInProfile.state
+
+
 /**
  * @Desc Log user out
  */
@@ -14,6 +16,7 @@ const isLoggedIn = ref(false);
 
 // Used to refresh logged in menu navbar
 async function useLogUserOut(logStore: any) {
+  window.localStorage.clear()
   const { status } = await logout();
   if (status === "success") {
     // Clear store variables

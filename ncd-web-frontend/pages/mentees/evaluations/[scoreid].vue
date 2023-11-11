@@ -3,6 +3,8 @@ import { useEvaluationsStore } from '../../../stores/evaluations'
 import { format } from 'date-fns';
 import chartDataScorePie from '../../../composables/chartDataScorePie'
 
+const firstname = localStorage.getItem('user')
+
 const iamStore = useIamProfileStore();
 
 const { useLogUserOut, profile } = useAuthStuff()
@@ -131,7 +133,7 @@ const pieData: any = scorePieData.state
                         </div>
                     </div>
                     <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right py-2">
-                        <!-- <span class="text-xs pr-1 text-gray-500" v-if="profile"><strong>{{ profile?.data.first_name }}</strong></span> -->
+                        <span class="text-xs pr-1 text-gray-500"><strong>{{ firstname }}</strong></span>
                         <button
                             class="bg-green-500 text-white active:bg-green-600 text-xs font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                             type="button" @click="useLogUserOut(iamStore)">
